@@ -146,7 +146,8 @@ def list_cerdo():
 @index.route('/create_galpon')
 def create_galpon(): 
     data = Galpon.Traer_tipo_galpon_combo()
-    return render_template('view/galpon/new_galpon.html', data = data)
+    codigo = random.randint(0, 999999999)
+    return render_template('view/galpon/new_galpon.html', data = data, codigo = codigo)
 
 #vista listar el galpón
 @index.route('/list_galpon')

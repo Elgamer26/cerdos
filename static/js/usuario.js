@@ -231,7 +231,7 @@ function registra_permisis_rol(id) {
     if (response > 0) {
       if (response == 1) {
         $(".card-body").LoadingOverlay("hide");
-        $("#nuevo_rol").val("");
+        cargar_contenido("contenido_principal", "/vista_rol");
         return Swal.fire(
           "Registro exitoso",
           "El rol se creo con exito",
@@ -772,6 +772,7 @@ function registra_uuario() {
           "warning"
         );
       } else if (response == 4) {
+        $(".card-body").LoadingOverlay("hide");
         return Swal.fire(
           "Cédula ya existe",
           "La cédula " + cedula + ", ya existe en el sistema",
@@ -1122,14 +1123,14 @@ function cambiar_estado_usuario(id, dato) {
       if (response == 1) {
         tabla_usuarios.ajax.reload();
         return Swal.fire(
-          "Estado rol",
+          "Estado usuario",
           "EL estado se " + res + " con extio",
           "success"
         );
       }
     } else {
       return Swal.fire(
-        "Estado rol",
+        "Estado usuario",
         "No se pudo cambiar el estado, error en la matrix",
         "error"
       );

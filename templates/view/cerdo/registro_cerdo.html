@@ -64,8 +64,8 @@
 
                                 <div class="form-group col-lg-4 col-6">
                                     <label for="peso">Peso del cerdo (Kg)</label>
-                                    <input type="number" maxlength="10" class="form-control" id="peso"
-                                        placeholder="Ingrese peso (Kg)" />
+                                    <input type="text" maxlength="10" class="form-control" id="peso"
+                                        placeholder="Ingrese peso (Kg)" onkeypress="return filterfloat(event, this);" />
                                     <span style="color: red" id="peso_obligg"></span>
                                 </div>
 
@@ -79,7 +79,7 @@
 
                                 <div class="form-group col-lg-4 col-6">
                                     <label for="fecha">Fecha de origen</label> 
-                                    <input type="date" class="form-control" id="fecha" />
+                                    <input type="date" class="calendario form-control" placeholder="Ingrese la fecha" id="fecha" />
                                     <span style="color: red" id="fecha_obligg"></span> 
                                 </div>
 
@@ -124,6 +124,8 @@
 <script src="static/js/cerdos.js"></script>
 
 <script>
+    mostar_fecha(fecha_atras, fecha_adelante)
+    
     $(".raza_id").select2();
     
     function mostrar_imagen(input) {
@@ -154,5 +156,5 @@
                 .height(197);
             return (document.getElementById("foto").value = "");
         }
-    }
+    }     
 </script>

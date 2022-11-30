@@ -28,13 +28,13 @@
 
                   <div class="form-group col-lg-2 col-6">
                     <label for="numero_g">Número galpón</label>
-                    <input type="text" maxlength="15" class="form-control" id="numero_g" placeholder="Número galpón" onkeypress="return soloNumeros(event)" />
+                    <input type="text" maxlength="15" class="form-control" id="numero_g" value="{{ codigo }}" placeholder="Número galpón" onkeypress="return soloNumeros(event)" />
                     <span style="color: red" id="numero_g_oblig"></span>
                   </div>
   
                   <div class="form-group col-lg-4 col-6">
                     <label for="id_tipo_g">Tipo de galpón</label>
-                    <select class="form-control" style="width: 100%" id="id_tipo_g">
+                    <select class="form-control id_tipo_g" style="width: 100%" id="id_tipo_g">
                       <option value="0">--- Seleccione el tipo de galpón ---</option>
   
                       {% for datas in data %}
@@ -45,7 +45,7 @@
                   </div>
 
                   <div class="form-group col-lg-2 col-6">
-                    <label for="capacidad">Capacidad</label>
+                    <label for="capacidad">Capacidad gálpon</label>
                     <input type="text" maxlength="3" class="form-control" id="capacidad" placeholder="Capacidad" onkeypress="return soloNumeros(event)"  />
                     <span style="color: red" id="capacidad_obligg"></span>
                   </div>
@@ -81,18 +81,5 @@
   <script src="static/js/galpon.js"></script>
   
  <script>
-    // $(document).ready(function() {
-    //     var n = new Date();
-    //     var y = n.getFullYear();
-    //     var m = n.getMonth() + 1;
-    //     var d = n.getDate();
-    //     if (d < 10) {
-    //         d = '0' + d;
-    //     }
-    //     if (m < 10) {
-    //         m = '0' + m;
-    //     }
-
-    //     document.getElementById("fecha_g").value = y + "-" + m + "-" + d; 
-    // });
+    $(".id_tipo_g").select2();
  </script>

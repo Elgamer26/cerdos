@@ -54,7 +54,7 @@
 
                 <div class="form-group col-lg-2 col-6">
                     <label for="fecha_g">Fecha</label>
-                    <input type="date" class="form-control" id="fecha_g" /> 
+                    <input type="date" class="calendario form-control" id="fecha_g" /> 
                 </div>
 
                 <div class="form-group col-lg-1 col-6">
@@ -245,7 +245,7 @@
 <script src="static/js/galpon.js"></script>
   
 <script> 
-
+  $(".id_galpon_nuevo").select2();
   $(document).ready(function() {
     $("#id_galpon").val({{dicc.id}}).trigger("change");
     $("#galpo_actual_cerdo").val({{dicc.id}}).trigger("change");
@@ -261,6 +261,7 @@
           m = '0' + m;
       }
       document.getElementById("fecha_g").value = y + "-" + m + "-" + d; 
+      mostar_fecha(fecha_atras, fecha_adelante);
   });
 
   $(document).ready(function(){ 

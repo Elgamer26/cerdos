@@ -7,7 +7,7 @@ class Cerdo():
         try:
             query = mysql.connection.cursor()
             query.execute(
-                'SELECT * FROM raza WHERE binary raza = "{0}"'. format(_raza))
+                'SELECT * FROM raza WHERE raza = "{0}"'. format(_raza))
             data = query.fetchone()
             if not data:
                 query.execute(
@@ -28,7 +28,7 @@ class Cerdo():
     def Listar_cerdo():
         try:
             query = mysql.connection.cursor()
-            query.execute('SELECT * FROM raza')
+            query.execute('SELECT * FROM raza ORDER BY id_raza DESC')
             data = query.fetchall()
             query.close()
             new_lista = []
@@ -63,7 +63,7 @@ class Cerdo():
     def Editar_cerdo(_raza, _id):
         try:
             query = mysql.connection.cursor()
-            query.execute('SELECT * FROM raza WHERE binary raza = "{0}" AND id_raza != "{1}"'. format(_raza, _id))
+            query.execute('SELECT * FROM raza WHERE raza = "{0}" AND id_raza != "{1}"'. format(_raza, _id))
             data = query.fetchone()
             if not data:
                 query.execute('UPDATE raza SET raza = "{0}" WHERE id_raza = "{1}"'.format(_raza, _id))
@@ -127,7 +127,7 @@ class Cerdo():
             cerdo.id_cerdo, cerdo.codigo, cerdo.nombre, cerdo.sexo, raza.raza, cerdo.raza,
             cerdo.peso, cerdo.origen, cerdo.fecha, cerdo.detalle,
             cerdo.foto, cerdo.estado 
-            FROM cerdo INNER JOIN raza ON cerdo.raza = raza.id_raza""")
+            FROM cerdo INNER JOIN raza ON cerdo.raza = raza.id_raza ORDER BY id_cerdo DESC""")
             data = query.fetchall()
             query.close()
             new_lista = []
@@ -243,7 +243,7 @@ class Cerdo():
                     FROM
                         cerdo
                         INNER JOIN muertes ON cerdo.id_cerdo = muertes.id_cerdo
-                        INNER JOIN raza ON cerdo.raza = raza.id_raza""")
+                        INNER JOIN raza ON cerdo.raza = raza.id_raza ORDER BY id DESC""")
             data = query.fetchall()
             query.close()
             return data 

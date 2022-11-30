@@ -287,7 +287,7 @@ class Compras():
     def Listar_tipo_insumo():
         try:
             query = mysql.connection.cursor()
-            query.execute('SELECT * FROM tipo_insumo')
+            query.execute('SELECT * FROM tipo_insumo ORDER BY id DESC')
             data = query.fetchall()
             query.close()
             new_lista = []
@@ -355,7 +355,7 @@ class Compras():
                             insumo.estado 
                         FROM
                             insumo
-                            INNER JOIN tipo_insumo ON insumo.tipo_id = tipo_insumo.id""")
+                            INNER JOIN tipo_insumo ON insumo.tipo_id = tipo_insumo.id ORDER BY insumo.id DESC""")
             data = query.fetchall()
             query.close()
             new_lista = []
@@ -580,7 +580,7 @@ class Compras():
     def Listar_tipo_medicamento():
         try:
             query = mysql.connection.cursor()
-            query.execute('SELECT * FROM tipo_medicamento')
+            query.execute('SELECT * FROM tipo_medicamento ORDER BY id DESC')
             data = query.fetchall()
             query.close()
             new_lista = []
@@ -682,7 +682,7 @@ class Compras():
                             medicamento.estado 
                         FROM
                             medicamento
-                            INNER JOIN tipo_medicamento ON medicamento.tipo_id = tipo_medicamento.id""")
+                            INNER JOIN tipo_medicamento ON medicamento.tipo_id = tipo_medicamento.id ORDER BY medicamento.id DESC""")
             data = query.fetchall()
             query.close()
             new_lista = []

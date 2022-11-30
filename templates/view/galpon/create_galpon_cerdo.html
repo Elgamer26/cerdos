@@ -52,7 +52,7 @@
 
                 <div class="form-group col-lg-2 col-6">
                     <label for="fecha_g">Fecha</label>
-                    <input type="date" class="form-control" id="fecha_g" /> 
+                    <input type="date" class="calendario form-control" id="fecha_g" /> 
                 </div>
 
                 <div class="form-group col-lg-1 col-6">
@@ -194,7 +194,9 @@
             m = '0' + m;
         }
         document.getElementById("fecha_g").value = y + "-" + m + "-" + d; 
+        mostar_fecha(fecha_atras, fecha_adelante)
     });
+
     $("#id_galpon").on("change", function(){
       var id = $(this).val();
       $("#tbody_tabla_galpo_cerdo").empty();

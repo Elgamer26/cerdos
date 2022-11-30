@@ -236,14 +236,14 @@ function cambiar_estado_tipo_g(id, dato) {
       if (response == 1) {
         tabla_tipo_galpon.ajax.reload();
         return Swal.fire(
-          "Estado rol",
+          "Estado tipo gálpon",
           "EL estado se " + res + " con extio",
           "success"
         );
       }
     } else {
       return Swal.fire(
-        "Estado rol",
+        "Estado tipo gálpon",
         "No se pudo cambiar el estado, error en la matrix",
         "error"
       );
@@ -600,14 +600,14 @@ function cambiar_estado_galpon(id, dato) {
       if (response == 1) {
         tabla_galon.ajax.reload();
         return Swal.fire(
-          "Estado rol",
+          "Estado gálpon",
           "EL estado se " + res + " con extio",
           "success"
         );
       }
     } else {
       return Swal.fire(
-        "Estado rol",
+        "Estado gálpon",
         "No se pudo cambiar el estado, error en la matrix",
         "error"
       );

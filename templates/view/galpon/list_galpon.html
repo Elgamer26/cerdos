@@ -89,7 +89,7 @@
     
                     <div class="form-group col-lg-6 col-6">
                       <label for="id_tipo_g">Tipo de galpón</label>
-                      <select class="form-control" style="width: 100%" id="id_tipo_g">
+                      <select class="form-control id_tipo_g" style="width: 100%" id="id_tipo_g">
                         <option value="0">--- Seleccione el tipo de galpón ---</option>
     
                         {% for datas in data %}
@@ -132,4 +132,5 @@
 
 <script>
     listar_galpones();
+    $(".id_tipo_g").select2();
 </script>

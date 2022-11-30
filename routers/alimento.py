@@ -31,7 +31,7 @@ def acciones_tipo_alimento():
         elif funcion == 'estado_alimento':  
             _id = request.form['id']     
             _dato = request.form['dato']
-            dato = Alimento.Estado_alimento(_id,_dato)
+            dato = Alimento.Estado_alimento_tipo(_id,_dato)
             return jsonify(dato)
 
         elif funcion == 'editar_tipo_a':   

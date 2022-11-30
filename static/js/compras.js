@@ -1,413 +1,418 @@
 var tabla_proveedor, tabla_tipo_insumo, tabla_insumo, tabla_tipo_medicamento, tabla_medicamento;
 
-function registro_proveedor() { 
-    var razon_social = $("#razon_social").val();
-    var ruc = $("#ruc").val();
-    var telefonoo = $("#telefonoo").val();
-    var correo = $("#correo").val();
-    var direccion = $("#direccion").val();
-    var descripcion = $("#descripcion").val();
-    var encargdo = $("#encargdo").val();
-    var telefonoo_en = $("#telefonoo_en").val();
-  
-    if (
-      razon_social.length == 0 ||
-      razon_social.trim() == "" ||
-      ruc.length == 0 ||
-      ruc.trim() == "" ||
-      telefonoo.length == 0 ||
-      telefonoo.trim() == "" ||
-      correo.length == 0 ||
-      correo.trim() == "" ||
-      direccion.length == 0 ||
-      direccion.trim() == "" ||
-      descripcion.length == 0 ||
-      descripcion.trim() == "" ||
-      encargdo.length == 0 ||
-      encargdo.trim() == "" ||
-      telefonoo_en.length == 0 ||
-      telefonoo_en.trim() == ""
-    ) {
-      validar_registro_proveedor(
-        razon_social,
-        ruc,
-        telefonoo,
-        correo,
-        direccion,
-        descripcion,
-        encargdo,
-        telefonoo_en
-      );
-  
-      return swal.fire(
-        "Campo vacios",
-        "Los campos no deben quedar vacios, complete los datos",
-        "warning"
-      );
-    } else { 
-        $("#razon_social_oblig").html(""); 
-        $("#ruc_obligg").html(""); 
-        $("#telefonoo_obligg").html(""); 
-        $("#correo_obligg").html(""); 
-        $("#direccion_obligg").html(""); 
-        $("#descripcion_obligg").html(""); 
-        $("#encargdo_oblig").html(""); 
-        $("#telefonoo_en__obligg").html("");
-    }
+function registro_proveedor() {
+  var razon_social = $("#razon_social").val();
+  var ruc = $("#ruc").val();
+  var telefonoo = $("#telefonoo").val();
+  var correo = $("#correo").val();
+  var direccion = $("#direccion").val();
+  var descripcion = $("#descripcion").val();
+  var encargdo = $("#encargdo").val();
+  var telefonoo_en = $("#telefonoo_en").val();
 
-    if(!valid_email){
-        return swal.fire(
-            "Correo incorrecto",
-            "El correo ingresado es incorrecto",
-            "warning"
+  if (
+    razon_social.length == 0 ||
+    razon_social.trim() == "" ||
+    ruc.length == 0 ||
+    ruc.trim() == "" ||
+    telefonoo.length == 0 ||
+    telefonoo.trim() == "" ||
+    correo.length == 0 ||
+    correo.trim() == "" ||
+    direccion.length == 0 ||
+    direccion.trim() == "" ||
+    descripcion.length == 0 ||
+    descripcion.trim() == "" ||
+    encargdo.length == 0 ||
+    encargdo.trim() == "" ||
+    telefonoo_en.length == 0 ||
+    telefonoo_en.trim() == ""
+  ) {
+    validar_registro_proveedor(
+      razon_social,
+      ruc,
+      telefonoo,
+      correo,
+      direccion,
+      descripcion,
+      encargdo,
+      telefonoo_en
+    );
+
+    return swal.fire(
+      "Campo vacios",
+      "Los campos no deben quedar vacios, complete los datos",
+      "warning"
+    );
+  } else {
+    $("#razon_social_oblig").html("");
+    $("#ruc_obligg").html("");
+    $("#telefonoo_obligg").html("");
+    $("#correo_obligg").html("");
+    $("#direccion_obligg").html("");
+    $("#descripcion_obligg").html("");
+    $("#encargdo_oblig").html("");
+    $("#telefonoo_en__obligg").html("");
+  }
+
+  if (!valid_email_p) {
+    $("#email_correcto").html(" Correo incorrecto");
+    return swal.fire(
+      "Correo incorrecto",
+      "El correo ingresado es incorrecto",
+      "warning"
+    );
+  } else {
+    $("#email_correcto").html("");
+  }
+
+  var formdata = new FormData();
+  formdata.append("razon_social", razon_social);
+  formdata.append("ruc", ruc);
+  formdata.append("telefonoo", telefonoo);
+  formdata.append("correo", correo);
+  formdata.append("direccion", direccion);
+  formdata.append("descripcion", descripcion);
+  formdata.append("encargdo", encargdo);
+  formdata.append("telefonoo_en", telefonoo_en);
+
+  $.ajax({
+    url: "/compras/registrar_proveedor",
+    type: "POST",
+    //aqui envio toda la formdata
+    data: formdata,
+    contentType: false,
+    processData: false,
+    success: function (resp) {
+      if (resp > 0) {
+        if (resp == 1) {
+          $(".card-success").LoadingOverlay("hide");
+          cargar_contenido('contenido_principal', '/proveedor');
+          return Swal.fire(
+            "Proveedor registrado con exito",
+            "El proveedor se registro con exito",
+            "success"
           );
-    }
-  
-    var formdata = new FormData(); 
-    formdata.append("razon_social", razon_social);
-    formdata.append("ruc", ruc);
-    formdata.append("telefonoo", telefonoo);
-    formdata.append("correo", correo);
-    formdata.append("direccion", direccion);
-    formdata.append("descripcion", descripcion);
-    formdata.append("encargdo", encargdo);
-    formdata.append("telefonoo_en", telefonoo_en); 
-  
-    $.ajax({
-      url: "/compras/registrar_proveedor",
-      type: "POST",
-      //aqui envio toda la formdata
-      data: formdata,
-      contentType: false,
-      processData: false,
-      success: function (resp) {
-        if (resp > 0) {
-          if (resp == 1) {
-            $(".card-success").LoadingOverlay("hide");               
-            cargar_contenido('contenido_principal','/proveedor');
-            return Swal.fire(
-              "Proveedor registrado con exito",
-              "El proveedor se registro con exito",
-              "success"
-            );
-          } else if (resp == 2) {
-            $(".card-success").LoadingOverlay("hide");
-            return Swal.fire(
-              "Rúc ya existe",
-              "El rúc '" + ruc + "', ya existe en el sistema",
-              "warning"
-            );
-          }
-        } else {
+        } else if (resp == 2) {
           $(".card-success").LoadingOverlay("hide");
           return Swal.fire(
-            "Error",
-            "No se pudo registrar el proveedor, falla en la matrix",
-            "error"
-          );
-        }
-      },
-      beforeSend: function () {
-        $(".card-success").LoadingOverlay("show", {
-          text: "Cargando...",
-        });
-      },
-    });
-    return false;
-}
-  
-function validar_registro_proveedor(
-    razon_social,
-    ruc,
-    telefonoo,
-    correo,
-    direccion,
-    descripcion,
-    encargdo,
-    telefonoo_en
-  ) {
-    if (razon_social.length == 0 || razon_social.trim() == "") {
-      $("#razon_social_oblig").html("Ingrese razón social");
-    } else {
-      $("#razon_social_oblig").html("");
-    }
-  
-    if (ruc.length == 0 || ruc.trim() == "") {
-      $("#ruc_obligg").html("Ingrese el ruc");
-    } else {
-      $("#ruc_obligg").html("");
-    }
-  
-    if (telefonoo.length == 0  || telefonoo.trim() == "") {
-      $("#telefonoo_obligg").html("Ingrese el telefono");
-    } else {
-      $("#telefonoo_obligg").html("");
-    }
-  
-    if (correo.length == 0 || correo.trim() == "") {
-      $("#correo_obligg").html("Ingrese el correo");
-    } else {
-      $("#correo_obligg").html("");
-    }
-  
-    if (direccion.length == 0 || direccion.trim() == "") {
-      $("#direccion_obligg").html("Ingrese la dirección");
-    } else {
-      $("#direccion_obligg").html("");
-    }
-  
-    if (descripcion.length == 0 || descripcion.trim() == "") {
-      $("#descripcion_obligg").html("Ingrese la descripción");
-    } else {
-      $("#descripcion_obligg").html("");
-    }
-  
-    if (encargdo.length == 0 || encargdo.trim() == "") {
-      $("#encargdo_oblig").html("Ingrese el encargdo");
-    } else {
-      $("#encargdo_oblig").html("");
-    }
-  
-    if (telefonoo_en.length == 0 || telefonoo_en.trim() == "") {
-      $("#telefonoo_en__obligg").html("Ingrese el telefono del encargado");
-    } else {
-      $("#telefonoo_en__obligg").html("");
-    }
-}
-
-function listado_proveedores() {
-    tabla_proveedor = $("#tabla_proveedore").DataTable({
-      ordering: true,
-      paging: true,
-      aProcessing: true,
-      aServerSide: true,
-      searching: { regex: true },
-      lengthMenu: [
-        [10, 25, 50, 100, -1],
-        [10, 25, 50, 100, "All"],
-      ],
-      pageLength: 10,
-      destroy: true,
-      async: false,
-      processing: true,
-  
-      ajax: {
-        url: "/compras/listado_proveedores",
-        type: "GET",
-      },
-      //hay que poner la misma cantidad de columnas y tambien en el html
-      columns: [
-        { defaultContent: "" },
-        {
-          data: "estado",
-          render: function (data, type, row) {
-            if (data == 1) {
-              return `<button style='font-size:10px;' type='button' class='inactivar btn btn-outline-danger' title='Inactivar el cerdo'><i class='fa fa-times' style='font-size: 15px;'></i></button> - <button style='font-size:10px;' type='button' class='editar btn btn-outline-primary' title='Editar el cerdo'><i class='fa fa-edit' style='font-size: 15px;'></i></button>`;
-            } else {
-              return `<button style='font-size:10px;' type='button' class='activar btn btn-outline-success' title='Activar el cerdo'><i class='fa fa-check' style='font-size: 15px;'></i></button> - <button style='font-size:10px;' type='button' class='editar btn btn-outline-primary' title='Editar el cerdo'><i class='fa fa-edit' style='font-size: 15px;'></i></button>`;
-            }
-          },
-        },
-        { data: "razon" },
-        { data: "ruc" },
-        { data: "telefono" },
-        { data: "correo" },     
-        { data: "direccion" },
-        { data: "encargado" },
-        { data: "telefono_en" },
-        { data: "descripcion" },
-        {
-          data: "estado",
-          render: function (data, type, row) {
-            if (data == 1) {
-              return "<span class='badge badge-success'>ACTIVO</span>";
-            } else {
-              return "<span class='badge badge-danger'>INACTIVO</span>";
-            }
-          },
-        },
-      ],
-      language: {
-        rows: "%d fila seleccionada",
-        processing: "Tratamiento en curso...",
-        search: "Buscar&nbsp;:",
-        lengthMenu: "Agrupar en _MENU_ items",
-        info: "Mostrando los item (_START_ al _END_) de un total _TOTAL_ items",
-        infoEmpty: "No existe datos.",
-        infoFiltered: "(filtrado de _MAX_ elementos en total)",
-        infoPostFix: "",
-        loadingRecords: "Cargando...",
-        zeroRecords: "No se encontro resultados en tu busqueda",
-        emptyTable: "No hay datos disponibles en la tabla",
-        paginate: {
-          first: "Primero",
-          previous: "Anterior",
-          next: "Siguiente",
-          last: "Ultimo",
-        },
-        select: {
-          rows: "%d fila seleccionada",
-        },
-        aria: {
-          sortAscending: ": active para ordenar la columa en orden ascendente",
-          sortDescending: ": active para ordenar la columna en orden descendente",
-        },
-      },
-      select: true,
-      responsive: "true",
-      dom: "Bfrtilp",
-      buttons: [
-        {
-          extend: "excelHtml5",
-          text: "Excel",
-          titleAttr: "Exportar a Excel",
-          className: "btn btn-success greenlover",
-        },
-        {
-          extend: "pdfHtml5",
-          text: "PDF",
-          titleAttr: "Exportar a PDF",
-          className: "btn btn-danger redfule",
-        },
-        {
-          extend: "print",
-          text: "Imprimir",
-          titleAttr: "Imprimir",
-          className: "btn btn-primary azuldete",
-        },
-      ],
-      order: [[0, "ASC"]],
-    });
-  
-    //esto es para crearn un contador para la tabla este contador es automatico
-    tabla_proveedor.on("draw.dt", function () {
-      var pageinfo = $("#tabla_proveedore").DataTable().page.info();
-      tabla_proveedor
-        .column(0, { page: "current" })
-        .nodes()
-        .each(function (cell, i) {
-          cell.innerHTML = i + 1 + pageinfo.start;
-        });
-    });
-}
-
-$("#tabla_proveedore").on("click", ".inactivar", function () {
-    //esto esta extrayendo los datos de la tabla el (data)
-    var data = tabla_proveedor.row($(this).parents("tr")).data(); //a que fila deteta que doy click
-    //esta condicion es importante para el responsibe porque salda un error si no lo pongo
-    if (tabla_proveedor.row(this).child.isShown()) {
-      //esto es cuando esta en tamaño responsibo
-      var data = tabla_proveedor.row(this).data();
-    }
-    var dato = 0;
-    var id = data.id;
-  
-    Swal.fire({
-      title: "Cambiar estado?",
-      text: "El estado del proveedor se cambiara!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Si, cambiar!",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        cambiar_estado_proveedor(id, dato);
-      }
-    });
-});
-  
-$("#tabla_proveedore").on("click", ".activar", function () {
-    //esto esta extrayendo los datos de la tabla el (data)
-    var data = tabla_proveedor.row($(this).parents("tr")).data(); //a que fila deteta que doy click
-    //esta condicion es importante para el responsibe porque salda un error si no lo pongo
-    if (tabla_proveedor.row(this).child.isShown()) {
-      //esto es cuando esta en tamaño responsibo
-      var data = tabla_proveedor.row(this).data();
-    }
-    var dato = 1;
-    var id = data.id;
-  
-    Swal.fire({
-      title: "Cambiar estado?",
-      text: "El estado del proveedor se cambiara!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Si, cambiar!",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        cambiar_estado_proveedor(id, dato);
-      }
-    });
-});
-  
-function cambiar_estado_proveedor(id, dato) {
-    var res = "";
-    if (dato == 1) {
-      res = "activo";
-    } else {
-      res = "inactivo";
-    }
-  
-    $.ajax({
-      url: "/compras/estado_proveedor",
-      type: "POST",
-      data: { id: id, dato: dato },
-    }).done(function (response) {
-      if (response > 0) {
-        if (response == 1) {
-          tabla_proveedor.ajax.reload();
-          return Swal.fire(
-            "Estado proveedor",
-            "EL estado se " + res + " con extio",
-            "success"
+            "Rúc ya existe",
+            "El rúc '" + ruc + "', ya existe en el sistema",
+            "warning"
           );
         }
       } else {
+        $(".card-success").LoadingOverlay("hide");
         return Swal.fire(
-          "Estado rol",
-          "No se pudo cambiar el estado, error en la matrix",
+          "Error",
+          "No se pudo registrar el proveedor, falla en la matrix",
           "error"
         );
       }
-    });
+    },
+    beforeSend: function () {
+      $(".card-success").LoadingOverlay("show", {
+        text: "Cargando...",
+      });
+    },
+  });
+  return false;
 }
-  
-$("#tabla_proveedore").on("click", ".editar", function () {
-    //esto esta extrayendo los datos de la tabla el (data)
-    var data = tabla_proveedor.row($(this).parents("tr")).data(); //a que fila deteta que doy click
-    //esta condicion es importante para el responsibe porque salda un error si no lo pongo
-    if (tabla_proveedor.row(this).child.isShown()) {
-      //esto es cuando esta en tamaño responsibo
-      var data = tabla_proveedor.row(this).data();
+
+function validar_registro_proveedor(
+  razon_social,
+  ruc,
+  telefonoo,
+  correo,
+  direccion,
+  descripcion,
+  encargdo,
+  telefonoo_en
+) {
+  if (razon_social.length == 0 || razon_social.trim() == "") {
+    $("#razon_social_oblig").html("Ingrese razón social");
+  } else {
+    $("#razon_social_oblig").html("");
+  }
+
+  if (ruc.length == 0 || ruc.trim() == "") {
+    $("#ruc_obligg").html("Ingrese el ruc");
+  } else {
+    $("#ruc_obligg").html("");
+  }
+
+  if (telefonoo.length == 0 || telefonoo.trim() == "") {
+    $("#telefonoo_obligg").html("Ingrese el telefono");
+  } else {
+    $("#telefonoo_obligg").html("");
+  }
+
+  if (correo.length == 0 || correo.trim() == "") {
+    $("#correo_obligg").html("Ingrese el correo");
+  } else {
+    $("#correo_obligg").html("");
+  }
+
+  if (direccion.length == 0 || direccion.trim() == "") {
+    $("#direccion_obligg").html("Ingrese la dirección");
+  } else {
+    $("#direccion_obligg").html("");
+  }
+
+  if (descripcion.length == 0 || descripcion.trim() == "") {
+    $("#descripcion_obligg").html("Ingrese la descripción");
+  } else {
+    $("#descripcion_obligg").html("");
+  }
+
+  if (encargdo.length == 0 || encargdo.trim() == "") {
+    $("#encargdo_oblig").html("Ingrese el encargdo");
+  } else {
+    $("#encargdo_oblig").html("");
+  }
+
+  if (telefonoo_en.length == 0 || telefonoo_en.trim() == "") {
+    $("#telefonoo_en__obligg").html("Ingrese el telefono del encargado");
+  } else {
+    $("#telefonoo_en__obligg").html("");
+  }
+}
+
+function listado_proveedores() {
+  tabla_proveedor = $("#tabla_proveedore").DataTable({
+    ordering: true,
+    paging: true,
+    aProcessing: true,
+    aServerSide: true,
+    searching: { regex: true },
+    lengthMenu: [
+      [10, 25, 50, 100, -1],
+      [10, 25, 50, 100, "All"],
+    ],
+    pageLength: 10,
+    destroy: true,
+    async: false,
+    processing: true,
+
+    ajax: {
+      url: "/compras/listado_proveedores",
+      type: "GET",
+    },
+    //hay que poner la misma cantidad de columnas y tambien en el html
+    columns: [
+      { defaultContent: "" },
+      {
+        data: "estado",
+        render: function (data, type, row) {
+          if (data == 1) {
+            return `<button style='font-size:10px;' type='button' class='inactivar btn btn-outline-danger' title='Inactivar el cerdo'><i class='fa fa-times' style='font-size: 15px;'></i></button> - <button style='font-size:10px;' type='button' class='editar btn btn-outline-primary' title='Editar el cerdo'><i class='fa fa-edit' style='font-size: 15px;'></i></button>`;
+          } else {
+            return `<button style='font-size:10px;' type='button' class='activar btn btn-outline-success' title='Activar el cerdo'><i class='fa fa-check' style='font-size: 15px;'></i></button> - <button style='font-size:10px;' type='button' class='editar btn btn-outline-primary' title='Editar el cerdo'><i class='fa fa-edit' style='font-size: 15px;'></i></button>`;
+          }
+        },
+      },
+      { data: "razon" },
+      { data: "ruc" },
+      { data: "telefono" },
+      { data: "correo" },
+      { data: "direccion" },
+      { data: "encargado" },
+      { data: "telefono_en" },
+      { data: "descripcion" },
+      {
+        data: "estado",
+        render: function (data, type, row) {
+          if (data == 1) {
+            return "<span class='badge badge-success'>ACTIVO</span>";
+          } else {
+            return "<span class='badge badge-danger'>INACTIVO</span>";
+          }
+        },
+      },
+    ],
+    language: {
+      rows: "%d fila seleccionada",
+      processing: "Tratamiento en curso...",
+      search: "Buscar&nbsp;:",
+      lengthMenu: "Agrupar en _MENU_ items",
+      info: "Mostrando los item (_START_ al _END_) de un total _TOTAL_ items",
+      infoEmpty: "No existe datos.",
+      infoFiltered: "(filtrado de _MAX_ elementos en total)",
+      infoPostFix: "",
+      loadingRecords: "Cargando...",
+      zeroRecords: "No se encontro resultados en tu busqueda",
+      emptyTable: "No hay datos disponibles en la tabla",
+      paginate: {
+        first: "Primero",
+        previous: "Anterior",
+        next: "Siguiente",
+        last: "Ultimo",
+      },
+      select: {
+        rows: "%d fila seleccionada",
+      },
+      aria: {
+        sortAscending: ": active para ordenar la columa en orden ascendente",
+        sortDescending: ": active para ordenar la columna en orden descendente",
+      },
+    },
+    select: true,
+    responsive: "true",
+    dom: "Bfrtilp",
+    buttons: [
+      {
+        extend: "excelHtml5",
+        text: "Excel",
+        titleAttr: "Exportar a Excel",
+        className: "btn btn-success greenlover",
+      },
+      {
+        extend: "pdfHtml5",
+        text: "PDF",
+        titleAttr: "Exportar a PDF",
+        className: "btn btn-danger redfule",
+      },
+      {
+        extend: "print",
+        text: "Imprimir",
+        titleAttr: "Imprimir",
+        className: "btn btn-primary azuldete",
+      },
+    ],
+    order: [[0, "ASC"]],
+  });
+
+  //esto es para crearn un contador para la tabla este contador es automatico
+  tabla_proveedor.on("draw.dt", function () {
+    var pageinfo = $("#tabla_proveedore").DataTable().page.info();
+    tabla_proveedor
+      .column(0, { page: "current" })
+      .nodes()
+      .each(function (cell, i) {
+        cell.innerHTML = i + 1 + pageinfo.start;
+      });
+  });
+}
+
+$("#tabla_proveedore").on("click", ".inactivar", function () {
+  //esto esta extrayendo los datos de la tabla el (data)
+  var data = tabla_proveedor.row($(this).parents("tr")).data(); //a que fila deteta que doy click
+  //esta condicion es importante para el responsibe porque salda un error si no lo pongo
+  if (tabla_proveedor.row(this).child.isShown()) {
+    //esto es cuando esta en tamaño responsibo
+    var data = tabla_proveedor.row(this).data();
+  }
+  var dato = 0;
+  var id = data.id;
+
+  Swal.fire({
+    title: "Cambiar estado?",
+    text: "El estado del proveedor se cambiara!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Si, cambiar!",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      cambiar_estado_proveedor(id, dato);
     }
-
-    $("#id_proveedor").val(data.id);
-    $("#razon_social_edit").val(data.razon);
-    $("#ruc_edit").val(data.ruc);
-    $("#telefonoo_edit").val(data.telefono);
-    $("#correo_edit").val(data.correo);
-    $("#direccion_edit").val(data.direccion);
-    $("#descripcion_edit").val(data.descripcion);
-    $("#encargdo_edit").val(data.encargado);
-    $("#telefonoo_en_edit").val(data.telefono_en);
-
-    $("#razon_social_oblig_edit").html(""); 
-    $("#ruc_oblig_edit").html(""); 
-    $("#telefonoo_oblig_edit").html(""); 
-    $("#correo_oblig_edit").html(""); 
-    $("#direccion_oblig_edit").html(""); 
-    $("#descripcion_oblig_edit").html(""); 
-    $("#encargdo_oblig_edit").html(""); 
-    $("#telefonoo_en_oblig_edit").html("");
-  
-    $("#modal_editar_proveedor").modal({ backdrop: "static", keyboard: false });
-    $("#modal_editar_proveedor").modal("show");
+  });
 });
 
-function editar_proveedor() { 
+$("#tabla_proveedore").on("click", ".activar", function () {
+  //esto esta extrayendo los datos de la tabla el (data)
+  var data = tabla_proveedor.row($(this).parents("tr")).data(); //a que fila deteta que doy click
+  //esta condicion es importante para el responsibe porque salda un error si no lo pongo
+  if (tabla_proveedor.row(this).child.isShown()) {
+    //esto es cuando esta en tamaño responsibo
+    var data = tabla_proveedor.row(this).data();
+  }
+  var dato = 1;
+  var id = data.id;
+
+  Swal.fire({
+    title: "Cambiar estado?",
+    text: "El estado del proveedor se cambiara!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Si, cambiar!",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      cambiar_estado_proveedor(id, dato);
+    }
+  });
+});
+
+function cambiar_estado_proveedor(id, dato) {
+  var res = "";
+  if (dato == 1) {
+    res = "activo";
+  } else {
+    res = "inactivo";
+  }
+
+  $.ajax({
+    url: "/compras/estado_proveedor",
+    type: "POST",
+    data: { id: id, dato: dato },
+  }).done(function (response) {
+    if (response > 0) {
+      if (response == 1) {
+        tabla_proveedor.ajax.reload();
+        return Swal.fire(
+          "Estado proveedor",
+          "EL estado se " + res + " con extio",
+          "success"
+        );
+      }
+    } else {
+      return Swal.fire(
+        "Estado rol",
+        "No se pudo cambiar el estado, error en la matrix",
+        "error"
+      );
+    }
+  });
+}
+
+$("#tabla_proveedore").on("click", ".editar", function () {
+  //esto esta extrayendo los datos de la tabla el (data)
+  var data = tabla_proveedor.row($(this).parents("tr")).data(); //a que fila deteta que doy click
+  //esta condicion es importante para el responsibe porque salda un error si no lo pongo
+  if (tabla_proveedor.row(this).child.isShown()) {
+    //esto es cuando esta en tamaño responsibo
+    var data = tabla_proveedor.row(this).data();
+  }
+
+  $("#id_proveedor").val(data.id);
+  $("#razon_social_edit").val(data.razon);
+  $("#ruc_edit").val(data.ruc);
+  $("#telefonoo_edit").val(data.telefono);
+  $("#correo_edit").val(data.correo);
+  $("#direccion_edit").val(data.direccion);
+  $("#descripcion_edit").val(data.descripcion);
+  $("#encargdo_edit").val(data.encargado);
+  $("#telefonoo_en_edit").val(data.telefono_en);
+
+  $("#ruc_valid_edit").html('');
+
+  $("#razon_social_oblig_edit").html("");
+  $("#ruc_oblig_edit").html("");
+  $("#telefonoo_oblig_edit").html("");
+  $("#correo_oblig_edit").html("");
+  $("#direccion_oblig_edit").html("");
+  $("#descripcion_oblig_edit").html("");
+  $("#encargdo_oblig_edit").html("");
+  $("#telefonoo_en_oblig_edit").html("");
+
+  $("#modal_editar_proveedor").modal({ backdrop: "static", keyboard: false });
+  $("#modal_editar_proveedor").modal("show");
+});
+
+function editar_proveedor() {
   var id = $("#id_proveedor").val();
   var razon_social = $("#razon_social_edit").val();
   var ruc = $("#ruc_edit").val();
@@ -452,18 +457,29 @@ function editar_proveedor() {
       "Los campos no deben quedar vacios, complete los datos",
       "warning"
     );
-  } else { 
-      $("#razon_social_oblig_edit").html(""); 
-      $("#ruc_oblig_edit").html(""); 
-      $("#telefonoo_oblig_edit").html(""); 
-      $("#correo_oblig_edit").html(""); 
-      $("#direccion_oblig_edit").html(""); 
-      $("#descripcion_oblig_edit").html(""); 
-      $("#encargdo_oblig_edit").html(""); 
-      $("#telefonoo_en_oblig_edit").html("");
+  } else {
+    $("#razon_social_oblig_edit").html("");
+    $("#ruc_oblig_edit").html("");
+    $("#telefonoo_oblig_edit").html("");
+    $("#correo_oblig_edit").html("");
+    $("#direccion_oblig_edit").html("");
+    $("#descripcion_oblig_edit").html("");
+    $("#encargdo_oblig_edit").html("");
+    $("#telefonoo_en_oblig_edit").html("");
   }
 
-  var formdata = new FormData(); 
+  if (!valid_email_p_edit) {
+    $("#email_correcto_edit").html(" Correo incorrecto");
+    return swal.fire(
+      "Correo incorrecto",
+      "El correo ingresado es incorrecto",
+      "warning"
+    );
+  } else {
+    $("#email_correcto_edit").html("");
+  }
+
+  var formdata = new FormData();
   formdata.append("id", id);
   formdata.append("razon_social", razon_social);
   formdata.append("ruc", ruc);
@@ -472,7 +488,7 @@ function editar_proveedor() {
   formdata.append("direccion", direccion);
   formdata.append("descripcion", descripcion);
   formdata.append("encargdo", encargdo);
-  formdata.append("telefonoo_en", telefonoo_en); 
+  formdata.append("telefonoo_en", telefonoo_en);
 
   $.ajax({
     url: "/compras/editar_proveedor",
@@ -484,7 +500,7 @@ function editar_proveedor() {
     success: function (resp) {
       if (resp > 0) {
         if (resp == 1) {
-          $(".bg-primary").LoadingOverlay("hide");               
+          $(".bg-primary").LoadingOverlay("hide");
           $("#modal_editar_proveedor").modal("hide");
           tabla_proveedor.ajax.reload();
           return Swal.fire(
@@ -540,7 +556,7 @@ function validar_editar_proveedor(
     $("#ruc_oblig_edit").html("");
   }
 
-  if (telefonoo.length == 0  || telefonoo.trim() == "") {
+  if (telefonoo.length == 0 || telefonoo.trim() == "") {
     $("#telefonoo_oblig_edit").html("Ingrese el telefono");
   } else {
     $("#telefonoo_oblig_edit").html("");
@@ -579,7 +595,7 @@ function validar_editar_proveedor(
 
 ////////////////////////
 /////////// compras de alimentos para cerdos
-function registra_compra_alimento(){
+function registra_compra_alimento() {
   Swal.fire({
     title: 'Guardar compra de alimento?',
     text: "La compra se guardará en el sistema!",
@@ -595,48 +611,48 @@ function registra_compra_alimento(){
   })
 }
 
-function guardar_compra_alimento(){
-  var proveedor = $("#proveedor").val(); 
-  var fecha_c = $("#fecha_c").val(); 
-  var numero_compra = $("#numero_compra").val(); 
-  var tipo_comprobante = $("#tipo_comprobante").val(); 
-  var iva = $("#iva").val(); 
+function guardar_compra_alimento() {
+  var proveedor = $("#proveedor").val();
+  var fecha_c = $("#fecha_c").val();
+  var numero_compra = $("#numero_compra").val();
+  var tipo_comprobante = $("#tipo_comprobante").val();
+  var iva = $("#iva").val();
 
-  var subtotal = $("#subtotal").val(); 
-  var impuesto_sub = $("#impuesto_sub").val(); 
-  var total_pagar = $("#total_pagar").val(); 
+  var subtotal = $("#subtotal").val();
+  var impuesto_sub = $("#impuesto_sub").val();
+  var total_pagar = $("#total_pagar").val();
   var count = 0;
 
-  if(proveedor == "0" || 
-  numero_compra.length == 0 || 
-  numero_compra.trim() == "" ||
-  iva.length == 0 || 
-  iva.trim() == ""){
-    validar_registro_compra(proveedor,numero_compra,iva);
+  if (proveedor == "0" ||
+    numero_compra.length == 0 ||
+    numero_compra.trim() == "" ||
+    iva.length == 0 ||
+    iva.trim() == "") {
+    validar_registro_compra(proveedor, numero_compra, iva);
     return swal.fire(
       "Campo vacios",
       "Los campos no deben quedar vacios, complete los datos",
       "warning"
     );
-  }else{ 
-      $("#proveedor_obligg").html(""); 
-      $("#numero_c_obligg").html(""); 
-      $("#ivaa_obligg").html("");
+  } else {
+    $("#proveedor_obligg").html("");
+    $("#numero_c_obligg").html("");
+    $("#ivaa_obligg").html("");
   }
 
   $("#tabla_compra_alimento tbody#tbody_tabla_compra_alimento tr").each(function () {
-      count++;
-    }
+    count++;
+  }
   );
 
-  if(count == 0){ 
+  if (count == 0) {
     $("#unir_no_hay").html('<span class="badge badge-danger"><b>.:No hay alimentos en el detalle de compra:.</b></span>');
     return swal.fire(
       "Detalle vacío",
       "No hay alimentos en el detalle de compra",
       "warning"
     );
-  }else{
+  } else {
     $("#unir_no_hay").html("");
   }
 
@@ -648,7 +664,7 @@ function guardar_compra_alimento(){
   formdata.append("iva", iva);
   formdata.append("subtotal", subtotal);
   formdata.append("impuesto_sub", impuesto_sub);
-  formdata.append("total_pagar", total_pagar); 
+  formdata.append("total_pagar", total_pagar);
 
   $.ajax({
     url: "/compras/registrar_compra_alimento",
@@ -671,7 +687,7 @@ function guardar_compra_alimento(){
             "warning"
           );
 
-        } 
+        }
 
       } else {
 
@@ -693,7 +709,7 @@ function guardar_compra_alimento(){
   return false;
 }
 
-function guardar_detalle_compra_alimento(id){
+function guardar_detalle_compra_alimento(id) {
   var count = 0;
   var arrego_alimento = new Array();
   var arreglo_precio = new Array();
@@ -726,7 +742,7 @@ function guardar_detalle_compra_alimento(id){
   $.ajax({
     url: "/compras/registrar_detalle_compra_alimento",
     type: "POST",
-    data: { 
+    data: {
       id: id,
       ida: ida,
       precio: precio,
@@ -749,11 +765,11 @@ function guardar_detalle_compra_alimento(id){
           confirmButtonText: "Si, Imprimir!!",
         }).then((result) => {
           if (result.value) {
-            window.open("/reporte/compra_alimento/" + parseInt(id) + "#zoom=100%", "Reporte de compra","scrollbards=No");
-            cargar_contenido('contenido_principal','/compra_alimento');
+            window.open("/reporte/compra_alimento/" + parseInt(id) + "#zoom=100%", "Reporte de compra", "scrollbards=No");
+            cargar_contenido('contenido_principal', '/compra_alimento');
           }
         });
-        cargar_contenido('contenido_principal','/compra_alimento');
+        cargar_contenido('contenido_principal', '/compra_alimento');
       }
     } else {
 
@@ -767,7 +783,7 @@ function guardar_detalle_compra_alimento(id){
   });
 }
 
-function validar_registro_compra(proveedor,numero_compra,iva) {
+function validar_registro_compra(proveedor, numero_compra, iva) {
   if (proveedor == "0") {
     $("#proveedor_obligg").html("Seleccione el proveedor");
   } else {
@@ -787,7 +803,7 @@ function validar_registro_compra(proveedor,numero_compra,iva) {
   }
 }
 
-function anular_compa_alimento(id){
+function anular_compa_alimento(id) {
   Swal.fire({
     title: "Anular la compra?",
     text: "La compra se anulará!",
@@ -811,7 +827,7 @@ function compra_alimneto_anular(id) {
   }).done(function (response) {
     if (response > 0) {
       if (response == 1) {
-        cargar_contenido('contenido_principal','/compra_alimento');
+        cargar_contenido('contenido_principal', '/compra_alimento');
         return Swal.fire(
           "Compar anulada",
           "La compra se anulo con extio",
@@ -859,7 +875,7 @@ function registra_tipo_insumo() {
 
         $("#mensaje_tipo_i_success").text("El tipo de insumo se creo con exito");
         $(".alerta_smsm_tipo_i_success").show(3000);
-        
+
         tabla_tipo_insumo.ajax.reload();
 
       } else if (response == 2) {
@@ -1029,7 +1045,7 @@ function editar_tipo_insumo() {
 
         $("#mensaje_tipo_i_success").text("El tipo de insumo se edito con exito");
         $(".alerta_smsm_tipo_i_success").show(3000);
-        
+
         tabla_tipo_insumo.ajax.reload();
 
         $("#unir_texto").text("Registrar tipo insumo");
@@ -1129,17 +1145,17 @@ function cambiar_estado_tipo_insumo(id, dato) {
   }).done(function (response) {
     if (response > 0) {
       if (response == 1) {
-        
+
         tabla_tipo_insumo.ajax.reload();
         return Swal.fire(
-          "Estado de marca",
+          "Estado de tipo insumo",
           "EL estado se " + res + " con extio",
           "success"
         );
       }
     } else {
       return Swal.fire(
-        "Estado de marca",
+        "Estado de tipo insumo",
         "No se pudo cambiar el estado, error en la matrix",
         "error"
       );
@@ -1148,7 +1164,7 @@ function cambiar_estado_tipo_insumo(id, dato) {
 }
 
 //// insumos
-function registrar_insumo(){
+function registrar_insumo() {
   Swal.fire({
     title: 'Guardar registro?',
     text: "El registro se guardará en el sistema!",
@@ -1164,13 +1180,13 @@ function registrar_insumo(){
   })
 }
 
-function guardar_insumo(){
+function guardar_insumo() {
   var codigo = $("#codigo_alimento").val();
   var nombre = $("#nombre").val();
   var tipo = $("#tipo_id").val();
   var cantidad = $("#cantidad").val();
-  var precio = $("#precio_c").val(); 
-  var detalle = $("#detalle_a").val(); 
+  var precio = $("#precio_c").val();
+  var detalle = $("#detalle_a").val();
 
   if (
     codigo.length == 0 ||
@@ -1189,9 +1205,9 @@ function guardar_insumo(){
     validar_registro_insumo(
       codigo,
       nombre,
-      tipo, 
+      tipo,
       cantidad,
-      precio, 
+      precio,
       detalle
     );
 
@@ -1203,9 +1219,9 @@ function guardar_insumo(){
   } else {
     $("#codigo_oblig").html("");
     $("#nombre_obligg").html("");
-    $("#tipo_obligg").html(""); 
+    $("#tipo_obligg").html("");
     $("#cantidad_obligg").html("");
-    $("#precio_obligg").html(""); 
+    $("#precio_obligg").html("");
     $("#detalle_obligg").html("");
   }
 
@@ -1214,9 +1230,9 @@ function guardar_insumo(){
   //est valores son como los que van en la data del ajax
   formdata.append("codigo", codigo);
   formdata.append("nombre", nombre);
-  formdata.append("tipo", tipo); 
+  formdata.append("tipo", tipo);
   formdata.append("cantidad", cantidad);
-  formdata.append("precio", precio); 
+  formdata.append("precio", precio);
   formdata.append("detalle", detalle);
   formdata.append("foto", foto);
 
@@ -1267,9 +1283,9 @@ function guardar_insumo(){
 function validar_registro_insumo(
   codigo,
   nombre,
-  tipo, 
+  tipo,
   cantidad,
-  precio, 
+  precio,
   detalle
 ) {
   if (codigo.length == 0 || codigo.trim() == "") {
@@ -1344,7 +1360,7 @@ function listar_insumos() {
       },
       { data: "codigo" },
       { data: "nombre" },
-      { data: "tipo" }, 
+      { data: "tipo" },
       {
         data: "foto",
         render: function (data, type, row) {
@@ -1370,7 +1386,7 @@ function listar_insumos() {
         },
       },
     ],
-    
+
     language: {
       rows: "%d fila seleccionada",
       processing: "Tratamiento en curso...",
@@ -1534,27 +1550,27 @@ $("#tabla_insumo").on("click", ".editar", function () {
   $("#tipo_id_edit").val(data.tipo_id).trigger("change");
   $("#cantidad_edit").val(data.cantidad);
   $("#precio_c_edit").val(data.precio);
-  $("#detalle_a_edit").val(data.detalle); 
+  $("#detalle_a_edit").val(data.detalle);
 
-  $("#codigo_oblig_edi").html(""); 
-  $("#nombre_obligg_edi").html(""); 
-  $("#tipo_obligg_edi").html(""); 
-  $("#cantidad_obligg_edi").html(""); 
-  $("#precio_obligg_edi").html(""); 
-  $("#detalle_obligg_edi").html("");  
+  $("#codigo_oblig_edi").html("");
+  $("#nombre_obligg_edi").html("");
+  $("#tipo_obligg_edi").html("");
+  $("#cantidad_obligg_edi").html("");
+  $("#precio_obligg_edi").html("");
+  $("#detalle_obligg_edi").html("");
 
   $("#modal_editar_insumo").modal({ backdrop: "static", keyboard: false });
   $("#modal_editar_insumo").modal("show");
 });
 
-function editar_insumo(){
+function editar_insumo() {
   var id = $("#id_insumo_edit").val();
   var codigo = $("#codigo_insumo_edit").val();
   var nombre = $("#nombre_edit").val();
   var tipo = $("#tipo_id_edit").val();
   var cantidad = $("#cantidad_edit").val();
-  var precio = $("#precio_c_edit").val(); 
-  var detalle = $("#detalle_a_edit").val(); 
+  var precio = $("#precio_c_edit").val();
+  var detalle = $("#detalle_a_edit").val();
 
   if (
     codigo.length == 0 ||
@@ -1573,9 +1589,9 @@ function editar_insumo(){
     validar_editar_insumo(
       codigo,
       nombre,
-      tipo, 
+      tipo,
       cantidad,
-      precio, 
+      precio,
       detalle
     );
 
@@ -1587,20 +1603,20 @@ function editar_insumo(){
   } else {
     $("#codigo_oblig_edi").html("");
     $("#nombre_obligg_edi").html("");
-    $("#tipo_obligg_edi").html(""); 
+    $("#tipo_obligg_edi").html("");
     $("#cantidad_obligg_edi").html("");
-    $("#precio_obligg_edi").html(""); 
+    $("#precio_obligg_edi").html("");
     $("#detalle_obligg_edi").html("");
   }
 
-  var formdata = new FormData(); 
+  var formdata = new FormData();
   formdata.append("id", id);
   formdata.append("codigo", codigo);
   formdata.append("nombre", nombre);
-  formdata.append("tipo", tipo); 
+  formdata.append("tipo", tipo);
   formdata.append("cantidad", cantidad);
-  formdata.append("precio", precio); 
-  formdata.append("detalle", detalle); 
+  formdata.append("precio", precio);
+  formdata.append("detalle", detalle);
 
   $.ajax({
     url: "/compras/editar_insumo",
@@ -1655,9 +1671,9 @@ function editar_insumo(){
 function validar_editar_insumo(
   codigo,
   nombre,
-  tipo, 
+  tipo,
   cantidad,
-  precio, 
+  precio,
   detalle
 ) {
   if (codigo.length == 0 || codigo.trim() == "") {
@@ -1780,7 +1796,7 @@ function editar_foto_insumo() {
 }
 
 /////////// compras de alimentos para cerdos
-function registra_compra_insumo(){
+function registra_compra_insumo() {
   Swal.fire({
     title: 'Guardar compra de insumo?',
     text: "La compra se guardará en el sistema!",
@@ -1796,49 +1812,49 @@ function registra_compra_insumo(){
   })
 }
 
-function guardar_compra_insumo(){
-  var proveedor = $("#proveedor").val(); 
-  var fecha_c = $("#fecha_c").val(); 
-  var numero_compra = $("#numero_compra").val(); 
-  var tipo_comprobante = $("#tipo_comprobante").val(); 
-  var iva = $("#iva").val(); 
+function guardar_compra_insumo() {
+  var proveedor = $("#proveedor").val();
+  var fecha_c = $("#fecha_c").val();
+  var numero_compra = $("#numero_compra").val();
+  var tipo_comprobante = $("#tipo_comprobante").val();
+  var iva = $("#iva").val();
 
-  var subtotal = $("#subtotal").val(); 
-  var impuesto_sub = $("#impuesto_sub").val(); 
-  var total_pagar = $("#total_pagar").val(); 
+  var subtotal = $("#subtotal").val();
+  var impuesto_sub = $("#impuesto_sub").val();
+  var total_pagar = $("#total_pagar").val();
   var count = 0;
 
-  if(proveedor == "0" || 
-  numero_compra.length == 0 || 
-  numero_compra.trim() == "" ||
-  iva.length == 0 || 
-  iva.trim() == ""){
+  if (proveedor == "0" ||
+    numero_compra.length == 0 ||
+    numero_compra.trim() == "" ||
+    iva.length == 0 ||
+    iva.trim() == "") {
 
-    validar_registro_compra_insumo(proveedor,numero_compra,iva);
+    validar_registro_compra_insumo(proveedor, numero_compra, iva);
     return swal.fire(
       "Campo vacios",
       "Los campos no deben quedar vacios, complete los datos",
       "warning"
     );
-  }else{ 
-      $("#proveedor_obligg").html(""); 
-      $("#numero_c_obligg").html(""); 
-      $("#ivaa_obligg").html("");
+  } else {
+    $("#proveedor_obligg").html("");
+    $("#numero_c_obligg").html("");
+    $("#ivaa_obligg").html("");
   }
 
   $("#tabla_compra_insumo tbody#tbody_tabla_compra_insumo tr").each(function () {
-      count++;
-    }
+    count++;
+  }
   );
 
-  if(count == 0){ 
+  if (count == 0) {
     $("#unir_no_hay").html('<span class="badge badge-danger"><b>.:No hay insumo en el detalle de compra:.</b></span>');
     return swal.fire(
       "Detalle vacío",
       "No hay insumo en el detalle de compra",
       "warning"
     );
-  }else{
+  } else {
     $("#unir_no_hay").html("");
   }
 
@@ -1850,7 +1866,7 @@ function guardar_compra_insumo(){
   formdata.append("iva", iva);
   formdata.append("subtotal", subtotal);
   formdata.append("impuesto_sub", impuesto_sub);
-  formdata.append("total_pagar", total_pagar); 
+  formdata.append("total_pagar", total_pagar);
 
   $.ajax({
     url: "/compras/registrar_compra_insumo",
@@ -1871,7 +1887,7 @@ function guardar_compra_insumo(){
             "El número de compra: '" + numero_compra + "', ya existe en el sistema",
             "warning"
           );
-        } 
+        }
 
       } else {
 
@@ -1893,7 +1909,7 @@ function guardar_compra_insumo(){
   return false;
 }
 
-function validar_registro_compra_insumo(proveedor,numero_compra,iva) {
+function validar_registro_compra_insumo(proveedor, numero_compra, iva) {
   if (proveedor == "0") {
     $("#proveedor_obligg").html("Seleccione el proveedor");
   } else {
@@ -1913,7 +1929,7 @@ function validar_registro_compra_insumo(proveedor,numero_compra,iva) {
   }
 }
 
-function guardar_detalle_compra_insumo(id){
+function guardar_detalle_compra_insumo(id) {
   var count = 0;
   var arrego_alimento = new Array();
   var arreglo_precio = new Array();
@@ -1946,7 +1962,7 @@ function guardar_detalle_compra_insumo(id){
   $.ajax({
     url: "/compras/registrar_detalle_compra_insumo",
     type: "POST",
-    data: { 
+    data: {
       id: id,
       ida: ida,
       precio: precio,
@@ -1969,11 +1985,11 @@ function guardar_detalle_compra_insumo(id){
           confirmButtonText: "Si, Imprimir!!",
         }).then((result) => {
           if (result.value) {
-            window.open("/reporte/compra_insumo/" + parseInt(id) + "#zoom=100%", "Reporte de compra","scrollbards=No");
-            cargar_contenido('contenido_principal','/compra_insumos');
+            window.open("/reporte/compra_insumo/" + parseInt(id) + "#zoom=100%", "Reporte de compra", "scrollbards=No");
+            cargar_contenido('contenido_principal', '/compra_insumos');
           }
         });
-        cargar_contenido('contenido_principal','/compra_insumos');
+        cargar_contenido('contenido_principal', '/compra_insumos');
       }
     } else {
 
@@ -1987,7 +2003,7 @@ function guardar_detalle_compra_insumo(id){
   });
 }
 
-function anular_compa_insumo(id){
+function anular_compa_insumo(id) {
   Swal.fire({
     title: "Anular la compra de insumo?",
     text: "La compra se anulará!",
@@ -2011,7 +2027,7 @@ function compra_insumo_anular(id) {
   }).done(function (response) {
     if (response > 0) {
       if (response == 1) {
-        cargar_contenido('contenido_principal','/compra_insumos');
+        cargar_contenido('contenido_principal', '/compra_insumos');
         return Swal.fire(
           "Compar de insumo anulada",
           "La compra se anulo con extio",
@@ -2058,7 +2074,7 @@ function registra_tipo_medicamento() {
 
         $("#mensaje_tipo_m_success").text("El tipo de medicamento se creo con exito");
         $(".alerta_smsm_tipo_m_success").show(3000);
-        
+
         tabla_tipo_medicamento.ajax.reload();
 
       } else if (response == 2) {
@@ -2241,7 +2257,7 @@ function cambiar_estado_tipo_medicamento(id, dato) {
   }).done(function (response) {
     if (response > 0) {
       if (response == 1) {
-        
+
         tabla_tipo_medicamento.ajax.reload();
 
         return Swal.fire(
@@ -2316,7 +2332,7 @@ function editar_tipo_medicamento() {
 
         $("#mensaje_tipo_m_success").text("El tipo de insumo se edito con exito");
         $(".alerta_smsm_tipo_m_success").show(3000);
-        
+
         tabla_tipo_medicamento.ajax.reload();
 
         $("#unir_texto").text("Registrar tipo medicamento");
@@ -2347,7 +2363,7 @@ function editar_tipo_medicamento() {
   });
 }
 
-function registrar_medicamentos(){
+function registrar_medicamentos() {
   Swal.fire({
     title: 'Guardar registro?',
     text: "El registro se guardará en el sistema!",
@@ -2363,13 +2379,13 @@ function registrar_medicamentos(){
   })
 }
 
-function guardar_medicamento(){
+function guardar_medicamento() {
   var codigo = $("#codigo_medicamento").val();
   var nombre = $("#nombre").val();
   var tipo = $("#tipo_id").val();
   var cantidad = $("#cantidad").val();
-  var precio = $("#precio_c").val(); 
-  var detalle = $("#detalle_m").val(); 
+  var precio = $("#precio_c").val();
+  var detalle = $("#detalle_m").val();
 
   if (
     codigo.length == 0 ||
@@ -2388,9 +2404,9 @@ function guardar_medicamento(){
     validar_registro_medicamento(
       codigo,
       nombre,
-      tipo, 
+      tipo,
       cantidad,
-      precio, 
+      precio,
       detalle
     );
 
@@ -2402,9 +2418,9 @@ function guardar_medicamento(){
   } else {
     $("#codigo_oblig").html("");
     $("#nombre_obligg").html("");
-    $("#tipo_obligg").html(""); 
+    $("#tipo_obligg").html("");
     $("#cantidad_obligg").html("");
-    $("#precio_obligg").html(""); 
+    $("#precio_obligg").html("");
     $("#detalle_obligg").html("");
   }
 
@@ -2413,9 +2429,9 @@ function guardar_medicamento(){
   //est valores son como los que van en la data del ajax
   formdata.append("codigo", codigo);
   formdata.append("nombre", nombre);
-  formdata.append("tipo", tipo); 
+  formdata.append("tipo", tipo);
   formdata.append("cantidad", cantidad);
-  formdata.append("precio", precio); 
+  formdata.append("precio", precio);
   formdata.append("detalle", detalle);
   formdata.append("foto", foto);
 
@@ -2466,9 +2482,9 @@ function guardar_medicamento(){
 function validar_registro_medicamento(
   codigo,
   nombre,
-  tipo, 
+  tipo,
   cantidad,
-  precio, 
+  precio,
   detalle
 ) {
   if (codigo.length == 0 || codigo.trim() == "") {
@@ -2544,7 +2560,7 @@ function listar_medicamento() {
       },
       { data: "codigo" },
       { data: "nombre" },
-      { data: "tipo" }, 
+      { data: "tipo" },
       {
         data: "foto",
         render: function (data, type, row) {
@@ -2570,7 +2586,7 @@ function listar_medicamento() {
         },
       },
     ],
-    
+
     language: {
       rows: "%d fila seleccionada",
       processing: "Tratamiento en curso...",
@@ -2734,27 +2750,27 @@ $("#tabla_medicamento").on("click", ".editar", function () {
   $("#tipo_id_edit").val(data.tipo_id).trigger("change");
   $("#cantidad_edit").val(data.cantidad);
   $("#precio_c_edit").val(data.precio);
-  $("#detalle_m_edit").val(data.detalle); 
+  $("#detalle_m_edit").val(data.detalle);
 
-  $("#codigo_oblig_edi").html(""); 
-  $("#nombre_obligg_edi").html(""); 
-  $("#tipo_obligg_edi").html(""); 
-  $("#cantidad_obligg_edi").html(""); 
-  $("#precio_obligg_edi").html(""); 
-  $("#detalle_obligg_edi").html("");  
+  $("#codigo_oblig_edi").html("");
+  $("#nombre_obligg_edi").html("");
+  $("#tipo_obligg_edi").html("");
+  $("#cantidad_obligg_edi").html("");
+  $("#precio_obligg_edi").html("");
+  $("#detalle_obligg_edi").html("");
 
   $("#modal_editar_medicamento").modal({ backdrop: "static", keyboard: false });
   $("#modal_editar_medicamento").modal("show");
 });
 
-function editar_medicamento(){
+function editar_medicamento() {
   var id = $("#id_medicamento_edit").val();
   var codigo = $("#codigo_medicamento_edit").val();
   var nombre = $("#nombre_edit").val();
   var tipo = $("#tipo_id_edit").val();
   var cantidad = $("#cantidad_edit").val();
-  var precio = $("#precio_c_edit").val(); 
-  var detalle = $("#detalle_m_edit").val(); 
+  var precio = $("#precio_c_edit").val();
+  var detalle = $("#detalle_m_edit").val();
 
   if (
     codigo.length == 0 ||
@@ -2773,9 +2789,9 @@ function editar_medicamento(){
     validar_editar_medicamento(
       codigo,
       nombre,
-      tipo, 
+      tipo,
       cantidad,
-      precio, 
+      precio,
       detalle
     );
 
@@ -2787,20 +2803,20 @@ function editar_medicamento(){
   } else {
     $("#codigo_oblig_edi").html("");
     $("#nombre_obligg_edi").html("");
-    $("#tipo_obligg_edi").html(""); 
+    $("#tipo_obligg_edi").html("");
     $("#cantidad_obligg_edi").html("");
-    $("#precio_obligg_edi").html(""); 
+    $("#precio_obligg_edi").html("");
     $("#detalle_obligg_edi").html("");
   }
 
-  var formdata = new FormData(); 
+  var formdata = new FormData();
   formdata.append("id", id);
   formdata.append("codigo", codigo);
   formdata.append("nombre", nombre);
-  formdata.append("tipo", tipo); 
+  formdata.append("tipo", tipo);
   formdata.append("cantidad", cantidad);
-  formdata.append("precio", precio); 
-  formdata.append("detalle", detalle); 
+  formdata.append("precio", precio);
+  formdata.append("detalle", detalle);
 
   $.ajax({
     url: "/compras/editar_medicamento",
@@ -2855,9 +2871,9 @@ function editar_medicamento(){
 function validar_editar_medicamento(
   codigo,
   nombre,
-  tipo, 
+  tipo,
   cantidad,
-  precio, 
+  precio,
   detalle
 ) {
   if (codigo.length == 0 || codigo.trim() == "") {
@@ -2980,7 +2996,7 @@ function editar_foto_medicamento() {
 }
 
 //// COMPRAS DE MEDICAMENTOS 
-function registra_compra_medicamento(){
+function registra_compra_medicamento() {
   Swal.fire({
     title: 'Guardar compra de medicamento?',
     text: "La compra se guardará en el sistema!",
@@ -2996,49 +3012,49 @@ function registra_compra_medicamento(){
   })
 }
 
-function guardar_compra_medicamentoo(){
-  var proveedor = $("#proveedor").val(); 
-  var fecha_c = $("#fecha_c").val(); 
-  var numero_compra = $("#numero_compra").val(); 
-  var tipo_comprobante = $("#tipo_comprobante").val(); 
-  var iva = $("#iva").val(); 
+function guardar_compra_medicamentoo() {
+  var proveedor = $("#proveedor").val();
+  var fecha_c = $("#fecha_c").val();
+  var numero_compra = $("#numero_compra").val();
+  var tipo_comprobante = $("#tipo_comprobante").val();
+  var iva = $("#iva").val();
 
-  var subtotal = $("#subtotal").val(); 
-  var impuesto_sub = $("#impuesto_sub").val(); 
-  var total_pagar = $("#total_pagar").val(); 
+  var subtotal = $("#subtotal").val();
+  var impuesto_sub = $("#impuesto_sub").val();
+  var total_pagar = $("#total_pagar").val();
   var count = 0;
 
-  if(proveedor == "0" || 
-  numero_compra.length == 0 || 
-  numero_compra.trim() == "" ||
-  iva.length == 0 || 
-  iva.trim() == ""){
+  if (proveedor == "0" ||
+    numero_compra.length == 0 ||
+    numero_compra.trim() == "" ||
+    iva.length == 0 ||
+    iva.trim() == "") {
 
-    validar_registro_compra_medicamento(proveedor,numero_compra,iva);
+    validar_registro_compra_medicamento(proveedor, numero_compra, iva);
     return swal.fire(
       "Campo vacios",
       "Los campos no deben quedar vacios, complete los datos",
       "warning"
     );
-  }else{ 
-      $("#proveedor_obligg").html(""); 
-      $("#numero_c_obligg").html(""); 
-      $("#ivaa_obligg").html("");
+  } else {
+    $("#proveedor_obligg").html("");
+    $("#numero_c_obligg").html("");
+    $("#ivaa_obligg").html("");
   }
 
   $("#tabla_compra_medicamentoo tbody#tbody_tabla_compra_medicamentoo tr").each(function () {
-      count++;
-    }
+    count++;
+  }
   );
 
-  if(count == 0){ 
+  if (count == 0) {
     $("#unir_no_hay").html('<span class="badge badge-danger"><b>.:No hay medicamento en el detalle de compra:.</b></span>');
     return swal.fire(
       "Detalle vacío",
       "No hay medicamento en el detalle de compra",
       "warning"
     );
-  }else{
+  } else {
     $("#unir_no_hay").html("");
   }
 
@@ -3050,7 +3066,7 @@ function guardar_compra_medicamentoo(){
   formdata.append("iva", iva);
   formdata.append("subtotal", subtotal);
   formdata.append("impuesto_sub", impuesto_sub);
-  formdata.append("total_pagar", total_pagar); 
+  formdata.append("total_pagar", total_pagar);
 
   $.ajax({
     url: "/compras/registrar_compra_medicamentoo",
@@ -3070,7 +3086,7 @@ function guardar_compra_medicamentoo(){
             "El número de compra: '" + numero_compra + "', ya existe en el sistema",
             "warning"
           );
-        } 
+        }
 
       } else {
 
@@ -3092,7 +3108,7 @@ function guardar_compra_medicamentoo(){
   return false;
 }
 
-function validar_registro_compra_medicamento(proveedor,numero_compra,iva) {
+function validar_registro_compra_medicamento(proveedor, numero_compra, iva) {
   if (proveedor == "0") {
     $("#proveedor_obligg").html("Seleccione el proveedor");
   } else {
@@ -3112,7 +3128,7 @@ function validar_registro_compra_medicamento(proveedor,numero_compra,iva) {
   }
 }
 
-function guardar_detalle_compra_medicamento(id){
+function guardar_detalle_compra_medicamento(id) {
   var count = 0;
   var arrego_alimento = new Array();
   var arreglo_precio = new Array();
@@ -3145,7 +3161,7 @@ function guardar_detalle_compra_medicamento(id){
   $.ajax({
     url: "/compras/registrar_detalle_compra_medicamento",
     type: "POST",
-    data: { 
+    data: {
       id: id,
       ida: ida,
       precio: precio,
@@ -3168,11 +3184,11 @@ function guardar_detalle_compra_medicamento(id){
           confirmButtonText: "Si, Imprimir!!",
         }).then((result) => {
           if (result.value) {
-            window.open("/reporte/compra_medicamento/" + parseInt(id) + "#zoom=100%", "Reporte de compra","scrollbards=No");
-            cargar_contenido('contenido_principal','/compra_medicamento');
+            window.open("/reporte/compra_medicamento/" + parseInt(id) + "#zoom=100%", "Reporte de compra", "scrollbards=No");
+            cargar_contenido('contenido_principal', '/compra_medicamento');
           }
         });
-        cargar_contenido('contenido_principal','/compra_medicamento');
+        cargar_contenido('contenido_principal', '/compra_medicamento');
       }
     } else {
 
@@ -3186,7 +3202,7 @@ function guardar_detalle_compra_medicamento(id){
   });
 }
 
-function anular_compa_medicamento(id){
+function anular_compa_medicamento(id) {
   Swal.fire({
     title: "Anular la compra de medicamento?",
     text: "La compra se anulará!",
@@ -3210,7 +3226,7 @@ function compra_medicamento_anular(id) {
   }).done(function (response) {
     if (response > 0) {
       if (response == 1) {
-        cargar_contenido('contenido_principal','/compra_medicamento');
+        cargar_contenido('contenido_principal', '/compra_medicamento');
         return Swal.fire(
           "Compar de medicamento anulada",
           "La compra se anulo con extio",
@@ -3228,7 +3244,7 @@ function compra_medicamento_anular(id) {
 }
 
 ////////////// compras vacunas
-function registra_compra_vacunas(){
+function registra_compra_vacunas() {
   Swal.fire({
     title: 'Guardar compra de vacuna?',
     text: "La compra se guardará en el sistema!",
@@ -3244,49 +3260,49 @@ function registra_compra_vacunas(){
   })
 }
 
-function guardar_compra_vacuna(){
-  var proveedor = $("#proveedor").val(); 
-  var fecha_c = $("#fecha_c").val(); 
-  var numero_compra = $("#numero_compra").val(); 
-  var tipo_comprobante = $("#tipo_comprobante").val(); 
-  var iva = $("#iva").val(); 
+function guardar_compra_vacuna() {
+  var proveedor = $("#proveedor").val();
+  var fecha_c = $("#fecha_c").val();
+  var numero_compra = $("#numero_compra").val();
+  var tipo_comprobante = $("#tipo_comprobante").val();
+  var iva = $("#iva").val();
 
-  var subtotal = $("#subtotal").val(); 
-  var impuesto_sub = $("#impuesto_sub").val(); 
-  var total_pagar = $("#total_pagar").val(); 
+  var subtotal = $("#subtotal").val();
+  var impuesto_sub = $("#impuesto_sub").val();
+  var total_pagar = $("#total_pagar").val();
   var count = 0;
 
-  if(proveedor == "0" || 
-  numero_compra.length == 0 || 
-  numero_compra.trim() == "" ||
-  iva.length == 0 || 
-  iva.trim() == ""){
+  if (proveedor == "0" ||
+    numero_compra.length == 0 ||
+    numero_compra.trim() == "" ||
+    iva.length == 0 ||
+    iva.trim() == "") {
 
-    validar_registro_compra_vacuna(proveedor,numero_compra,iva);
+    validar_registro_compra_vacuna(proveedor, numero_compra, iva);
     return swal.fire(
       "Campo vacios",
       "Los campos no deben quedar vacios, complete los datos",
       "warning"
     );
-  }else{ 
-      $("#proveedor_obligg").html(""); 
-      $("#numero_c_obligg").html(""); 
-      $("#ivaa_obligg").html("");
+  } else {
+    $("#proveedor_obligg").html("");
+    $("#numero_c_obligg").html("");
+    $("#ivaa_obligg").html("");
   }
 
   $("#tabla_compra_vacunas tbody#tbody_tabla_compra_vacunas tr").each(function () {
-      count++;
-    }
+    count++;
+  }
   );
 
-  if(count == 0){ 
+  if (count == 0) {
     $("#unir_no_hay").html('<span class="badge badge-danger" style="font-size: 30px;"><b>.:No hay vacuna en el detalle de compra:.</b></span>');
     return swal.fire(
       "Detalle vacío",
       "No hay vacuna en el detalle de compra",
       "warning"
     );
-  }else{
+  } else {
     $("#unir_no_hay").html("");
   }
 
@@ -3298,7 +3314,7 @@ function guardar_compra_vacuna(){
   formdata.append("iva", iva);
   formdata.append("subtotal", subtotal);
   formdata.append("impuesto_sub", impuesto_sub);
-  formdata.append("total_pagar", total_pagar); 
+  formdata.append("total_pagar", total_pagar);
 
   $.ajax({
     url: "/compras/registrar_compra_vacuna",
@@ -3319,7 +3335,7 @@ function guardar_compra_vacuna(){
             "El número de compra: '" + numero_compra + "', ya existe en el sistema",
             "warning"
           );
-        } 
+        }
 
       } else {
 
@@ -3341,7 +3357,7 @@ function guardar_compra_vacuna(){
   return false;
 }
 
-function validar_registro_compra_vacuna(proveedor,numero_compra,iva) {
+function validar_registro_compra_vacuna(proveedor, numero_compra, iva) {
   if (proveedor == "0") {
     $("#proveedor_obligg").html("Seleccione el proveedor");
   } else {
@@ -3361,7 +3377,7 @@ function validar_registro_compra_vacuna(proveedor,numero_compra,iva) {
   }
 }
 
-function guardar_detalle_compra_vacunas(id){
+function guardar_detalle_compra_vacunas(id) {
   var count = 0;
   var arrego_alimento = new Array();
   var arreglo_precio = new Array();
@@ -3394,7 +3410,7 @@ function guardar_detalle_compra_vacunas(id){
   $.ajax({
     url: "/compras/registrar_detalle_compra_vacuna",
     type: "POST",
-    data: { 
+    data: {
       id: id,
       ida: ida,
       precio: precio,
@@ -3417,10 +3433,10 @@ function guardar_detalle_compra_vacunas(id){
           confirmButtonText: "Si, Imprimir!!",
         }).then((result) => {
           if (result.value) {
-            window.open("/reporte/compra_vacuna/" + parseInt(id) + "#zoom=100%", "Reporte de compra","scrollbards=No");
+            window.open("/reporte/compra_vacuna/" + parseInt(id) + "#zoom=100%", "Reporte de compra", "scrollbards=No");
           }
         });
-        cargar_contenido('contenido_principal','/compra_vacunas');
+        cargar_contenido('contenido_principal', '/compra_vacunas');
       }
     } else {
 
@@ -3434,7 +3450,7 @@ function guardar_detalle_compra_vacunas(id){
   });
 }
 
-function anular_compa_vacunas(id){
+function anular_compa_vacunas(id) {
   Swal.fire({
     title: "Anular la compra de vacuna?",
     text: "La compra se anulará!",
@@ -3458,7 +3474,7 @@ function compra_vacuna_anular(id) {
   }).done(function (response) {
     if (response > 0) {
       if (response == 1) {
-        cargar_contenido('contenido_principal','/compra_vacunas');
+        cargar_contenido('contenido_principal', '/compra_vacunas');
         return Swal.fire(
           "Compar de vacuna anulada",
           "La compra se anulo con extio",

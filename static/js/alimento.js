@@ -1516,14 +1516,14 @@ function cambiar_estado_tipo_alimentacion(id, dato) {
       if (response == 1) {
         tabla_tipo_alimentacion.ajax.reload();
         return Swal.fire(
-          "Estado de marca",
+          "Estado de alimentación",
           "EL estado se " + res + " con extio",
           "success"
         );
       }
     } else {
       return Swal.fire(
-        "Estado de marca",
+        "Estado de alimentación",
         "No se pudo cambiar el estado, error en la matrix",
         "error"
       );

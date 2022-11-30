@@ -109,7 +109,7 @@ class Vacunas():
     def Listar_tipo_vacuna():
         try:
             query = mysql.connection.cursor()
-            query.execute('SELECT * FROM tipo_vacuna')
+            query.execute('SELECT * FROM tipo_vacuna ORDER BY id DESC')
             data = query.fetchall()
             query.close()
             new_lista = []
@@ -212,7 +212,7 @@ class Vacunas():
                         vacuna.estado 
                     FROM
                         vacuna
-                        INNER JOIN tipo_vacuna ON vacuna.tipo_id = tipo_vacuna.id""")
+                        INNER JOIN tipo_vacuna ON vacuna.tipo_id = tipo_vacuna.id ORDER BY vacuna.id DESC""")
             data = query.fetchall()
             query.close()
             new_lista = []

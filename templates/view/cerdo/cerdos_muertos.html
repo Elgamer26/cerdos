@@ -129,7 +129,7 @@
                                   <div class="row text-center">
 
                                     <div class="form-group col-lg-8 col-6 text-center">
-                                        <label for="cerdo">Cerdo:</label>
+                                        <label for="cerdo">Cerdo en gálpon:</label>
                                         <select class="form-control cerdo_select" style="width: 100%" id="cerdo">
                                             <option value="0">--- Seleccione cerdo ---</option>    
                                             {% for datas in data.cerdo %}
@@ -141,7 +141,7 @@
     
                                     <div class="form-group col-lg-3 col-6">
                                         <label for="fecha_c">Fecha</label>
-                                        <input type="date" class="form-control" value="{{data.fecha}}" id="fecha_c" />
+                                        <input type="date" class="calendario form-control" value="{{data.fecha}}" id="fecha_c" />
                                         <span style="color: red" id="fecha_c_obligg"></span>
                                     </div>
 
@@ -185,6 +185,7 @@
 
 <script>  
     $(".cerdo_select").select2();
+    mostar_fecha(fecha_atras, fecha_adelante)
 
     $("#tabla_muertes_cerdo").DataTable({
       language: {

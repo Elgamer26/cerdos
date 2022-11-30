@@ -235,14 +235,14 @@ function cambiar_estado_raza(id, dato) {
       if (response == 1) {
         tabla_razas.ajax.reload();
         return Swal.fire(
-          "Estado rol",
+          "Estado raza",
           "EL estado se " + res + " con extio",
           "success"
         );
       }
     } else {
       return Swal.fire(
-        "Estado rol",
+        "Estado raza",
         "No se pudo cambiar el estado, error en la matrix",
         "error"
       );
@@ -700,14 +700,14 @@ function cambiar_estado_cerdo(id, dato) {
       if (response == 1) {
         tabla_cerdo.ajax.reload();
         return Swal.fire(
-          "Estado rol",
+          "Estado cerdo",
           "EL estado se " + res + " con extio",
           "success"
         );
       }
     } else {
       return Swal.fire(
-        "Estado rol",
+        "Estado cerdo",
         "No se pudo cambiar el estado, error en la matrix",
         "error"
       );
@@ -812,6 +812,9 @@ $("#tabla_cerdo_").on("click", ".editar", function () {
   $("#peso").val(data.peso);
   $("#origen").val(data.origen);
   $("#fecha").val(data.fecha);
+
+  mostar_fecha(data.fecha, fecha_adelante);
+
   $("#detalle_c").val(data.detalle);
 
   $("#codigo_oblig").html("");

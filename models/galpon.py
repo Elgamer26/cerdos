@@ -6,7 +6,7 @@ class Galpon():
     def Crear_tipo_galpo(_tipo_g):
         try:
             query = mysql.connection.cursor()
-            query.execute( 'SELECT * FROM tipo_galpon WHERE binary tipo_galpon = "{0}"'. format(_tipo_g))
+            query.execute( 'SELECT * FROM tipo_galpon WHERE tipo_galpon = "{0}"'. format(_tipo_g))
             data = query.fetchone()
             if not data:
                 query.execute('INSERT INTO tipo_galpon (tipo_galpon) VALUES ("{0}")'.format(_tipo_g))
@@ -38,7 +38,7 @@ class Galpon():
                             INNER JOIN galpon_cerdo ON galpon.id_galpon = galpon_cerdo.id_galpon
                             INNER JOIN tipo_galpon ON galpon.id_tipo = tipo_galpon.id_tipo 
                             GROUP BY
-                            galpon_cerdo.id_galpon""")
+                            galpon_cerdo.id_galpon ORDER BY id_galpon DESC""")
             data = query.fetchall()
             query.close()
             return data
@@ -125,7 +125,7 @@ class Galpon():
     def Listar_tipo_galpon():
         try:
             query = mysql.connection.cursor()
-            query.execute('SELECT * FROM tipo_galpon')
+            query.execute('SELECT * FROM tipo_galpon ORDER BY id_tipo DESC')
             data = query.fetchall()
             query.close()
             new_lista = []
@@ -160,7 +160,7 @@ class Galpon():
     def Editar_tipo_g(_tipo_g, _id):
         try:
             query = mysql.connection.cursor()
-            query.execute('SELECT * FROM tipo_galpon WHERE binary tipo_galpon = "{0}" AND id_tipo != "{1}"'. format(_tipo_g, _id))
+            query.execute('SELECT * FROM tipo_galpon WHERE tipo_galpon = "{0}" AND id_tipo != "{1}"'. format(_tipo_g, _id))
             data = query.fetchone()
             if not data:
                 query.execute('UPDATE tipo_galpon SET tipo_galpon = "{0}" WHERE id_tipo = "{1}"'.format(_tipo_g, _id))
@@ -224,7 +224,7 @@ class Galpon():
                         galpon.estado 
                         FROM
                         tipo_galpon
-                        INNER JOIN galpon ON tipo_galpon.id_tipo = galpon.id_tipo""")
+                        INNER JOIN galpon ON tipo_galpon.id_tipo = galpon.id_tipo ORDER BY id_galpon DESC""")
             data = query.fetchall()
             query.close()
             new_lista = []

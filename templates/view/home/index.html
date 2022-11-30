@@ -37,6 +37,7 @@
 
   <link rel="stylesheet" href="{{url_for('static', filename='plugins/DATATABLES/datatables.min.css')}}" />
   <link rel="stylesheet" href="{{url_for('static', filename='plugins/SELECT2/css/select2.min.css')}}" />
+  <link rel="stylesheet" href="{{url_for('static', filename='plugins/flatpickr/flatpickr.min.css')}}" />
 
    <!-- CSS -->
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css" />
@@ -329,7 +330,7 @@
                 </li>                 
                 <li class="nav-item">
                   <a href="#" class="nav-link">
-                    <i class="nav-icon fas fa-circle"></i>
+                    <i class="nav-icon fa fa-shopping-basket" style="color: yellow;"></i>
                     <p>
                       Alimento para cerdo
                       <i class="right fas fa-angle-left"></i>
@@ -339,19 +340,19 @@
 
                     <li class="nav-item">
                       <a onclick="cargar_contenido('contenido_principal','/tipo_alimento');" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
+                        <i class="fa fa-circle nav-icon" style="color: orange;"></i>
                         <p>Tipo de alimento</p>
                       </a>
                     </li>
                     <li class="nav-item">
                       <a onclick="cargar_contenido('contenido_principal','/marca_alimento');" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
+                        <i class="fa fa-circle nav-icon" style="color: orange;"></i>
                         <p>Marca de alimento</p>
                       </a>
                     </li>
                     <li class="nav-item">
                       <a onclick="cargar_contenido('contenido_principal','/alimento');" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
+                        <i class="fa fa-circle nav-icon" style="color: orange;"></i>
                         <p>Alimento de cerdos</p>
                       </a>
                     </li>
@@ -360,7 +361,7 @@
                 </li>
                 <li class="nav-item">
                   <a href="#" class="nav-link">
-                    <i class="nav-icon fas fa-circle"></i>
+                    <i class="nav-icon fa fa-eye-dropper" style="color: yellow;"></i>
                     <p>
                       Insumo para el cerdo
                       <i class="right fas fa-angle-left"></i>
@@ -370,13 +371,13 @@
 
                     <li class="nav-item">
                       <a onclick="cargar_contenido('contenido_principal','/tipo_insumo');" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
+                        <i class="fa fa-circle nav-icon" style="color: orange;"></i>
                         <p>Tipo insumo</p>
                       </a>
                     </li>
                     <li class="nav-item">
                       <a onclick="cargar_contenido('contenido_principal','/insumo');" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
+                        <i class="fa fa-circle nav-icon" style="color: orange;"></i>
                         <p>Insumo</p>
                       </a>
                     </li>
@@ -385,7 +386,7 @@
                 </li>  
                 <li class="nav-item">
                   <a href="#" class="nav-link">
-                    <i class="nav-icon fas fa-circle"></i>
+                    <i class="nav-icon fa fa-hand-holding-medical" style="color: yellow;"></i>
                     <p>
                       Medicamento y desparasitantes para cerdos
                       <i class="right fas fa-angle-left"></i>
@@ -395,13 +396,13 @@
 
                     <li class="nav-item">
                       <a onclick="cargar_contenido('contenido_principal','/tipo_medicamento');" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
+                        <i class="fa fa-circle nav-icon" style="color: orange;"></i>
                         <p>Tipo medicamento y desparasitante</p>
                       </a>
                     </li>
                     <li class="nav-item">
                       <a onclick="cargar_contenido('contenido_principal','/medicamentos');" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
+                        <i class="fa fa-circle nav-icon" style="color: orange;"></i>
                         <p>Medicamentos y desparasitantes</p>
                       </a>
                     </li>
@@ -410,7 +411,7 @@
                 </li>
                 <li class="nav-item">
                   <a href="#" class="nav-link">
-                    <i class="nav-icon fas fa-circle"></i>
+                    <i class="nav-icon fa fa-syringe" style="color: yellow;"></i>
                     <p>
                       Vacunas para cerdo
                       <i class="right fas fa-angle-left"></i>
@@ -420,13 +421,13 @@
 
                     <li class="nav-item">
                       <a onclick="cargar_contenido('contenido_principal','/tipo_vacuna');" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
+                        <i class="fa fa-circle nav-icon" style="color: orange;"></i>
                         <p>Tipo de vacunas</p>
                       </a>
                     </li>
                     <li class="nav-item">
                       <a onclick="cargar_contenido('contenido_principal','/vacunas');" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
+                        <i class="fa fa-circle nav-icon" style="color: orange;"></i>
                         <p>Vacunas</p>
                       </a>
                     </li> 
@@ -435,7 +436,7 @@
                 </li>
                 <li class="nav-item">
                   <a href="#" class="nav-link">
-                    <i class="nav-icon fas fa-circle"></i>
+                    <i class="nav-icon fa fa-cart-arrow-down" style="color: #17a2b8;"></i>
                     <p>
                       Compras y abastecimiento
                       <i class="right fas fa-angle-left"></i>
@@ -445,25 +446,25 @@
 
                     <li class="nav-item">
                       <a onclick="cargar_contenido('contenido_principal','/compra_alimento');" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
+                        <i class="fa fa-circle nav-icon" style="color: orange;"></i>
                         <p>Compra de alimento</p>
                       </a>
                     </li>       
                     <li class="nav-item">
                       <a onclick="cargar_contenido('contenido_principal','/compra_insumos');" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
+                        <i class="fa fa-circle nav-icon" style="color: orange;"></i>
                         <p>Compra de insumos</p>
                       </a>
                     </li>
                     <li class="nav-item">
                       <a onclick="cargar_contenido('contenido_principal','/compra_medicamento');" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
+                        <i class="fa fa-circle nav-icon" style="color: orange;"></i>
                         <p>Compra de medicamento y desparasitante</p>
                       </a>
                     </li>
                     <li class="nav-item">
                       <a onclick="cargar_contenido('contenido_principal','/compra_vacunas');" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
+                        <i class="fa fa-circle nav-icon" style="color: orange;"></i>
                         <p>Compra de vacunas</p>
                       </a>
                     </li>
@@ -472,7 +473,7 @@
                 </li>
                 <li class="nav-item">
                   <a href="#" class="nav-link">
-                    <i class="nav-icon fas fa-circle"></i>
+                    <i class="nav-icon fa fa-money-bill" style="color: green;"></i>
                     <p>
                       Ventas y pedidos
                       <i class="right fas fa-angle-left"></i>
@@ -482,19 +483,19 @@
 
                     <li class="nav-item">
                       <a onclick="cargar_contenido('contenido_principal','/compra_alimento');" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
+                        <i class="fa fa-circle nav-icon" style="color: orange;"></i>
                         <p>Nueva venta</p>
                       </a>
                     </li>       
                     <li class="nav-item">
                       <a onclick="cargar_contenido('contenido_principal','/compra_insumos');" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
+                        <i class="fa fa-circle nav-icon" style="color: orange;"></i>
                         <p>Listado de ventas</p>
                       </a>
                     </li>
                     <li class="nav-item">
                       <a onclick="cargar_contenido('contenido_principal','/compra_medicamento');" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
+                        <i class="fa fa-circle nav-icon" style="color: orange;"></i>
                         <p>Pedidos</p>
                       </a>
                     </li>
@@ -949,6 +950,7 @@
   <script src="{{url_for('static', filename='plugins/DATATABLES/datatables.min.js')}}"></script>
   <script src="{{url_for('static', filename='plugins/SELECT2/js/select2.min.js')}}"></script>
   <script src="{{url_for('static', filename='plugins/Chart/chart.min.js')}}"></script>
+  <script src="{{url_for('static', filename='plugins/flatpickr/flatpickr.js')}}"></script>
 
   <script src="https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.7/dist/loadingoverlay.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
@@ -1133,6 +1135,22 @@
 </div>
 
 <script>
+  //// para controlar las fecha de dias depues y dias antes
+  var fecha_atras;
+  var fecha_adelante;
+
+  fecha = new Date();
+  fecha2 = new Date();
+  dia = fecha.getDate();
+  mes = fecha.getMonth()+1;// +1 porque los meses empiezan en 0
+  anio = fecha.getFullYear();
+  fecha2.setDate(fecha2.getDate() + 10);
+
+  fecha_atras =  fecha.getFullYear() + "-" + (fecha.getMonth()+1) + "-" + (fecha.getDate()-6);  
+  fecha_adelante = fecha2.getFullYear()  + "-" + (fecha2.getMonth()+1) + "-" + fecha2.getDate();
+
+  //////////////
+  //////////
   var pass_usus_l = false;
   var G_cedula = true;
   var G_correo = true;
@@ -1174,6 +1192,46 @@
         "warning"
       );
     }
+  }
+
+  ////
+  //funcion para validar decimales
+  function filterfloat(evt, input) {
+      var key = window.Event ? evt.which : evt.keyCode;
+      var chark = String.fromCharCode(key);
+      var tempvalue = input.value + chark;
+      if (key >= 48 && key <= 57) {
+          if (filter(tempvalue) === false) {
+              return false;
+          } else {
+              return true;
+          }
+      } else {
+          if (key == 8 || key == 13 || key == 0) {
+              return false;
+          } else if (key === 46) {
+              if (filter(tempvalue) === false) {
+                  return false;
+              } else {
+                  return true;
+              }
+          } else {
+              return swal.fire(
+                  "No se permiten letras ni comas (,)!!",
+                  "Solo se permiten numeros decimales y punto decimal (00.00)",
+                  "warning"
+              );
+          }
+      }
+  }
+
+  function filter(__val__) {
+      var preg = /^([0-9]+\.?[0-9]{0,2})$/;
+      if (preg.test(__val__) === true) {
+          return true;
+      } else {
+          return false;
+      }
   }
 
   document.getElementById("foto_new_l").addEventListener("change", () => {
@@ -1397,4 +1455,57 @@
         G_cedula = false;
     }
   });
+
+  /// para validar las fechas
+  function mostar_fecha(fecha_i, fecha_f) {
+    $(".calendario").flatpickr({
+      minDate: fecha_i,
+      maxDate: fecha_f,
+        locale: {
+          firstDayOfWeek: 1,
+          weekdays: {
+            shorthand: ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa"],
+            longhand: [
+              "Domingo",
+              "Lunes",
+              "Martes",
+              "Miércoles",
+              "Jueves",
+              "Viernes",
+              "Sábado",
+            ],
+          },
+          months: {
+            shorthand: [
+              "Ene",
+              "Feb",
+              "Mar",
+              "Abr",
+              "May",
+              "Jun",
+              "Jul",
+              "Ago",
+              "Sep",
+              "Оct",
+              "Nov",
+              "Dic",
+            ],
+            longhand: [
+              "Enero",
+              "Febreo",
+              "Мarzo",
+              "Abril",
+              "Mayo",
+              "Junio",
+              "Julio",
+              "Agosto",
+              "Septiembre",
+              "Octubre",
+              "Noviembre",
+              "Diciembre",
+            ],
+          },
+        },
+        });
+    }
 </script>

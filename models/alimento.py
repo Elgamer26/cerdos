@@ -6,7 +6,7 @@ class Alimento():
     def Listar_tipio_alimento():
         try:
             query = mysql.connection.cursor()
-            query.execute('SELECT * FROM tipo_alimento')
+            query.execute('SELECT * FROM tipo_alimento ORDER BY id DESC')
             data = query.fetchall()
             query.close()
             new_lista = []
@@ -27,7 +27,7 @@ class Alimento():
     def Registrar_tipo_alimento(_valor):
         try:
             query = mysql.connection.cursor()
-            query.execute('SELECT * FROM tipo_alimento WHERE binary tipo_alimento = "{0}"'. format(_valor))
+            query.execute('SELECT * FROM tipo_alimento WHERE tipo_alimento = "{0}"'. format(_valor))
             data = query.fetchone()
             if not data:
                 query.execute('INSERT INTO tipo_alimento (tipo_alimento) VALUES ("{0}")'.format(_valor))
@@ -44,10 +44,10 @@ class Alimento():
         return 0
     
     # modelo para estado del tipo alimentos
-    def Estado_alimento(_id, _dato):
+    def Estado_alimento_tipo(_id, _dato):
         try:
             query = mysql.connection.cursor()
-            query.execute('UPDATE tipo_alimento SET estado = "{0}" WHERE id = {1}'.format(_dato, _id))
+            query.execute('UPDATE tipo_alimento SET estado = "{0}" WHERE id = "{1}"'.format(_dato, _id))
             query.connection.commit()
             query.close()
             return 1  # se inserto correcto
@@ -61,7 +61,7 @@ class Alimento():
     def Editar_tipo_alimento(_id,_valor):
         try:
             query = mysql.connection.cursor()
-            query.execute('SELECT * FROM tipo_alimento WHERE binary tipo_alimento = "{0}" AND id != "{1}"'. format(_valor,_id))
+            query.execute('SELECT * FROM tipo_alimento WHERE tipo_alimento = "{0}" AND id != "{1}"'. format(_valor,_id))
             data = query.fetchone()
             if not data:
                 query.execute('UPDATE tipo_alimento SET tipo_alimento="{0}" WHERE id="{1}"'.format(_valor,_id))
@@ -81,7 +81,7 @@ class Alimento():
     def Listar_marca_alimento():
         try:
             query = mysql.connection.cursor()
-            query.execute('SELECT * FROM marca_alimento')
+            query.execute('SELECT * FROM marca_alimento ORDER BY id DESC')
             data = query.fetchall()
             query.close()
             new_lista = []
@@ -102,7 +102,7 @@ class Alimento():
     def Registrar_marca_alimento(_valor):
         try:
             query = mysql.connection.cursor()
-            query.execute('SELECT * FROM marca_alimento WHERE binary marca_alimento = "{0}"'. format(_valor))
+            query.execute('SELECT * FROM marca_alimento WHERE marca_alimento = "{0}"'. format(_valor))
             data = query.fetchone()
             if not data:
                 query.execute('INSERT INTO marca_alimento (marca_alimento) VALUES ("{0}")'.format(_valor))
@@ -136,7 +136,7 @@ class Alimento():
     def Editar_marca_alimento(_id,_valor):
         try:
             query = mysql.connection.cursor()
-            query.execute('SELECT * FROM marca_alimento WHERE binary marca_alimento = "{0}" AND id != "{1}"'. format(_valor,_id))
+            query.execute('SELECT * FROM marca_alimento WHERE marca_alimento = "{0}" AND id != "{1}"'. format(_valor,_id))
             data = query.fetchone()
             if not data:
                 query.execute('UPDATE marca_alimento SET marca_alimento="{0}" WHERE id="{1}"'.format(_valor,_id))
@@ -302,7 +302,7 @@ class Alimento():
     def Listar_tipio_alimentacion():
         try:
             query = mysql.connection.cursor()
-            query.execute('SELECT * FROM tipo_alimentcion')
+            query.execute('SELECT * FROM tipo_alimentcion ORDER BY id DESC')
             data = query.fetchall()
             query.close()
             new_lista = []
@@ -323,7 +323,7 @@ class Alimento():
     def Registrar_tipo_alimentacion(_valor):
         try:
             query = mysql.connection.cursor()
-            query.execute('SELECT * FROM tipo_alimentcion WHERE binary tipo = "{0}"'. format(_valor))
+            query.execute('SELECT * FROM tipo_alimentcion WHERE tipo = "{0}"'. format(_valor))
             data = query.fetchone()
             if not data:
                 query.execute('INSERT INTO tipo_alimentcion (tipo) VALUES ("{0}")'.format(_valor))

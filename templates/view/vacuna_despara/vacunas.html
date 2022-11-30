@@ -110,7 +110,7 @@
                                   <div class="row">
 
                                     <div class="form-group col-lg-3 col-6">
-                                        <label for="codigo_vacuna">Codigo de la vacuna</label>
+                                        <label for="codigo_vacuna">Código de la vacuna</label>
                                         <input type="text" maxlength="20" class="form-control" id="codigo_vacuna"
                                             value="{{data.codigo}}" placeholder="Ingrese codigo del alimento"
                                             onkeypress="return soloNumeros(event)" />
@@ -144,7 +144,7 @@
 
                                     <div class="form-group col-lg-3 col-6">
                                         <label for="precio_c">Precio compra</label>
-                                        <input type="number" max="10" class="form-control" id="precio_c" placeholder="Ingrese precio" />
+                                        <input type="text" max="10" class="form-control" id="precio_c" placeholder="Ingrese precio" onkeypress="return filterfloat(event, this);"/>
                                         <span style="color: red" id="precio_obligg"></span>
                                     </div>
                                     
@@ -184,7 +184,7 @@
                                   </button>
                                 </div>
 
-                            </div>
+                              </div>
 
                           </div> 
                         </div>
@@ -251,7 +251,7 @@
                 <div class="row">
 
                     <div class="form-group col-lg-3 col-6">
-                        <label for="codigo_vacuna_edi">Codigo del vacuna</label>
+                        <label for="codigo_vacuna_edi">Código del vacuna</label>
                         <input type="text" maxlength="20" class="form-control" id="codigo_vacuna_edi"  placeholder="Ingrese codigo de la vacuna" onkeypress="return soloNumeros(event)" />
                         <span style="color: red" id="codigo_oblig_edi"></span>
                     </div>
@@ -283,7 +283,7 @@
 
                     <div class="form-group col-lg-3 col-6">
                         <label for="precio_c_edi">Precio compra</label>
-                        <input type="number" class="form-control" id="precio_c_edi" placeholder="Ingrese precio" />
+                        <input type="text" class="form-control" id="precio_c_edi" placeholder="Ingrese precio" onkeypress="return filterfloat(event, this);" />
                         <span style="color: red" id="precio_obligg_edi"></span>
                     </div> 
 

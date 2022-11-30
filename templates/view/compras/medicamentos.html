@@ -142,7 +142,7 @@
 
                                     <div class="form-group col-lg-3 col-6">
                                         <label for="precio_c">Precio compra</label>
-                                        <input type="number" class="form-control" id="precio_c" placeholder="Ingrese precio" />
+                                        <input type="text" class="form-control" id="precio_c" placeholder="Ingrese precio" onkeypress="return filterfloat(event, this);" />
                                         <span style="color: red" id="precio_obligg"></span>
                                     </div>
                                             
@@ -269,7 +269,7 @@
 
                 <div class="form-group col-lg-3 col-6">
                     <label for="precio_c_edit">Precio compra</label>
-                    <input type="number" class="form-control" id="precio_c_edit" placeholder="Ingrese precio" />
+                    <input type="text" class="form-control" id="precio_c_edit" placeholder="Ingrese precio" onkeypress="return filterfloat(event, this);" />
                     <span style="color: red" id="precio_obligg_edi"></span>
                 </div> 
 
