@@ -131,7 +131,7 @@ function editar_usuario_loegado() {
   formdata.append("apellidos", apellidos);
   formdata.append("domicilio", domicilio);
   formdata.append("telefono", telefono);
-  formdata.append("usuario", usuario);
+  formdata.append("usuario", usuario.trim());
   formdata.append("correo_l", correo_l);
   formdata.append("cedula_l", cedula_l);
 
@@ -358,7 +358,7 @@ function editar_password_l() {
   }
 
   var formdata = new FormData();
-  formdata.append("password_n", password_n);
+  formdata.append("password_n", password_n.trim());
 
   $.ajax({
     url: "/usuario/cambiar_password",

@@ -330,6 +330,9 @@ function registrar_cerdo() {
   var origen = $("#origen").val();
   var fecha = $("#fecha").val();
   var detalle_c = $("#detalle_c").val();
+  var tipo_ingreso = $("#tipo_ingreso").val();
+  var costo = $("#costo").val();
+  var etapa = $("#etapa").val();
 
   if (
     codigo_cerdo.length == 0 ||
@@ -338,8 +341,7 @@ function registrar_cerdo() {
     nombre.trim() == "" ||
     sexo_cerdo.length == 0 ||
     sexo_cerdo.trim() == "" ||
-    raza_id.length == 0 ||
-    raza_id.trim() == "" ||
+    raza_id == "0" ||
     peso.length == 0 ||
     peso == 0 ||
     origen.length == 0 ||
@@ -376,6 +378,21 @@ function registrar_cerdo() {
     $("#detalle_c_obligg").html("");
   }
 
+  if(tipo_ingreso == 'Compra'){
+    if(costo == '0.00' || costo.trim() == "" || costo.length == 0) {
+      $("#costo_obligg").html("Ingrese costo de compra");
+      return swal.fire(
+        "No hay costo de compra",
+        "Ingrese costo de compra",
+        "warning"
+      );
+    }else{
+      $("#costo_obligg").html("");
+    }
+  }else{
+    $("#costo_obligg").html("");
+  }
+
   var formdata = new FormData();
   var foto = $("#foto")[0].files[0];
   //est valores son como los que van en la data del ajax
@@ -388,6 +405,9 @@ function registrar_cerdo() {
   formdata.append("origen", origen);
   formdata.append("fecha", fecha);
   formdata.append("detalle_c", detalle_c);
+  formdata.append("tipo_ingreso", tipo_ingreso);
+  formdata.append("costo", costo);
+  formdata.append("etapa", etapa);
   formdata.append("foto", foto);
 
   $.ajax({
@@ -398,6 +418,7 @@ function registrar_cerdo() {
     contentType: false,
     processData: false,
     success: function (resp) {
+
       if (resp > 0) {
         if (resp == 1) {
           $(".card-body").LoadingOverlay("hide");
@@ -468,7 +489,7 @@ function validar_registro_cerdo(
     $("#sexo_obligg").html("");
   }
 
-  if (raza_id.length == 0 || raza_id == 0) {
+  if (raza_id == "0") {
     $("#raza_obligg").html("Ingrese la raza");
   } else {
     $("#raza_obligg").html("");

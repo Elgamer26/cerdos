@@ -94,7 +94,7 @@ class Cerdo():
         return 0
 
     # modelo para registra el cerdo
-    def Crear_cerdo(_codigo_cerdo, _nombre, _sexo_cerdo, _raza_id, _peso, _origen, _fecha, _detalle_c, archivo):
+    def Crear_cerdo(_codigo_cerdo, _nombre, _sexo_cerdo, _raza_id, _peso, _origen, _fecha, _detalle_c, archivo, _tipo_ingreso, _costo, _etapa):
         try:
             query = mysql.connection.cursor()
             query.execute('SELECT * FROM cerdo WHERE codigo = "{0}"'. format(_codigo_cerdo))
@@ -103,7 +103,7 @@ class Cerdo():
                 query.execute('SELECT * FROM cerdo WHERE nombre = "{0}"'. format(_nombre))
                 data_n = query.fetchone()
                 if not data_n:
-                    query.execute('INSERT INTO cerdo (codigo,nombre,sexo,raza,peso,origen,fecha,detalle,foto) VALUES ("{0}","{1}","{2}","{3}","{4}","{5}","{6}","{7}","{8}")'.format(_codigo_cerdo,_nombre,_sexo_cerdo,_raza_id,_peso,_origen,_fecha,_detalle_c,archivo))
+                    query.execute('INSERT INTO cerdo (codigo,nombre,sexo,raza,peso,origen,fecha,detalle,foto,etapa,tipo_ingreso,costo) VALUES ("{0}","{1}","{2}","{3}","{4}","{5}","{6}","{7}","{8}","{9}","{10}","{11}")'.format(_codigo_cerdo,_nombre,_sexo_cerdo,_raza_id,_peso,_origen,_fecha,_detalle_c,archivo,_etapa,_tipo_ingreso, _costo))
                     query.connection.commit()
                     query.close()
                     return 1  # se inserto correcto

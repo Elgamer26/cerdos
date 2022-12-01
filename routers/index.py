@@ -133,7 +133,7 @@ def razas():
 def new_cerdo():
     if 'id_usu' in session and 'id_rol' in session:
         data = Cerdo.Traer_razas_combo()
-        codigo = random.randint(0, 999999999)
+        codigo = random.randint(0, 99999)
     return render_template('view/cerdo/registro_cerdo.html', data = data, codigo = codigo)
 
 #vista listar cerdo
@@ -146,7 +146,7 @@ def list_cerdo():
 @index.route('/create_galpon')
 def create_galpon(): 
     data = Galpon.Traer_tipo_galpon_combo()
-    codigo = random.randint(0, 999999999)
+    codigo = random.randint(0, 99999)
     return render_template('view/galpon/new_galpon.html', data = data, codigo = codigo)
 
 #vista listar el galpón
@@ -223,7 +223,7 @@ def marca_alimento():
 #vista alimento de cerdos
 @index.route('/alimento')
 def alimento():  
-    codigo = random.randint(0, 999999999)
+    codigo = random.randint(0, 99999)
     data = Alimento.Traer_tipo_alimento_select()
     marca = Alimento.Traer_marca_alimento_select()
     return render_template('view/alimento/alimento.html', codigo = codigo, data = data, marca = marca)
@@ -330,7 +330,7 @@ def tipo_insumo():
 #vista de insumo
 @index.route('/insumo')
 def insumo():
-    codigo = random.randint(0, 999999999)
+    codigo = random.randint(0, 99999)
     tipo = Compras.Combo_tipo_insumo()    
     return render_template('view/compras/insumo.html', codigo = codigo, tipo = tipo)
 
@@ -416,7 +416,7 @@ def tipo_medicamento():
 #vista de medicamentos
 @index.route('/medicamentos')
 def medicamentos():  
-    codigo = random.randint(0, 999999999)
+    codigo = random.randint(0, 99999)
     tipo = Compras.Combo_tipo_medicamento()  
     return render_template('view/compras/medicamentos.html', codigo = codigo, tipo = tipo)
 
@@ -529,7 +529,7 @@ def tipo_vacuna():
 #vista de vacunas
 @index.route('/vacunas')
 def vacunas():  
-    codigo = random.randint(0, 999999999)
+    codigo = random.randint(0, 99999)
     tipo = Vacunas.Combo_tipo_vacuna()  
     data = {
         'codigo': codigo,

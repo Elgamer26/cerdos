@@ -796,8 +796,8 @@ function registra_uuario() {
               formdata.append("domicilio", domicilio);
               formdata.append("telefono", telefono);
               formdata.append("tipo_rol", tipo_rol);
-              formdata.append("usuario", usuario);
-              formdata.append("password", response);
+              formdata.append("usuario", usuario.trim());
+              formdata.append("password", response.trim());
               formdata.append("correo", correo);
               formdata.append("cedula", cedula);
               formdata.append("foto", foto);
@@ -1262,7 +1262,7 @@ function editar_usuario() {
   formdata.append("domicilio", domicilio);
   formdata.append("telefono", telefono);
   formdata.append("tipo_rol", tipo_rol);
-  formdata.append("usuario", usuario);
+  formdata.append("usuario", usuario.trim());
   formdata.append("correo", correo);
   formdata.append("cedula", cedula);
 

@@ -41,7 +41,7 @@
                                     <span style="color: red" id="nombre_obligg"></span>
                                 </div>
 
-                                <div class="form-group col-lg-3 col-6">
+                                <div class="form-group col-lg-2 col-6">
                                     <label for="sexo_cerdo">Sexo</label>
                                     <select class="form-control" style="width: 100%" id="sexo_cerdo">
                                         <option value="Macho">Macho</option>
@@ -50,7 +50,7 @@
                                     <span style="color: red" id="sexo_obligg"></span>
                                 </div>
 
-                                <div class="form-group col-lg-5 col-6">
+                                <div class="form-group col-lg-4 col-6">
                                     <label for="raza_id">Razas de cerdo</label>
                                     <select class="form-control raza_id" style="width: 100%" id="raza_id">
                                         <option value="0">--- Seleccione la raza ---</option>
@@ -62,13 +62,19 @@
                                     <span style="color: red" id="raza_obligg"></span>
                                 </div>
 
-                                <div class="form-group col-lg-4 col-6">
+                                <div class="form-group col-lg-3 col-6">
                                     <label for="peso">Peso del cerdo (Kg)</label>
                                     <input type="text" maxlength="10" class="form-control" id="peso"
-                                        placeholder="Ingrese peso (Kg)" onkeypress="return filterfloat(event, this);" />
+                                        placeholder="Ingrese peso (Kg)" onkeypress="return filterfloat(event, this);" autocomplete="off" />
                                     <span style="color: red" id="peso_obligg"></span>
                                 </div>
 
+                                <div class="form-group col-lg-3 col-6">
+                                    <label for="etapa">Etapa/Fase</label>
+                                    <input type="text" readonly maxlength="30" class="form-control" id="etapa"
+                                        placeholder="Etapa/Fase" onkeypress="return soloLetras(event)" />
+                                    <span style="color: red" id="etapa_obligg"></span>
+                                </div>
 
                                 <div class="form-group col-lg-8 col-6">
                                     <label for="origen">Origen del cerdo</label>
@@ -78,9 +84,24 @@
                                 </div>
 
                                 <div class="form-group col-lg-4 col-6">
-                                    <label for="fecha">Fecha de origen</label> 
+                                    <label for="fecha">Fecha</label> 
                                     <input type="date" class="calendario form-control" placeholder="Ingrese la fecha" id="fecha" />
                                     <span style="color: red" id="fecha_obligg"></span> 
+                                </div>
+
+                                <div class="form-group col-lg-3 col-6">
+                                    <label for="tipo_ingreso">Tipo de ingreso:</label> 
+                                    <select class="tipo_ingreso form-control" id="tipo_ingreso">
+                                        <option value="Nacimiento">Nacimiento</option>
+                                        <option value="Compra">Compra</option>
+                                    </select> 
+                                    <span style="color: red" id="tipo_ingreso_obligg"></span> 
+                                </div>
+
+                                <div class="form-group col-lg-3 col-6">
+                                    <label for="costo">Costo</label> 
+                                    <input type="text" readonly value="0.00" onkeypress="return filterfloat(event, this);" class="form-control" placeholder="Ingrese el costo" id="costo" />
+                                    <span style="color: red" id="costo_obligg"></span> 
                                 </div>
 
                                 <div class="form-group col-lg-12 col-6">
@@ -88,7 +109,7 @@
                                     <textarea class="form-control" id="detalle_c" cols="10" rows="3"> </textarea>
                                     <span style="color: red" id="detalle_c_obligg"></span> 
                                 </div>
-                                
+
                                 <div class="col-md-6 mb-3 mx-auto text-center">
                                     <label for="password_c">Foto del cerdo</label>
 
@@ -127,7 +148,45 @@
     mostar_fecha(fecha_atras, fecha_adelante)
     
     $(".raza_id").select2();
-    
+
+    $("#tipo_ingreso").on("change", function(){
+        var valor = $(this).val();
+        if(valor == 'Compra'){
+            $("#costo").removeAttr("readonly");
+        }else{
+            $('#costo').attr('readonly', true);
+            $("#costo").val("0.00");
+        }
+    });
+
+    $("#peso").on("keyup", function(){
+
+        var data = $("#peso").val();
+
+        if(parseInt(data) > 0 && parseInt(data) <= 5.5){
+           return $("#etapa").val("Lactancia");
+        } 
+        if(parseInt(data) >= 6.5 && parseInt(data) <= 15){
+           return $("#etapa").val("Preiniciador");
+        } 
+        if(parseInt(data) >= 16 && parseInt(data) <= 30){
+           return $("#etapa").val("Iniciador");
+        } 
+        if(parseInt(data) >= 31 && parseInt(data) <= 50){
+           return $("#etapa").val("Crecimiento");
+        } 
+        if(parseInt(data) >= 51 && parseInt(data) <= 75){
+           return $("#etapa").val("Desarrollo");
+        } 
+        if(parseInt(data) >= 76){
+           return $("#etapa").val("Finalización");
+        }
+        if(data == ""){
+            return $("#etapa").val(""); 
+        }
+       
+    });
+
     function mostrar_imagen(input) {
         var filename = document.getElementById("foto").value;
         var idxdot = filename.lastIndexOf(".") + 1;

@@ -55,13 +55,18 @@ def crear_cerdo():
         _origen = request.form['origen']
         _fecha = request.form['fecha']
         _detalle_c = request.form['detalle_c']
+        
+        _tipo_ingreso = request.form['tipo_ingreso']
+        _costo = request.form['costo']
+        _etapa = request.form['etapa']
+        
         _foto = request.files.get("foto", False)
 
         if _foto:
             # cerdo con foto
             hora_ac = time.strftime('%Y%m%d%H%M%S_', time.localtime())
             archivo = hora_ac + _foto.filename             
-            dato = Cerdo.Crear_cerdo(_codigo_cerdo, _nombre, _sexo_cerdo, _raza_id, _peso, _origen, _fecha, _detalle_c, archivo)
+            dato = Cerdo.Crear_cerdo(_codigo_cerdo, _nombre, _sexo_cerdo, _raza_id, _peso, _origen, _fecha, _detalle_c, archivo, _tipo_ingreso, _costo, _etapa)
             if dato == 1:
                 _foto.save(PATH_FILE + archivo)
                 return str(dato)
@@ -70,7 +75,7 @@ def crear_cerdo():
         else:
             # cerdo sin foto
             archivo = "cerdo.jpg"
-            dato = Cerdo.Crear_cerdo(_codigo_cerdo, _nombre, _sexo_cerdo, _raza_id, _peso, _origen, _fecha, _detalle_c, archivo)
+            dato = Cerdo.Crear_cerdo(_codigo_cerdo, _nombre, _sexo_cerdo, _raza_id, _peso, _origen, _fecha, _detalle_c, archivo, _tipo_ingreso, _costo, _etapa)
             return str(dato)
 
 # controlador para listar el cerdo
