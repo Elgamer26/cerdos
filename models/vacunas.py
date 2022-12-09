@@ -175,13 +175,13 @@ class Vacunas():
         return 0
     
     # modelo para crear la vacuna
-    def Crear_vacuna(_codigo, _nombre, _tipo, _cantidad, _precio, _detalle, _presentacion, archivo):
+    def Crear_vacuna(_codigo, _nombre, _tipo, _cantidad, _precio, _detalle, _presentacion, archivo, _registro_sani, _cantidad_dosis):
         try:
             query = mysql.connection.cursor()
             query.execute('SELECT * FROM vacuna WHERE codigo = "{0}"'. format(_codigo))
             data = query.fetchone()
             if not data:
-                query.execute('INSERT INTO vacuna (codigo,nombre,tipo_id,cantidad,precio,detalle,presentacion,foto) VALUES ("{0}","{1}","{2}","{3}","{4}","{5}","{6}","{7}")'.format(_codigo,_nombre,_tipo,_cantidad,_precio,_detalle,_presentacion,archivo))
+                query.execute('INSERT INTO vacuna (codigo,nombre,tipo_id,cantidad,precio,detalle,presentacion,foto,registro_sani,cantidad_dosis) VALUES ("{0}","{1}","{2}","{3}","{4}","{5}","{6}","{7}","{8}","{9}")'.format(_codigo,_nombre,_tipo,_cantidad,_precio,_detalle,_presentacion,archivo,_registro_sani,_cantidad_dosis))
                 query.connection.commit()
                 query.close()
                 return 1  # se inserto correcto
@@ -209,7 +209,9 @@ class Vacunas():
                         vacuna.detalle,
                         vacuna.presentacion,
                         vacuna.foto,
-                        vacuna.estado 
+                        vacuna.estado,
+                        vacuna.registro_sani,
+                        vacuna.cantidad_dosis 
                     FROM
                         vacuna
                         INNER JOIN tipo_vacuna ON vacuna.tipo_id = tipo_vacuna.id ORDER BY vacuna.id DESC""")
@@ -228,7 +230,54 @@ class Vacunas():
                 dic["detalle"] = datos[7]
                 dic["presentacion"] = datos[8]
                 dic["foto"] = datos[9] 
-                dic["estado"] = datos[10]       
+                dic["estado"] = datos[10]   
+                dic["registro_sani"] = datos[11] 
+                dic["cantidad_dosis"] = datos[12]       
+                new_lista.append(dic)
+            return {"data": new_lista}
+        except Exception as e:
+            query.close()
+            error = "Ocurrio un problema: " + str(e)
+            return error
+        return 0
+
+    # modelo para listar las vacunas lotes
+    def Listar_vacunas_lotes():
+        try:
+            query = mysql.connection.cursor()
+            query.execute("""SELECT
+                        lote_vacuna.id,
+                        lote_vacuna.codigo,
+                        vacuna.nombre,
+                        tipo_vacuna.tipo_vacuna,
+                        vacuna.foto,
+                        lote_vacuna.cantidad,
+                        lote_vacuna.fecha_i,
+                        lote_vacuna.fecha_f,
+                        DATE(lote_vacuna.fecha)
+                    FROM
+                        vacuna
+                        INNER JOIN lote_vacuna ON vacuna.id = lote_vacuna.vacuna_id
+                        INNER JOIN tipo_vacuna ON vacuna.tipo_id = tipo_vacuna.id 
+                    ORDER BY
+                        lote_vacuna.id DESC""")
+            data = query.fetchall()
+            query.close()
+            new_lista = []
+            for datos in data:
+                dic = {} 
+                dic["id"] = datos[0]
+                dic["codigo"] = datos[1]
+                dic["nombre"] = datos[2] 
+                dic["tipo_vacuna"] = datos[3]
+                dic["foto"] = datos[4]
+                dic["cantidad"] = datos[5] 
+                Convert = datetime.strptime(str(datos[6]), '%Y-%m-%d')
+                dic["fecha_i"] = Convert.strftime('%Y-%m-%d')
+                Convert = datetime.strptime(str(datos[7]), '%Y-%m-%d')
+                dic["fecha_f"] = Convert.strftime('%Y-%m-%d')                
+                Convert = datetime.strptime(str(datos[8]), '%Y-%m-%d')
+                dic["fecha"] = Convert.strftime('%Y-%m-%d') 
                 new_lista.append(dic)
             return {"data": new_lista}
         except Exception as e:
@@ -251,14 +300,28 @@ class Vacunas():
             return error
         return 0
     
+    ### eliminra el lote de vacunas
+    def Eliminar_lote_vacuna(_id):
+        try:
+            query = mysql.connection.cursor()
+            query.execute('DELETE FROM lote_vacuna WHERE id = "{0}"'.format(_id))
+            query.connection.commit()
+            query.close()
+            return 1  # se inserto correcto
+        except Exception as e:
+            query.close()
+            error = "Ocurrio un problema: " + str(e)
+            return error
+        return 0
+    
     # modelo para editar la vacuna
-    def Editar_vacuna(_codigo, _nombre, _tipo, _cantidad, _precio, _detalle, _presentacion, _id):
+    def Editar_vacuna(_codigo, _nombre, _tipo, _cantidad, _precio, _detalle, _presentacion, _id, _registro_sani, _cantidad_dosis):
         try:
             query = mysql.connection.cursor()
             query.execute('SELECT * FROM vacuna WHERE codigo = "{0}" AND id != "{1}"'. format(_codigo, _id))
             data = query.fetchone()
             if not data:
-                query.execute('UPDATE vacuna SET codigo="{0}",nombre="{1}",tipo_id="{2}",cantidad="{3}",precio="{4}",detalle="{5}",presentacion="{6}" WHERE id = "{7}"'.format(_codigo,_nombre,_tipo,_cantidad,_precio,_detalle,_presentacion,_id))
+                query.execute('UPDATE vacuna SET codigo="{0}",nombre="{1}",tipo_id="{2}",cantidad="{3}",precio="{4}",detalle="{5}",presentacion="{6}", registro_sani="{7}",cantidad_dosis="{8}" WHERE id = "{9}"'.format(_codigo,_nombre,_tipo,_cantidad,_precio,_detalle,_presentacion,_registro_sani,_cantidad_dosis,_id))
                 query.connection.commit()
                 query.close()
                 return 1  # se inserto correcto
@@ -299,7 +362,8 @@ class Vacunas():
                         vacuna.precio,
                         vacuna.detalle, 
                         vacuna.foto,
-                        vacuna.estado 
+                        vacuna.estado,
+                        vacuna.cantidad_dosis 
                     FROM
                         vacuna
                         INNER JOIN tipo_vacuna ON vacuna.tipo_id = tipo_vacuna.id WHERE vacuna.estado = 1""")

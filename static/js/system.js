@@ -107,22 +107,22 @@ function editar_usuario_loegado() {
   if (!G_correo) {
     $("#correo_obligg_l").html("Ingrese un correo correcto");
     return swal.fire(
-    "Correo incorrecto",
-    "Ingrese un correo correcto",
-    "warning"
+      "Correo incorrecto",
+      "Ingrese un correo correcto",
+      "warning"
     );
-  }else{
+  } else {
     $("#correo_obligg_l").html("");
   }
 
   if (!G_cedula) {
     $("#cedula_obligg_l").html("Ingrese una cédula correcta");
     return swal.fire(
-    "Cédula incorrecta",
-    "Ingrese una cédula correcta",
-    "warning"
+      "Cédula incorrecta",
+      "Ingrese una cédula correcta",
+      "warning"
     );
-  }else{
+  } else {
     $("#cedula_obligg_l").html("");
   }
 
@@ -616,4 +616,219 @@ function editar_detalle_foto() {
       );
     }
   });
+}
+
+var tabla_lote_alimento_exper, tabla_lote_vacunas_exper, listar_lote_desparasitante_expirar;
+////////////////// listar el lote de alimentos por expirar
+function listar_lote_alimento_expirar() {
+  tabla_lote_alimento_exper = $("#tabla_lote_alimento_exper").DataTable({
+    ordering: true,
+    paging: true,
+    aProcessing: true,
+    aServerSide: true,
+    searching: { regex: true },
+    lengthMenu: [
+      [10, 25, 50, 100, -1],
+      [10, 25, 50, 100, "All"],
+    ],
+    pageLength: 10,
+    destroy: true,
+    async: false,
+    processing: true,
+
+    ajax: {
+      url: "/alimento/listar_lote_alimento",
+      type: "GET",
+    },
+    //hay que poner la misma cantidad de columnas y tambien en el html
+    columns: [
+      { data: "codigo" },
+      {
+        data: "fecha_f",
+        render: function (data, type, row) {
+          if (data == 1) {
+            return "<span class='badge badge-success'>" + data + "</span>";
+          } else if (data == 0) {
+            return "<span class='badge badge-warning'>" + data + "</span>";
+          } else {
+            return "<span class='badge badge-danger'>" + data + "</span>";
+          }
+        },
+      },
+      { data: "nombre" },
+    ],
+
+    language: {
+      rows: "%d fila seleccionada",
+      processing: "Tratamiento en curso...",
+      search: "Buscar&nbsp;:",
+      lengthMenu: "Agrupar en _MENU_ items",
+      info: "Mostrando los item (_START_ al _END_) de un total _TOTAL_ items",
+      infoEmpty: "No existe datos.",
+      infoFiltered: "(filtrado de _MAX_ elementos en total)",
+      infoPostFix: "",
+      loadingRecords: "Cargando...",
+      zeroRecords: "No se encontro resultados en tu busqueda",
+      emptyTable: "No hay datos disponibles en la tabla",
+      paginate: {
+        first: "Primero",
+        previous: "Anterior",
+        next: "Siguiente",
+        last: "Ultimo",
+      },
+      select: {
+        rows: "%d fila seleccionada",
+      },
+      aria: {
+        sortAscending: ": active para ordenar la columa en orden ascendente",
+        sortDescending: ": active para ordenar la columna en orden descendente",
+      },
+    },
+    select: true,
+    responsive: "true",
+    order: [[1, 'asc']]
+  });
+
+}
+
+function listar_lote_vacunas_expirar() {
+  tabla_lote_vacunas_exper = $("#tabla_lote_vacunas_expe").DataTable({
+    ordering: true,
+    paging: true,
+    aProcessing: true,
+    aServerSide: true,
+    searching: { regex: true },
+    lengthMenu: [
+      [10, 25, 50, 100, -1],
+      [10, 25, 50, 100, "All"],
+    ],
+    pageLength: 10,
+    destroy: true,
+    async: false,
+    processing: true,
+
+    ajax: {
+      url: "/vacunas/listar_vacunas_lotes",
+      type: "GET",
+    },
+    //hay que poner la misma cantidad de columnas y tambien en el html
+    columns: [
+      { data: "codigo" },
+      {
+        data: "fecha_f",
+        render: function (data, type, row) {
+          if (data == 1) {
+            return "<span class='badge badge-success'>" + data + "</span>";
+          } else if (data == 0) {
+            return "<span class='badge badge-warning'>" + data + "</span>";
+          } else {
+            return "<span class='badge badge-danger'>" + data + "</span>";
+          }
+        },
+      },
+      { data: "nombre" },
+    ],
+
+    language: {
+      rows: "%d fila seleccionada",
+      processing: "Tratamiento en curso...",
+      search: "Buscar&nbsp;:",
+      lengthMenu: "Agrupar en _MENU_ items",
+      info: "Mostrando los item (_START_ al _END_) de un total _TOTAL_ items",
+      infoEmpty: "No existe datos.",
+      infoFiltered: "(filtrado de _MAX_ elementos en total)",
+      infoPostFix: "",
+      loadingRecords: "Cargando...",
+      zeroRecords: "No se encontro resultados en tu busqueda",
+      emptyTable: "No hay datos disponibles en la tabla",
+      paginate: {
+        first: "Primero",
+        previous: "Anterior",
+        next: "Siguiente",
+        last: "Ultimo",
+      },
+      select: {
+        rows: "%d fila seleccionada",
+      },
+      aria: {
+        sortAscending: ": active para ordenar la columa en orden ascendente",
+        sortDescending: ": active para ordenar la columna en orden descendente",
+      },
+    },
+    select: true,
+    responsive: "true",
+    order: [[1, 'asc']]
+  });
+
+}
+
+function listar_lote_desparasitante_expirar() {
+  tabla_lote_desparasitante_exper = $("#tabla_lote_desaparasitantes_expe").DataTable({
+    ordering: true,
+    paging: true,
+    aProcessing: true,
+    aServerSide: true,
+    searching: { regex: true },
+    lengthMenu: [
+      [10, 25, 50, 100, -1],
+      [10, 25, 50, 100, "All"],
+    ],
+    pageLength: 10,
+    destroy: true,
+    async: false,
+    processing: true,
+
+    ajax: {
+      url: "/compras/listar_lote_medicmaneto",
+      type: "GET",
+    },
+    //hay que poner la misma cantidad de columnas y tambien en el html
+    columns: [
+      { data: "codigo" },
+      {
+        data: "fecha_f",
+        render: function (data, type, row) {
+          if (data == 1) {
+            return "<span class='badge badge-success'>" + data + "</span>";
+          } else if (data == 0) {
+            return "<span class='badge badge-warning'>" + data + "</span>";
+          } else {
+            return "<span class='badge badge-danger'>" + data + "</span>";
+          }
+        },
+      },
+      { data: "medicamento" },
+    ],
+
+    language: {
+      rows: "%d fila seleccionada",
+      processing: "Tratamiento en curso...",
+      search: "Buscar&nbsp;:",
+      lengthMenu: "Agrupar en _MENU_ items",
+      info: "Mostrando los item (_START_ al _END_) de un total _TOTAL_ items",
+      infoEmpty: "No existe datos.",
+      infoFiltered: "(filtrado de _MAX_ elementos en total)",
+      infoPostFix: "",
+      loadingRecords: "Cargando...",
+      zeroRecords: "No se encontro resultados en tu busqueda",
+      emptyTable: "No hay datos disponibles en la tabla",
+      paginate: {
+        first: "Primero",
+        previous: "Anterior",
+        next: "Siguiente",
+        last: "Ultimo",
+      },
+      select: {
+        rows: "%d fila seleccionada",
+      },
+      aria: {
+        sortAscending: ": active para ordenar la columa en orden ascendente",
+        sortDescending: ": active para ordenar la columna en orden descendente",
+      },
+    },
+    select: true,
+    responsive: "true",
+    order: [[1, 'asc']]
+  });
+
 }

@@ -1,4 +1,4 @@
-var tabla_tipo_vacuna, tabla_vacunas;
+var tabla_tipo_vacuna, tabla_vacunas, tabla_lote_vacuna;
 
 function registrar_calendario_cerdo() {
   var titulo = $("#evento_titulo").val();
@@ -609,6 +609,9 @@ function guardar_vacunas_de_cerdos() {
   var detalle = $("#detalle_v").val();
   var presentacion = $("#presentacion").val();
 
+  var registro_sani = $("#registro_sani").val();
+  var cantidad_dosis = $("#cantidad_dosis").val();
+
   if (
     codigo.length == 0 ||
     codigo.trim() == "" ||
@@ -623,16 +626,22 @@ function guardar_vacunas_de_cerdos() {
     detalle.length == 0 ||
     detalle.trim() == "" ||
     presentacion.length == 0 ||
-    presentacion.trim() == ""
+    presentacion.trim() == "" ||
+    registro_sani.length == 0 ||
+    registro_sani.trim() == "" ||
+    cantidad_dosis.length == 0 ||
+    cantidad_dosis.trim() == ""
   ) {
-    validar_registro_vacunas(
+    validar_registro_vacunas_REGISTER(
       codigo,
       nombre,
       tipo,
       cantidad,
       precio,
       detalle,
-      presentacion
+      presentacion,
+      registro_sani,
+      cantidad_dosis
     );
 
     return swal.fire(
@@ -648,6 +657,8 @@ function guardar_vacunas_de_cerdos() {
     $("#precio_obligg").html("");
     $("#detalle_obligg").html("");
     $("#presentacion_obligg").html("");
+    $("#cantidad_dosis_obligg").html("");
+    $("#registro_sani_obligg").html("");
   }
 
   var formdata = new FormData();
@@ -660,6 +671,10 @@ function guardar_vacunas_de_cerdos() {
   formdata.append("precio", precio);
   formdata.append("detalle", detalle);
   formdata.append("presentacion", presentacion);
+
+  formdata.append("registro_sani", registro_sani);
+  formdata.append("cantidad_dosis", cantidad_dosis);
+
   formdata.append("foto", foto);
 
   $.ajax({
@@ -706,14 +721,16 @@ function guardar_vacunas_de_cerdos() {
   return false;
 }
 
-function validar_registro_vacunas(
+function validar_registro_vacunas_REGISTER(
   codigo,
   nombre,
   tipo,
   cantidad,
   precio,
   detalle,
-  presentacion
+  presentacion,
+  registro_sani,
+  cantidad_dosis
 ) {
   if (codigo.length == 0 || codigo.trim() == "") {
     $("#codigo_oblig").html("Ingrese código");
@@ -755,6 +772,18 @@ function validar_registro_vacunas(
     $("#presentacion_obligg").html("Ingrese la presentación de la vacuna");
   } else {
     $("#presentacion_obligg").html("");
+  }
+
+  if (registro_sani.length == 0 || registro_sani.trim() == "") {
+    $("#cantidad_dosis_obligg").html("Ingrese cantidad de dosis");
+  } else {
+    $("#cantidad_dosis_obligg").html("");
+  }
+
+  if (cantidad_dosis.length == 0 || cantidad_dosis.trim() == "") {
+    $("#registro_sani_obligg").html("Ingrese registro sanitario");
+  } else {
+    $("#registro_sani_obligg").html("");
   }
 }
 
@@ -805,8 +834,7 @@ function listar_vacunas() {
           );
         },
       },
-      { data: "presentacion" },
-      { data: "cantidad" },
+      { data: "presentacion" }, 
       { data: "precio" },
       { data: "detalle" },
       {
@@ -882,6 +910,146 @@ function listar_vacunas() {
       .each(function (cell, i) {
         cell.innerHTML = i + 1 + pageinfo.start;
       });
+  });
+}
+
+function listar_lotes_vacunas() {
+  tabla_lote_vacuna = $("#tabla_lote_vacuna").DataTable({
+    ordering: true,
+    paging: true,
+    aProcessing: true,
+    aServerSide: true,
+    searching: { regex: true },
+    lengthMenu: [
+      [10, 25, 50, 100, -1],
+      [10, 25, 50, 100, "All"],
+    ],
+    pageLength: 10,
+    destroy: true,
+    async: false,
+    processing: true,
+
+    ajax: {
+      url: "/vacunas/listar_vacunas_lotes",
+      type: "GET",
+    },
+    //hay que poner la misma cantidad de columnas y tambien en el html
+    columns: [
+      {
+        render: function (data, type, row) {
+            return `<button style='font-size:10px;' type='button' class='eliminar btn btn-outline-danger' title='Eliminar el lote'><i class='fa fa-times' style='font-size: 15px;'></i></button>`;
+        },
+      },
+      { data: "codigo" },
+      { data: "nombre" }, 
+      { data: "cantidad" },
+      { data: "fecha_i" }, 
+      { data: "fecha_f" },
+      { data: "fecha" },
+    ],
+
+    language: {
+      rows: "%d fila seleccionada",
+      processing: "Tratamiento en curso...",
+      search: "Buscar&nbsp;:",
+      lengthMenu: "Agrupar en _MENU_ items",
+      info: "Mostrando los item (_START_ al _END_) de un total _TOTAL_ items",
+      infoEmpty: "No existe datos.",
+      infoFiltered: "(filtrado de _MAX_ elementos en total)",
+      infoPostFix: "",
+      loadingRecords: "Cargando...",
+      zeroRecords: "No se encontro resultados en tu busqueda",
+      emptyTable: "No hay datos disponibles en la tabla",
+      paginate: {
+        first: "Primero",
+        previous: "Anterior",
+        next: "Siguiente",
+        last: "Ultimo",
+      },
+      select: {
+        rows: "%d fila seleccionada",
+      },
+      aria: {
+        sortAscending: ": active para ordenar la columa en orden ascendente",
+        sortDescending: ": active para ordenar la columna en orden descendente",
+      },
+    },
+    select: true,
+    responsive: "true",
+    dom: "Bfrtilp",
+    buttons: [
+      {
+        extend: "excelHtml5",
+        text: "Excel",
+        titleAttr: "Exportar a Excel",
+        className: "btn btn-success greenlover",
+      },
+      {
+        extend: "pdfHtml5",
+        text: "PDF",
+        titleAttr: "Exportar a PDF",
+        className: "btn btn-danger redfule",
+      },
+      {
+        extend: "print",
+        text: "Imprimir",
+        titleAttr: "Imprimir",
+        className: "btn btn-primary azuldete",
+      },
+    ],
+    order: [[0, "ASC"]],
+  });
+}
+
+$("#tabla_lote_vacuna").on("click", ".eliminar", function () {
+  //esto esta extrayendo los datos de la tabla el (data)
+  var data = tabla_lote_vacuna.row($(this).parents("tr")).data(); //a que fila deteta que doy click
+  //esta condicion es importante para el responsibe porque salda un error si no lo pongo
+  if (tabla_lote_vacuna.row(this).child.isShown()) {
+    //esto es cuando esta en tamaño responsibo
+    var data = tabla_lote_vacuna.row(this).data();
+  }
+
+  var id = data.id;
+
+  Swal.fire({
+    title: "Eliminar el lote de vacuna?",
+    text: "El lote de vacina se eliminará!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Si, eliminar!",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      eliminar_lote_vacuna_a(id);
+    }
+  });
+
+});
+
+function eliminar_lote_vacuna_a(id) {
+  $.ajax({
+    url: "/vacunas/eliminar_lote_vacuna_a",
+    type: "POST",
+    data: { id: id },
+  }).done(function (response) {
+    if (response > 0) {
+      if (response == 1) {
+        tabla_lote_vacuna.ajax.reload();
+        return Swal.fire(
+          "Lote eliminado",
+          "EL lote de vacuna se elimino con exito",
+          "success"
+        );
+      }
+    } else {
+      return Swal.fire(
+        "Error",
+        "No se pudo eliminar el lote, error en la matrix",
+        "error"
+      );
+    }
   });
 }
 
@@ -987,6 +1155,10 @@ $("#tabla_vacunas").on("click", ".editar", function () {
   $("#detalle_a_edi").val(data.detalle);
   $("#presentacion_edit").val(data.presentacion);
 
+  $("#registro_sani_edit").val(data.registro_sani);
+  $("#cantidad_dosis_edit").val(data.cantidad_dosis);
+
+
   $("#codigo_oblig_edi").html("");
   $("#nombre_obligg_edi").html("");
   $("#tipo_obligg_edi").html("");
@@ -994,6 +1166,8 @@ $("#tabla_vacunas").on("click", ".editar", function () {
   $("#precio_obligg_edi").html("");
   $("#detalle_obligg_edi").html("");
   $("#presentacion_edit_obligg").html("");
+  $("#registro_sani_edit_obligg").html("");
+  $("#cantidad_dosis_edit_obligg").html("");
 
   $("#modal_editar_vacuna").modal({ backdrop: "static", keyboard: false });
   $("#modal_editar_vacuna").modal("show");
@@ -1009,6 +1183,9 @@ function editar_vacuna() {
   var detalle = $("#detalle_a_edi").val();
   var presentacion = $("#presentacion_edit").val();
 
+  var registro_sani = $("#registro_sani_edit").val();
+  var cantidad_dosis = $("#cantidad_dosis_edit").val();
+
   if (
     codigo.length == 0 ||
     codigo.trim() == "" ||
@@ -1023,7 +1200,11 @@ function editar_vacuna() {
     detalle.length == 0 ||
     detalle.trim() == "" ||
     presentacion.length == 0 ||
-    presentacion.trim() == ""
+    presentacion.trim() == "" ||
+    registro_sani.length == 0 ||
+    registro_sani.trim() == "" ||
+    cantidad_dosis.length == 0 ||
+    cantidad_dosis.trim() == ""
   ) {
     validar_editar_vacuna(
       codigo,
@@ -1032,7 +1213,9 @@ function editar_vacuna() {
       cantidad,
       precio,
       detalle,
-      presentacion
+      presentacion,
+      registro_sani,
+      cantidad_dosis
     );
 
     return swal.fire(
@@ -1048,6 +1231,8 @@ function editar_vacuna() {
     $("#precio_obligg_edi").html("");
     $("#detalle_obligg_edi").html("");
     $("#presentacion_edit_obligg").html("");
+    $("#registro_sani_edit_obligg").html("");
+    $("#cantidad_dosis_edit_obligg").html("");
   }
 
   var formdata = new FormData();
@@ -1059,6 +1244,9 @@ function editar_vacuna() {
   formdata.append("precio", precio);
   formdata.append("detalle", detalle);
   formdata.append("presentacion", presentacion);
+
+  formdata.append("registro_sani", registro_sani);
+  formdata.append("cantidad_dosis", cantidad_dosis);
 
   $.ajax({
     url: "/vacunas/editar_vacuna",
@@ -1117,7 +1305,9 @@ function validar_editar_vacuna(
   cantidad,
   precio,
   detalle,
-  presentacion
+  presentacion,
+  registro_sani,
+  cantidad_dosis
 ) {
   if (codigo.length == 0 || codigo.trim() == "") {
     $("#codigo_oblig_edi").html("Ingrese código");
@@ -1159,6 +1349,18 @@ function validar_editar_vacuna(
     $("#presentacion_edit_obligg").html("Ingrese la presentación");
   } else {
     $("#presentacion_edit_obligg").html("");
+  }
+
+  if (registro_sani.length == 0 || registro_sani.trim() == "") {
+    $("#cantidad_dosis_edit_obligg").html("Ingrese cantidad de dosis");
+  } else {
+    $("#cantidad_dosis_edit_obligg").html("");
+  }
+
+  if (cantidad_dosis.length == 0 || cantidad_dosis.trim() == "") {
+    $("#registro_sani_edit_obligg").html("Ingrese registro sanitario");
+  } else {
+    $("#registro_sani_edit_obligg").html("");
   }
 }
 

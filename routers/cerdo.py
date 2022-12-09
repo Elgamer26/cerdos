@@ -136,8 +136,12 @@ def editar_cerdo_chancho():
         _origen = request.form['origen']
         _fecha = request.form['fecha']
         _detalle_c = request.form['detalle_c']
+        
+        _tipo_ingreso = request.form['tipo_ingreso']
+        _costo = request.form['costo']
+        _etapa = request.form['etapa']
 
-        dato = Cerdo.Editar_cerdo_chancho(_codigo_cerdo, _nombre, _sexo_cerdo, _raza_id, _peso, _origen, _fecha, _detalle_c, _id)
+        dato = Cerdo.Editar_cerdo_chancho(_codigo_cerdo, _nombre, _sexo_cerdo, _raza_id, _peso, _origen, _fecha, _detalle_c, _tipo_ingreso, _costo, _etapa, _id)
         return str(dato)
 
 # controlador para registra el cerdo muerto

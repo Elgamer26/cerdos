@@ -1,4 +1,4 @@
-var tabla_tipo_a, tabla_marca_a, tabla_alimento, funcion, tabla_tipo_alimentacion, tabla_seguimineto;
+var tabla_tipo_a, tabla_marca_a, tabla_alimento, funcion, tabla_tipo_alimentacion, tabla_seguimineto, tabla_lote_alimento;
 
 function listar_tipo_a() {
   tabla_tipo_a = $("#tabla_tipo_a_").DataTable({
@@ -928,6 +928,124 @@ function listado_alimento_cerdo() {
       });
   });
 }
+
+function listar_lote_alimento() {
+  tabla_lote_alimento = $("#tabla_lote_alimento").DataTable({
+    ordering: true,
+    paging: true,
+    aProcessing: true,
+    aServerSide: true,
+    searching: { regex: true },
+    lengthMenu: [
+      [10, 25, 50, 100, -1],
+      [10, 25, 50, 100, "All"],
+    ],
+    pageLength: 10,
+    destroy: true,
+    async: false,
+    processing: true,
+
+    ajax: {
+      url: "/alimento/listar_lote_alimento",
+      type: "GET",
+    },
+    //hay que poner la misma cantidad de columnas y tambien en el html
+    columns: [
+      {
+        render: function (data, type, row) {
+            return `<button style='font-size:10px;' type='button' class='eliminar btn btn-outline-danger' title='Eliminar lote alimento'><i class='fa fa-times' style='font-size: 15px;'></i></button> `;     
+        },
+      },
+      { data: "codigo" },
+      { data: "nombre" },
+      { data: "cantidad" },
+      { data: "fecha_i" },
+      { data: "fecha_f" },
+      { data: "fecha" }, 
+    ],
+
+    language: {
+      rows: "%d fila seleccionada",
+      processing: "Tratamiento en curso...",
+      search: "Buscar&nbsp;:",
+      lengthMenu: "Agrupar en _MENU_ items",
+      info: "Mostrando los item (_START_ al _END_) de un total _TOTAL_ items",
+      infoEmpty: "No existe datos.",
+      infoFiltered: "(filtrado de _MAX_ elementos en total)",
+      infoPostFix: "",
+      loadingRecords: "Cargando...",
+      zeroRecords: "No se encontro resultados en tu busqueda",
+      emptyTable: "No hay datos disponibles en la tabla",
+      paginate: {
+        first: "Primero",
+        previous: "Anterior",
+        next: "Siguiente",
+        last: "Ultimo",
+      },
+      select: {
+        rows: "%d fila seleccionada",
+      },
+      aria: {
+        sortAscending: ": active para ordenar la columa en orden ascendente",
+        sortDescending: ": active para ordenar la columna en orden descendente",
+      },
+    },
+    select: true,
+    responsive: "true",
+    order: [[0, "ASC"]],
+  });
+}
+
+$("#tabla_lote_alimento").on("click", ".eliminar", function () {
+  //esto esta extrayendo los datos de la tabla el (data)
+  var data = tabla_lote_alimento.row($(this).parents("tr")).data(); //a que fila deteta que doy click
+  //esta condicion es importante para el responsibe porque salda un error si no lo pongo
+  if (tabla_lote_alimento.row(this).child.isShown()) {
+    //esto es cuando esta en tamaño responsibo
+    var data = tabla_lote_alimento.row(this).data();
+  }
+  var id = data.id;
+
+  Swal.fire({
+    title: "Eiminar lote?",
+    text: "Eliminar lote de alimento!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Si, eliminar!",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      eliminar_lote_alimento(id);
+    }
+  });
+});
+
+function eliminar_lote_alimento(id) {
+  $.ajax({
+    url: "/alimento/eliminar_lote_alimento",
+    type: "POST",
+    data: { id: id },
+  }).done(function (response) {
+    if (response > 0) {
+      if (response == 1) {
+        tabla_lote_alimento.ajax.reload();
+        return Swal.fire(
+          "Lote eliminado",
+          "EL lote de alimento se elimino con exito",
+          "success"
+        );
+      }
+    } else {
+      return Swal.fire(
+        "Error",
+        "No se pudo eliminar el lote, error en la matrix",
+        "error"
+      );
+    }
+  });
+}
+
 
 $("#tabla_alimento").on("click", ".inactivar", function () {
   //esto esta extrayendo los datos de la tabla el (data)

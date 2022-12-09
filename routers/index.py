@@ -166,6 +166,44 @@ def list_galpon_cerdo():
     data = Galpon.Listar_cerdo_galpon_LIST()
     return render_template('view/galpon/list_galpon_cerdo.html', data = data)
 
+### galpon corección ###########
+#vista del galpon del cerdo new
+@index.route('/galpones_cerdoss')
+def galpones_cerdoss(): 
+    data = Galpon.Listar_cerdos_en_galpon()
+    return render_template('view/galpon/galpones_cerdoss.html', data = data)
+
+#crear galpon cerdo new
+@index.route('/nuevo_cerdo_galpon')
+def nuevo_cerdo_galpon(): 
+    data = Galpon.Listar_galpon_combo()
+    return render_template('view/galpon/nuevo_cerdo_galpon.html', data = data)
+
+#ver los cerdos del galpon new
+@index.route('/ver_cerdos_galpo_new/<int:id>')
+def ver_cerdos_galpo_new(id): 
+    galpon = Galpon.Listar_galpo_cerdo_id(id)
+    cerdos = Galpon.Listar_cerdos_galpon_tabla(id)
+    tipo = Alimento.Traer_tipo_alimento_select() 
+    tipo_a = Alimento.Traer_tipo_alimentacion_select() 
+    h_m = Galpon.Hembras_Machos(id)
+    tipo_v = Vacunas.Combo_tipo_vacuna()
+    tipo_m = Compras.Combo_tipo_medicamento()  
+    data = {
+        'galpon': galpon,
+        'cerdos': cerdos,
+        'id': id,
+        'tipo': tipo, 
+        'tipo_a': tipo_a,
+        'h_m': h_m,
+        'tipo_v': tipo_v,
+        'tipo_m': tipo_m
+    }
+    return render_template('view/galpon/cerdos_galpo_detalle.html', data = data)
+
+################
+################
+
 #crear galpon cerdo
 @index.route('/create_galpon_cerdo')
 def create_galpon_cerdo(): 
@@ -241,11 +279,13 @@ def compra_alimento():
     proveedor = Compras.Select_proveedor()
     alimentos = Compras.Table_alimentos()
     list_compras = Compras.Listar_compras_alimentos()
+    codigo = random.randint(0, 99999)
     data = {
         'fecha': now,
         'proveedor': proveedor,
         'alimentos': alimentos,
-        'lista': list_compras
+        'lista': list_compras,
+        'codigo': codigo
     }
     return render_template('view/compras/compra_alimento.html', data = data)
 
@@ -259,18 +299,12 @@ def tipo_alimentacion():
 def alimentacion_cerdos():  
     fecha = datetime.now()
     now = fecha.strftime("%Y-%m-%d")
-    tipo = Alimento.Traer_tipo_alimento_select() 
-    tipo_a = Alimento.Traer_tipo_alimentacion_select() 
     galpon = Galpon.Listar_galpon_combo() 
     alimentacion = Alimento.Listar_alimentacion()
-    cerdo = Galpon.Select_cerdos() 
     data = {
         'fecha': now,
-        'tipo': tipo, 
-        'tipo_a': tipo_a,
         'galpon': galpon,
-        'alimentacion': alimentacion,
-        'cerdo': cerdo, 
+        'alimentacion': alimentacion
     }  
     return render_template('view/alimento/alimentacion_cerdos.html', data = data)
 
@@ -279,18 +313,12 @@ def alimentacion_cerdos():
 def alimentacion_cerdos_fecha(f_i, f_f):  
     fecha = datetime.now()
     now = fecha.strftime("%Y-%m-%d")
-    tipo = Alimento.Traer_tipo_alimento_select() 
-    tipo_a = Alimento.Traer_tipo_alimentacion_select() 
     galpon = Galpon.Listar_galpon_combo() 
     alimentacion = Alimento.Listar_alimentacion_fecha(f_i,f_f)
-    cerdo = Galpon.Select_cerdos() 
     data = {
         'fecha': now,
-        'tipo': tipo, 
-        'tipo_a': tipo_a,
         'galpon': galpon,
-        'alimentacion': alimentacion,
-        'cerdo': cerdo, 
+        'alimentacion': alimentacion
     }  
     return render_template('view/alimento/alimentacion_cerdos.html', data = data)
 
@@ -298,29 +326,27 @@ def alimentacion_cerdos_fecha(f_i, f_f):
 @index.route('/peso_cerdo')
 def peso_cerdo():    
     fecha = datetime.now()
-    now = fecha.strftime("%Y-%m-%d")
-    cerdo = Galpon.Select_cerdos() 
-    pesaje = Alimento.Listar_pesaje_cerdo()
+    now = fecha.strftime("%Y-%m-%d") 
+    galpon = Galpon.Listar_galpon_combo()
     data = {
         'fecha': now,
-        'cerdo': cerdo,  
-        'pesaje': pesaje
+        'galpon': galpon
     } 
     return render_template('view/alimento/peso_cerdo.html', data = data)
 
 #vista movimientos de cerdos de galpones por fechas
-@index.route('/peso_cerdos_fecha/<string:f_i>/<string:f_f>')
-def peso_cerdos_fecha(f_i, f_f):  
-    fecha = datetime.now()
-    now = fecha.strftime("%Y-%m-%d")
-    cerdo = Galpon.Select_cerdos() 
-    pesaje = Alimento.Listar_pesaje_cerdo_fecha(f_i, f_f)
-    data = {
-        'fecha': now,
-        'cerdo': cerdo,  
-        'pesaje': pesaje
-    } 
-    return render_template('view/alimento/peso_cerdo.html', data = data)
+# @index.route('/peso_cerdos_fecha/<string:f_i>/<string:f_f>')
+# def peso_cerdos_fecha(f_i, f_f):  
+#     fecha = datetime.now()
+#     now = fecha.strftime("%Y-%m-%d")
+#     cerdo = Galpon.Select_cerdos() 
+#     pesaje = Alimento.Listar_pesaje_cerdo_fecha(f_i, f_f)
+#     data = {
+#         'fecha': now,
+#         'cerdo': cerdo,  
+#         'pesaje': pesaje
+#     } 
+#     return render_template('view/alimento/peso_cerdo.html', data = data)
 
 #vista tipo de insumo
 @index.route('/tipo_insumo')
@@ -342,11 +368,13 @@ def compra_insumos():
     proveedor = Compras.Select_proveedor()
     insumos = Compras.Table_insumos()
     listar_compras = Compras.Listar_compras_insumos()
+    codigo = random.randint(0, 99999)
     data = {
         'fecha': now,
         'proveedor': proveedor,
         'insumo': insumos,
-        'lista': listar_compras
+        'lista': listar_compras,
+        'codigo': codigo
     }
     return render_template('view/compras/compra_insumos.html', data = data)
 
@@ -428,11 +456,13 @@ def compra_medicamento():
     proveedor = Compras.Select_proveedor()
     medicamento = Compras.Table_medicamento()
     listar_compras = Compras.Listar_compras_medicamento()
+    codigo = random.randint(0, 99999)
     data = {
         'fecha': now,
         'proveedor': proveedor,
         'insumo': medicamento,
-        'lista': listar_compras
+        'lista': listar_compras,
+        'codigo': codigo
     }
     return render_template('view/compras/compra_medicamento.html', data = data)
 
@@ -462,14 +492,8 @@ def listado_tratamientos():
 #vista de cerdos muertos
 @index.route('/cerdos_muertos')
 def cerdos_muertos():      
-    fecha = datetime.now()
-    now = fecha.strftime("%Y-%m-%d")   
-    cerdo = Galpon.Select_cerdos() 
     muertos = Cerdo.Cerdos_muertos()
-
     data = {
-        'fecha': now, 
-        'cerdo': cerdo,
         'muertos': muertos
     }
     return render_template('view/cerdo/cerdos_muertos.html', data = data)
@@ -554,75 +578,77 @@ def compra_vacunas():
     return render_template('view/compras/compra_vacunas.html', data = data)
 
 #vista de registro vacunas de cerdos
-@index.route('/registro_vacunacion')
-def registro_vacunacion():  
-    fecha = datetime.now()
-    now = fecha.strftime("%Y-%m-%d")
-    cerdo = Galpon.Select_cerdos() 
-    vacuna = Vacunas.Table_vacuna()
-    calendario = Vacunas.Tabla_calendario_vacunas()
-    data = {
-        'fecha': now,
-        'cerdo': cerdo,
-        'vacuna': vacuna,
-        'calendario': calendario
-    }
-    return render_template('view/vacuna_despara/registro_vacunacion.html', data = data)
+# @index.route('/registro_vacunacion')
+# def registro_vacunacion():  
+#     fecha = datetime.now()
+#     now = fecha.strftime("%Y-%m-%d")
+#     cerdo = Galpon.Select_cerdos() 
+#     vacuna = Vacunas.Table_vacuna()
+#     calendario = Vacunas.Tabla_calendario_vacunas()
+#     data = {
+#         'fecha': now,
+#         'cerdo': cerdo,
+#         'vacuna': vacuna,
+#         'calendario': calendario
+#     }
+#     return render_template('view/vacuna_despara/registro_vacunacion.html', data = data)
 
 #vista del listado de vacunaciones de cerdos
-@index.route('/listado_vacunacion')
-def listado_vacunacion():   
-    vacunacion = Vacunas.Listar_vacunaciones_cerdos() 
-    data = {
-        'vacunacion': vacunacion
-    }
-    return render_template('view/vacuna_despara/listado_vacunacion.html', data = data)
+# @index.route('/listado_vacunacion')
+# def listado_vacunacion():   
+#     vacunacion = Vacunas.Listar_vacunaciones_cerdos() 
+#     data = {
+#         'vacunacion': vacunacion
+#     }
+#     return render_template('view/vacuna_despara/listado_vacunacion.html', data = data)
 
 #vista del listado de vacunaciones de cerdos por fechas
-@index.route('/listado_vacunacion_fecha/<string:f_i>/<string:f_f>')
-def listado_vacunacion_fecha(f_i, f_f):   
-    vacunacion_f = Vacunas.Listar_vacunaciones_cerdos_fecha(f_i, f_f) 
-    data = {
-        'vacunacion': vacunacion_f,
-        'f_i': f_i,
-        'f_f': f_f
-    }
-    return render_template('view/vacuna_despara/listado_vacunacion_fecha.html', data = data)
+# @index.route('/listado_vacunacion_fecha/<string:f_i>/<string:f_f>')
+# def listado_vacunacion_fecha(f_i, f_f):   
+#     vacunacion_f = Vacunas.Listar_vacunaciones_cerdos_fecha(f_i, f_f) 
+#     data = {
+#         'vacunacion': vacunacion_f,
+#         'f_i': f_i,
+#         'f_f': f_f
+#     }
+#     return render_template('view/vacuna_despara/listado_vacunacion_fecha.html', data = data)
 
 #vista de historial de vacunacion de los cerdos
 @index.route('/historial_de_vacunacion')
 def historial_de_vacunacion():  
     fecha = datetime.now()
     now = fecha.strftime("%Y-%m-%d")
-    cerdo = Galpon.Select_cerdos() 
+    galpon = Galpon.Listar_galpon_combo() 
     data = {
         'fecha': now,
-        'cerdo': cerdo
+        'galpon': galpon
     }
     return render_template('view/vacuna_despara/historial_de_vacunacion.html', data = data)
 
 #vista de registro desparasitacion de cerdos
-@index.route('/registro_desparasitacion')
-def registro_desparasitacion():  
-    fecha = datetime.now()
-    now = fecha.strftime("%Y-%m-%d")
-    cerdo = Galpon.Select_cerdos() 
-    medicamento = Compras.Table_medicamento()
-    calendario = Vacunas.Tabla_calendario_desparacitacion()
-    data = {
-        'fecha': now,
-        'cerdo': cerdo,
-        'medicamento': medicamento,
-        'calendario': calendario
-    }
-    return render_template('view/vacuna_despara/registro_desparasitacion.html', data = data)
+# @index.route('/registro_desparasitacion')
+# def registro_desparasitacion():  
+#     fecha = datetime.now()
+#     now = fecha.strftime("%Y-%m-%d")
+#     cerdo = Galpon.Select_cerdos() 
+#     medicamento = Compras.Table_medicamento()
+#     calendario = Vacunas.Tabla_calendario_desparacitacion()
+#     data = {
+#         'fecha': now,
+#         'cerdo': cerdo,
+#         'medicamento': medicamento,
+#         'calendario': calendario
+#     }
+#     return render_template('view/vacuna_despara/registro_desparasitacion.html', data = data)
 
 #vista del listado de desparasitacion de cerdos
 @index.route('/listado_desparasitacion')
 def listado_desparasitacion():   
-    desparasitacion = Vacunas.Listar_desparasitacion_cerdos() 
+    desparasitacion = Vacunas.Listar_desparasitacion_cerdos()
+    galpon = Galpon.Listar_galpon_combo() 
     data = {
-        'desparasitacion': desparasitacion
+        'desparasitacion': desparasitacion,
+        'galpon': galpon
     }
     return render_template('view/vacuna_despara/listado_desparasitacion.html', data = data)
 

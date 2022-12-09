@@ -29,25 +29,28 @@
                 <div class="card-body">
                     <div class="row">
     
-                      <div class="form-group col-lg-2 col-2">
-                        <label for="fecha_i">Fecha inicio</label>
-                        <input type="date" class="form-control" id="fecha_i" /> 
-                    </div>
+                      <div class="form-group col-lg-12 col-6 text-center">
 
-                    <div class="form-group col-lg-2 col-2">
-                        <label for="fecha_f">Fecha fin</label>
-                        <input type="date" class="form-control" id="fecha_f" /> 
-                    </div>
-
-                    <div class="form-group col-lg-1 col-1">
-                        <label>Buscar</label>
-                        <button onclick="cargar_fechas();" class="btn btn-info"> <i class="fa fa-search"></i> </button>
-                    </div>
-
-                    <div class="form-group col-lg-1 col-1">
-                        <label>Todo</label>
-                        <button onclick="cargar_contenido('contenido_principal','/listado_desparasitacion');" class="btn btn-success"> <i class="fa fa-eye"></i> </button>
-                    </div>
+                        <div class="row" style="border: solid 1px; border-radius: 10px;">
+    
+                         <div class="form-group col-lg-6 col-6 text-center">
+                           <label for="galpon_cerdo">Seleccione galpón:</label>
+                           <select class="form-control galpon_cerdo" style="width: 100%" id="galpon_cerdo">
+                               <option value="0">--- Seleccione galpón ---</option>    
+                               {% for datas in data.galpon %}
+                               <option value="{{datas[0]}}">Número: {{datas[2]}} - Galpón: {{datas[1]}} - Fin: {{datas[4]}} </option>
+                               {% endfor %}
+                           </select> 
+                         </div>    
+    
+                         <div class="form-group col-lg-6 col-6 text-center espiner_cerdo">
+                             <label for="cerdo_galpon">Seleccione un cerdo:</label>
+                             <select class="form-control cerdo_galpon" style="width: 100%" id="cerdo_galpon"> </select> 
+                         </div>                                                                
+    
+                       </div>
+                       
+                       <br>
 
                       <div class="form-group col-lg-12 col-12">
 
@@ -57,52 +60,26 @@
                           style="width: 100%" >
                           <thead>
                             <tr> 
-                              <th style="width: 1px;">#</th>
-                              <th>Acci&oacute;n</th>
-                              <th>Cerdo</th>
                               <th>Fecha</th>
-                              <th>Observación</th>
-                              <th>Estado</th> 
+                              <th>Hora</th>
+                              <th>Semana</th> 
+                              <th>Desparasitante</th>
+                              <th>Cantidad</th> 
                             </tr>
                           </thead>
 
                           <tbody>
 
-                            {% for dato in data.desparasitacion %}
-
-                            <tr>    <td></td>
-                                  
-                                    {% if dato[6] == 1 %}
-                                    <td> <button onclick="anular_desparasitacion_cerdo({{dato[0]}});" class="btn btn-outline-danger"><i class="fa fa-times"></i></button> 
-                                    - 
-                                    <a target="_blank" href="/reporte/desparasitacion_cerdo_reporte/{{dato[0]}}" class="btn btn-outline-primary"><i class="fa fa-file"></i></a> </td>
-                                    {% else %}
-                                    <td> <a target="_blank" href="/reporte/desparasitacion_cerdo_reporte/{{dato[0]}}" class="btn btn-outline-primary"><i class="fa fa-file"></i></a></td>
-                                    {% endif %} 
-                                    
-                                  </td>
-                                  <td> Código: {{dato[1]}} - Raza: {{dato[3]}} - Sexo: {{dato[2]}} </td>
-                                  <td> {{dato[4]}}  </td>
-                                  <td> {{dato[5]}}  </td>
-                                  {% if dato[6] == 1 %}
-                                  <td> <span style="font-size: 13px;" class="badge badge-success">Activo</span> </td>
-                                  {% else %}
-                                  <td> <span style="font-size: 13px;" class="badge badge-danger">Anulado</span> </td>
-                                  {% endif %}  
-                              </tr>
-                            
-                            {% endfor %}
-                                                      
+                 
                           </tbody>
       
                           <tfoot>
                             <tr> 
-                                <th style="width: 1px;">#</th>
-                                <th>Acci&oacute;n</th>
-                                <th>Cerdo</th>
-                                <th>Fecha</th>
-                                <th>Observación</th>
-                                <th>Estado</th> 
+                              <th>Fecha</th>
+                              <th>Hora</th>
+                              <th>Semana</th> 
+                              <th>Desparasitante</th>
+                              <th>Cantidad</th> 
                             </tr>
                           </tfoot>
                           
@@ -125,67 +102,132 @@
 
 <script>  
 
-    $(document).ready(function() {
-      var n = new Date();
-      var y = n.getFullYear();
-      var m = n.getMonth() + 1;
-      var d = n.getDate();
-      if (d < 10) {
-          d = '0' + d;
-      }
-      if (m < 10) {
-          m = '0' + m;
-      }
-      document.getElementById("fecha_i").value = y + "-" + m + "-" + d; 
-      document.getElementById("fecha_f").value = y + "-" + m + "-" + d; 
-    });
+  var tabla_cardo_despracitacion;
+  $(".galpon_cerdo").select2();
+  $(".cerdo_galpon").select2();
 
-    $("#tabla_desparasitacion_cerdos").DataTable({
-        language: {
-            rows: "%d fila seleccionada",
-            processing: "Tratamiento en curso...",
-            search: "Buscar&nbsp;:",
-            lengthMenu: "Agrupar en _MENU_ items",
-            info: "Mostrando los item (_START_ al _END_) de un total _TOTAL_ items",
-            infoEmpty: "No existe datos.",
-            infoFiltered: "(filtrado de _MAX_ elementos en total)",
-            infoPostFix: "",
-            loadingRecords: "Cargando...",
-            zeroRecords: "No se encontro resultados en tu busqueda",
-            emptyTable: "No hay datos disponibles en la tabla",
-            paginate: {
-              first: "Primero",
-              previous: "Anterior",
-              next: "Siguiente",
-              last: "Ultimo",
-            },
-            select: {
-              rows: "%d fila seleccionada",
-            },
-            aria: {
-              sortAscending: ": active para ordenar la columa en orden ascendente",
-              sortDescending: ": active para ordenar la columna en orden descendente",
-            },
-          },
-    });
-
-    function cargar_fechas(){
-      var f_i = document.getElementById("fecha_i").value;
-      var f_f = document.getElementById("fecha_f").value;
-
-      if (f_i > f_f) {
-          return Swal.fire(
-              "Mensaje de advertencia",
-              "La fecha inicio '" +
-              f_i +
-              "' es mayor a la fecha final '" +
-              f_f +
-              "'",
-              "warning"
-          );
-      }
-
-      cargar_contenido('contenido_principal','/listado_desparasitacion_fecha/'+f_i+'/'+f_f+'');
+  $("#galpon_cerdo").on("change", function(){
+    var id = $(this).val();
+    
+    if(id == 0){
+      return false;
     }
+
+    $(".espiner_cerdo").LoadingOverlay("show");
+    $.ajax({
+      url: "/galpon/traer_cerdo_dentro_galpon",
+        type: "POST",
+        data: {
+            id: id
+        },
+    }).done(function(data) { 
+        $("#cerdo_galpon").empty();
+        var cadena = "<option value='0'>--- Seleccione cerdo ---</option>";
+        if (data.length > 0) {
+          $(".espiner_cerdo").LoadingOverlay("hide");
+            //bucle para extraer los datos del rol
+            for (var i = 0; i < data.length; i++) {
+                cadena += "<option value='" + data[i][1] + "'> " + data[i][2] + " - " + data[i][4] + " - " + data[i][5] + " - " + data[i][6] + " Kg </option>";
+            }
+            //aqui concadenamos al id del select
+            $("#cerdo_galpon").html(cadena);
+        } else {
+            $(".espiner_cerdo").LoadingOverlay("hide");
+            cadena += "<option value='0'>No hay cerdo</option>";
+            $("#cerdo_galpon").html(cadena); 
+        }
+    });
+  });
+
+  $("#cerdo_galpon").on("change", function(){
+    var id = $(this).val();
+    
+    if(id == 0){
+      return false;
+    }
+
+    tabla_cardo_despracitacion = $("#tabla_desparasitacion_cerdos").DataTable({
+      ordering: true,
+      paging: true,
+      aProcessing: true,
+      aServerSide: true,
+      searching: { regex: true },
+      lengthMenu: [
+        [10, 25, 50, 100, -1],
+        [10, 25, 50, 100, "All"],
+      ],
+      pageLength: 10,
+      destroy: true,
+      async: false,
+      processing: true,
+  
+      ajax: {
+        url: "/alimento/listar_desparasitantess_cerdo_seguimiento",
+        type: "POST",
+        data: {id: id}
+      },
+      //hay que poner la misma cantidad de columnas y tambien en el html
+      columns: [
+        { data: "fecha" },
+        { data: "hora" },
+        { data: "semana" },
+        { data: "medicamaneto" },
+        { data: "cantidad" }, 
+        
+      ],
+  
+      language: {
+        rows: "%d fila seleccionada",
+        processing: "Tratamiento en curso...",
+        search: "Buscar&nbsp;:",
+        lengthMenu: "Agrupar en _MENU_ items",
+        info: "Mostrando los item (_START_ al _END_) de un total _TOTAL_ items",
+        infoEmpty: "No existe datos.",
+        infoFiltered: "(filtrado de _MAX_ elementos en total)",
+        infoPostFix: "",
+        loadingRecords: "Cargando...",
+        zeroRecords: "No se encontro resultados en tu busqueda",
+        emptyTable: "No hay datos disponibles en la tabla",
+        paginate: {
+          first: "Primero",
+          previous: "Anterior",
+          next: "Siguiente",
+          last: "Ultimo",
+        },
+        select: {
+          rows: "%d fila seleccionada",
+        },
+        aria: {
+          sortAscending: ": active para ordenar la columa en orden ascendente",
+          sortDescending: ": active para ordenar la columna en orden descendente",
+        },
+      },
+      select: true,
+      responsive: "true",
+      dom: "Bfrtilp",
+      buttons: [
+        {
+          extend: "excelHtml5",
+          text: "Excel",
+          titleAttr: "Exportar a Excel",
+          className: "btn btn-success greenlover",
+        },
+        {
+          extend: "pdfHtml5",
+          text: "PDF",
+          titleAttr: "Exportar a PDF",
+          className: "btn btn-danger redfule",
+        },
+        {
+          extend: "print",
+          text: "Imprimir",
+          titleAttr: "Imprimir",
+          className: "btn btn-primary azuldete",
+        },
+      ],
+      order: [[0, "ASC"]],
+    });
+  
+  });
 </script>
   

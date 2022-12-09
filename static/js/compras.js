@@ -717,13 +717,22 @@ function guardar_detalle_compra_alimento(id) {
   var arreglo_descuento = new Array();
   var arreglo_subtotal = new Array();
 
+  var arreglo_fecha_i = new Array();
+  var arreglo_fecha_f = new Array();
+  var arreglo_codigo = new Array();
+  var arreglo_peso = new Array();
+
   $("#tabla_compra_alimento tbody#tbody_tabla_compra_alimento tr").each(
     function () {
       arrego_alimento.push($(this).find("td").eq(0).text());
-      arreglo_precio.push($(this).find("td").eq(3).text());
+      arreglo_precio.push($(this).find("td").eq(2).text());
       arreglo_cantidad.push($(this).find("#cantida_a").val());
       arreglo_descuento.push($(this).find("#descuento_a").val());
-      arreglo_subtotal.push($(this).find("td").eq(6).text());
+      arreglo_subtotal.push($(this).find("td").eq(5).text());
+      arreglo_fecha_i.push($(this).find("#fecha_i").val());
+      arreglo_fecha_f.push($(this).find("#fecha_f").val());
+      arreglo_codigo.push($(this).find("td").eq(8).text());
+      arreglo_peso.push(parseInt($(this).find("td").eq(10).text()) * parseInt($(this).find("#cantida_a").val()));
       count++;
     }
   );
@@ -734,6 +743,10 @@ function guardar_detalle_compra_alimento(id) {
   var cantidad = arreglo_cantidad.toString();
   var descuento = arreglo_descuento.toString();
   var total = arreglo_subtotal.toString();
+  var fecha_i = arreglo_fecha_i.toString();
+  var fecha_f = arreglo_fecha_f.toString();
+  var caodigo = arreglo_codigo.toString();
+  var peso = arreglo_peso.toString();
 
   if (count == 0) {
     return false;
@@ -749,8 +762,13 @@ function guardar_detalle_compra_alimento(id) {
       cantidad: cantidad,
       descuento: descuento,
       total: total,
+      fecha_i: fecha_i,
+      fecha_f: fecha_f,
+      caodigo: caodigo,
+      peso: peso
     },
   }).done(function (resp) {
+
     if (resp > 0) {
       if (resp == 1) {
         Swal.fire({
@@ -772,7 +790,7 @@ function guardar_detalle_compra_alimento(id) {
         cargar_contenido('contenido_principal', '/compra_alimento');
       }
     } else {
-
+      $(".card-success").LoadingOverlay("hide");
       return Swal.fire(
         "Error",
         "No se pudo crear el detalle de comppra, falla en la matrix",
@@ -3135,14 +3153,24 @@ function guardar_detalle_compra_medicamento(id) {
   var arreglo_cantidad = new Array();
   var arreglo_descuento = new Array();
   var arreglo_subtotal = new Array();
+  var arreglo_unidad = new Array();
+  var arreglo_total_unidades = new Array();
+  var arreglo_fecha_i = new Array();
+  var arreglo_fecha_f = new Array();
+  var arreglo_codigo = new Array();
 
   $("#tabla_compra_medicamentoo tbody#tbody_tabla_compra_medicamentoo tr").each(
     function () {
       arrego_alimento.push($(this).find("td").eq(0).text());
-      arreglo_precio.push($(this).find("td").eq(3).text());
+      arreglo_precio.push($(this).find("td").eq(2).text());
       arreglo_cantidad.push($(this).find("#cantida_a").val());
+      arreglo_unidad.push($(this).find("#unidad_a").val());
       arreglo_descuento.push($(this).find("#descuento_a").val());
+      arreglo_fecha_i.push($(this).find("#fecha_i").val());
+      arreglo_fecha_f.push($(this).find("#fecha_f").val());
       arreglo_subtotal.push($(this).find("td").eq(6).text());
+      arreglo_total_unidades.push($(this).find("#cantida_a").val() * $(this).find("#unidad_a").val());
+      arreglo_codigo.push($(this).find("td").eq(10).text());
       count++;
     }
   );
@@ -3151,8 +3179,13 @@ function guardar_detalle_compra_medicamento(id) {
   var ida = arrego_alimento.toString();
   var precio = arreglo_precio.toString();
   var cantidad = arreglo_cantidad.toString();
+  var unidades = arreglo_unidad.toString();
   var descuento = arreglo_descuento.toString();
   var total = arreglo_subtotal.toString();
+  var total_unidades = arreglo_total_unidades.toString();
+  var fecha_i = arreglo_fecha_i.toString();
+  var fecha_f = arreglo_fecha_f.toString();
+  var codigo = arreglo_codigo.toString();
 
   if (count == 0) {
     return false;
@@ -3168,8 +3201,14 @@ function guardar_detalle_compra_medicamento(id) {
       cantidad: cantidad,
       descuento: descuento,
       total: total,
+      unidades: unidades,
+      total_unidades: total_unidades,
+      fecha_i: fecha_i,
+      fecha_f: fecha_f,
+      codigo: codigo
     },
   }).done(function (resp) {
+
     if (resp > 0) {
       if (resp == 1) {
         Swal.fire({
@@ -3384,14 +3423,24 @@ function guardar_detalle_compra_vacunas(id) {
   var arreglo_cantidad = new Array();
   var arreglo_descuento = new Array();
   var arreglo_subtotal = new Array();
+  var arreglo_fecha_i = new Array();
+  var arreglo_fecha_f = new Array();
+  var arreglo_codigo = new Array();
+  var arreglo_dosis = new Array();
 
   $("#tabla_compra_vacunas tbody#tbody_tabla_compra_vacunas tr").each(
     function () {
       arrego_alimento.push($(this).find("td").eq(0).text());
-      arreglo_precio.push($(this).find("td").eq(3).text());
+      arreglo_precio.push($(this).find("td").eq(2).text());
       arreglo_cantidad.push($(this).find("#cantida_a").val());
       arreglo_descuento.push($(this).find("#descuento_a").val());
-      arreglo_subtotal.push($(this).find("td").eq(6).text());
+      arreglo_subtotal.push($(this).find("td").eq(5).text());
+      arreglo_fecha_i.push($(this).find("#fecha_i").val());
+      arreglo_fecha_f.push($(this).find("#fecha_f").val());
+      arreglo_codigo.push($(this).find("td").eq(8).text());
+
+      arreglo_dosis.push(parseInt($(this).find("td").eq(10).text()) * parseInt($(this).find("#cantida_a").val()));
+
       count++;
     }
   );
@@ -3402,6 +3451,10 @@ function guardar_detalle_compra_vacunas(id) {
   var cantidad = arreglo_cantidad.toString();
   var descuento = arreglo_descuento.toString();
   var total = arreglo_subtotal.toString();
+  var fecha_i = arreglo_fecha_i.toString();
+  var fecha_f = arreglo_fecha_f.toString();
+  var codigo = arreglo_codigo.toString();
+  var dosis = arreglo_dosis.toString();
 
   if (count == 0) {
     return false;
@@ -3417,8 +3470,13 @@ function guardar_detalle_compra_vacunas(id) {
       cantidad: cantidad,
       descuento: descuento,
       total: total,
+      fecha_i: fecha_i,
+      fecha_f: fecha_f,
+      codigo: codigo,
+      dosis: dosis
     },
   }).done(function (resp) {
+
     if (resp > 0) {
       if (resp == 1) {
         Swal.fire({
@@ -3439,7 +3497,7 @@ function guardar_detalle_compra_vacunas(id) {
         cargar_contenido('contenido_principal', '/compra_vacunas');
       }
     } else {
-
+      $(".card-success").LoadingOverlay("hide");
       return Swal.fire(
         "Error",
         "No se pudo crear el detalle de compra, falla en la matrix",

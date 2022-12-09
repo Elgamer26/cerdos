@@ -1,0 +1,1945 @@
+<div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1 class="m-0"><i class="fa fa-home"></i><i class="fa fa-paw"></i> Detalle del gálpon cerdo</h1>
+        </div>
+  
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="/Admin">Inicio</a></li>
+            <li class="breadcrumb-item active"> Detalle del gálpon</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-lg-12 col-12">
+            <div class="card card-success">
+              <div class="card-header">
+                <h3 class="card-title"> Detalle</h3>
+              </div>
+  
+              <div class="card-body">
+                <div class="row">
+
+                  <input type="hidden" id="id_galpon_cerdo" value="{{ data.galpon[0] }}"  />
+
+                  <div class="form-group col-lg-4 col-6">
+                      <label for="id_galpon">Gálpon</label>
+                      <input type="text" disabled maxlength="3" class="form-control" value="{{ data.galpon[6] }}"  />
+                  </div> 
+              
+                  <div class="Capacidad_C form-group col-lg-1 col-6">
+                      <label for="capacidad">Capacidad</label>
+                      <input type="text" disabled maxlength="3" class="form-control" value="{{ data.galpon[5] }}" />
+                  </div>
+
+                  <div class="form-group col-lg-2 col-6">
+                      <label for="fecha_i">Fecha inicio</label>
+                      <input type="date" readonly id="fecha_i" class="form-control" value="{{ data.galpon[2] }}" /> 
+                  </div>
+
+                  <div class="form-group col-lg-2 col-6">
+                    <label for="fecha_f">Fecha fin</label>
+                    <input type="date" readonly class="form-control" id="fecha_f" value="{{ data.galpon[3] }}" /> 
+                  </div>
+
+                  <div class="form-group col-lg-1 col-6">
+                    <label for="semanas">Semanas</label>
+                    <input type="text" readonly class="form-control" value="{{ data.galpon[4] }}" /> 
+                  </div>
+
+                  <div class="form-group col-lg-2 col-6">
+                    <label for="semanas_actual">Semana actual</label>
+                    <input type="text" readonly class="form-control" id="semanas_actual" /> 
+                  </div>
+
+                  <div class="form-group col-lg-1 col-6">
+                    <label for="machos_c">Machos</label>
+                    <input type="text" readonly {% if data.h_m[0]  %} value="{{ data.h_m[0] }}" {% else %} value="0"  {% endif %} class="form-control" id="machos_c" /> 
+                  </div>
+
+                  <div class="form-group col-lg-1 col-6">
+                    <label for="hembras_c">Hembras</label>
+                    <input type="text" readonly {% if data.h_m[1]  %} value="{{ data.h_m[1] }}" {% else %} value="0"  {% endif %} class="form-control" id="hembras_c" /> 
+                  </div>
+
+                  <div class="form-group col-lg-2 col-6">
+                    <label for="total_c">Total cerdos</label>
+                    <input type="text" readonly {% if data.h_m[2]  %} value="{{ data.h_m[2] }}" {% else %} value="0"  {% endif %} class="form-control" id="total_c" /> 
+                  </div>
+
+                  <div class="form-group col-lg-2 col-6">
+                    <label >Alimentar cerdos</label>
+                    <button class="btn btn-success" onclick="modal_alimenar_todo_galpon();"> <i class="nav-icon fa fa-utensils"></i> <i class="nav-icon fa fa-home"></i> Alimentar</button>
+                  </div>
+
+                  <div class="form-group col-lg-2 col-6">
+                    <label >Vacunar cerdos</label>
+                    <button class="btn btn-warning" onclick="modal_vacunar_todo_galpon();"> <i class="nav-icon fa fa-syringe"></i> <i class="nav-icon fa fa-home"></i> Vacunar</button>
+                  </div>
+
+                  <div class="form-group col-lg-2 col-6">
+                    <label >Desparasitar cerdos</label>
+                    <button class="btn btn-primary" onclick="modal_desparasitar_todo_galpon();"> <i class="nav-icon fa fa-paw"></i> <i class="nav-icon fa fa-home"></i> Desparasitar</button>
+                  </div>
+
+                  <div class="form-group col-lg-2 col-6">
+                    <label >Cerdos muertos</label>
+                    <button class="btn btn-danger" onclick="modal_ver_cerdos_muertos();"> <i class="nav-icon fa fa-eye"></i> <i class="nav-icon fa fa-home"></i> Muertos</button>
+                  </div>
+
+
+                </div>
+              </div>
+ 
+            </div>
+          </div>
+
+          <div class="col-lg-12 col-12">
+            <div class="card card-info">
+              <div class="card-header">
+                <h3 class="card-title">Cerdos dentro del galpón</h3>
+              </div>
+  
+              <div class="card-body">
+                <div class="row">
+             
+                <div class="form-group col-lg-4 col-6 text-center">
+                  <input type="text" class="form-control" id="inpu_buscar_cerdo" onkeypress="return soloNumeros(event)" placeholder="Buscar cerdo en galpón por código del cerdo" />
+                </div>
+
+                  <div class="form-group col-lg-12 col-6">
+                      <table id="tabla_galpo_cerdo" class="table table-display table-hover responsive nowrap text-center" style="width: 100%">
+                          <thead style="background: orange;">
+                              <tr>
+                                  <th style="display: none;">Id cerdo</th> 
+                                  <th>Cód. cerdo</th>
+                                  <th>Nombre</th>
+                                  <th>Sexo</th>
+                                  <th>Raza</th>
+                                  <th>Peso Kg</th>
+                                  <th>Etapa</th>
+                                  <th>Opción</th>
+                              </tr>
+                          </thead>
+                          <tbody id="tbody_tabla_galpo_cerdo">
+                              
+                          </tbody>
+                      </table>
+                  </div>
+
+                  <div class="form-group col-lg-12 col-6">
+                    <button onclick="cargar_contenido('contenido_principal','/galpones_cerdoss');" class="btn btn-danger"><i class="fa fa-reply"></i> Volver</button>
+                </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+  
+        <div class="row"></div>
+      </div>
+    </section>
+  </div>
+  
+  <div class="modal fade" id="modal_alimenar_todo_galpon">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content bg-success card_aiment_todo">
+            <div class="modal-header">
+                <h4 class="modal-title">Alimentación de todos los cerdos</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="background: white; color: black">
+
+                <div class="row">
+
+                    <div class="card-body">
+                                  
+                        <div class="row">
+                          <div class="form-group col-lg-12 col-6 text-center">
+                             <div class="row" style="border: solid 0px; border-radius: 10px;">
+
+                              <div class="form-group col-lg-5 col-6 text-center">
+                                <label for="tipo_alimentacion_t">Tipo de alimentación:</label>
+                                <select class="form-control tipo_alimentacion" style="width: 100%" id="tipo_alimentacion_t">
+                                    <option value="0">--- Seleccione tipo alimentación ---</option>    
+                                    {% for datas in data.tipo_a %}
+                                    <option value="{{datas[0]}}"> {{datas[1]}} </option>
+                                    {% endfor %}
+                                </select>
+                                <span style="color: red" id="tipo_alimentacion_t_obligg"></span>
+                              </div>
+
+                              <div class="form-group col-lg-3 col-6">
+                                <label for="fecha_alimentaion_t">Fecha</label>
+                                <input type="date" readonly class="form-control" id="fecha_alimentaion_t" /> 
+                                <span style="color: red" id="fecha_to_obligg"></span>
+                              </div>
+
+                              <div class="form-group col-lg-4 col-6 text-center">
+                                  <label for="tipo_alimento_t">Tipo de alimento:</label>
+                                  <select class="form-control tipo_alimento" style="width: 100%" id="tipo_alimento_t">
+                                      <option value="0">--- Seleccione tipo ---</option>    
+                                      {% for datas in data.tipo %}
+                                      <option value="{{datas[0]}}"> {{datas[1]}} </option>
+                                      {% endfor %}
+                                  </select>
+                                  <span style="color: red" id="tipo_alimento_t_obligg"></span>
+                              </div>
+
+                              <div class="espiner_alimento form-group col-lg-7 col-6 text-center">
+                                  <label for="alimento_t">Alimento:</label>
+                                  <select class="form-control alimento" style="width: 100%" id="alimento_t">
+                                      <option value='0'>--- Seleccione tipo ---</option>
+                                  </select>
+                                  <span style="color: red" id="alimento_t_obligg"></span>
+                              </div>
+
+                              <div class="espiner_disponible form-group col-lg-2 col-6">
+                                <label for="disponibles_kg_t">Kg disponible:</label>
+                                <input readonly type="text" value="0" class="form-control" id="disponibles_kg_t" />
+                                <span style="color: red" id="disponibles_kg_t_obligg"></span>
+                              </div>
+
+                              <div class="form-group col-lg-2 col-6">
+                                  <label for="cantidad_kg_t">Cantidad ración Kg:</label>
+                                  <input type="text" class="form-control" onkeypress="return soloNumeros(event)" id="cantidad_kg_t" />
+                                  <span style="color: red" id="cantidad_kg_t_obligg"></span>
+                              </div>
+
+                              <div class="form-group col-lg-2 col-6">
+                                <label for="racion_ali">Total alimentaria Kg:</label>
+                                <input type="text" value="0" readonly class="form-control" id="racion_ali" />
+                                <span style="color: red" id="racion_ali_obligg"></span>
+                              </div>
+
+                              <div class="form-group col-lg-3 col-6">
+                                <label for="semana_alimentacion_t">Semana alimentación:</label>
+                                <input type="text" readonly class="form-control" id="semana_alimentacion_t" /> 
+                              </div>
+
+                              <div class="form-group col-lg-7 col-6">
+                                  <label for="observacion_t">Observación:</label>
+                                  <input type="text" maxlength="150" class="form-control" id="observacion_t" placeholder="Ingrese observación" />
+                                  <span style="color: red" id="observacion_t_obligg"></span>
+                              </div>
+
+                            </div>
+                          </div>
+
+                        </div> 
+                      
+                      </div> 
+  
+                </div>
+
+            </div>
+            <div class="modal-footer justify-content-between" style="background: #f5f4f3 !important">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">
+                    Cerrar
+                </button>    <button onclick="registrar_toda_alimentacion();" class="btn btn-success">
+                  <i class="fa fa-save"></i> Guardar
+              </button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+
+  <div class="modal fade" id="modaal_cerdo_alimentar">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content bg-success card_aiment_uni">
+            <div class="modal-header">
+                <h4 class="modal-title">Alimentación del cerdo</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="background: white; color: black">
+
+                <div class="row">
+
+                    <input type="hidden" id="id_cerdo">
+
+                    <div class="card-body">
+                                  
+                        <div class="row">
+                          <div class="form-group col-lg-12 col-6 text-center">
+                             <div class="row" style="border: solid 0px; border-radius: 10px;">
+
+                              <div class="form-group col-lg-5 col-6 text-center">
+                                <label for="tipo_alimentacion">Tipo de alimentación:</label>
+                                <select class="form-control tipo_alimentacion" style="width: 100%" id="tipo_alimentacion">
+                                    <option value="0">--- Seleccione tipo alimentación ---</option>    
+                                    {% for datas in data.tipo_a %}
+                                    <option value="{{datas[0]}}"> {{datas[1]}} </option>
+                                    {% endfor %}
+                                </select>
+                                <span style="color: red" id="tipo_alimentacion_obligg"></span>
+                              </div>
+
+                              <div class="form-group col-lg-3 col-6">
+                                <label for="fecha_alimentaion">Fecha</label>
+                                <input type="date" readonly class="form-control" id="fecha_alimentaion" /> 
+                              </div>
+
+                              <div class="form-group col-lg-4 col-6 text-center">
+                                  <label for="tipo_alimento">Tipo de alimento:</label>
+                                  <select class="form-control tipo_alimento" style="width: 100%" id="tipo_alimento">
+                                      <option value="0">--- Seleccione tipo ---</option>    
+                                      {% for datas in data.tipo %}
+                                      <option value="{{datas[0]}}"> {{datas[1]}} </option>
+                                      {% endfor %}
+                                  </select>
+                                  <span style="color: red" id="tipo_limento_obligg"></span>
+                              </div>
+
+                              <div class="espiner_alimento form-group col-lg-7 col-6 text-center">
+                                  <label for="alimento">Lote alimento:</label>
+                                  <select class="form-control alimento" style="width: 100%" id="alimento">
+                                      <option value='0'>--- Seleccione tipo ---</option>
+                                  </select>
+                                  <span style="color: red" id="alimento_obligg"></span>
+                              </div>
+
+                              <div class="espiner_disponible form-group col-lg-2 col-6">
+                                <label for="disponibles_kg">Kg disponible:</label>
+                                <input readonly type="text" value="0" class="form-control" id="disponibles_kg" />
+                                <span style="color: red" id="disponibles_kg_obligg"></span>
+                              </div>
+
+                              <div class="form-group col-lg-2 col-6">
+                                  <label for="cantidad_kg">Cantidad Kg:</label>
+                                  <input type="text" class="form-control" id="cantidad_kg" onkeypress="return soloNumeros(event)"/>
+                                  <span style="color: red" id="cantidad_kg_obligg"></span>
+                              </div>
+
+                              <div class="form-group col-lg-3 col-6">
+                                <label for="semana_alimentacion">Semana alimentación:</label>
+                                <input type="text" readonly class="form-control" id="semana_alimentacion" /> 
+                              </div>
+
+                              <div class="form-group col-lg-9 col-6">
+                                  <label for="observacion_a_u">Observación:</label>
+                                  <input type="text" maxlength="150" class="form-control" id="observacion_a_u" placeholder="Ingrese observación" />
+                                  <span style="color: red" id="observacion_a_u_obligg"></span>
+                              </div>
+
+                            </div>
+                          </div>
+
+                        </div> 
+                      
+                      </div> 
+  
+                </div>
+
+            </div>
+            <div class="modal-footer justify-content-between" style="background: #f5f4f3 !important">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">
+                    Cerrar
+                </button>
+              </button>    <button onclick="registrar_unitaria_alimentacion();" class="btn btn-success">
+                <i class="fa fa-save"></i> Guardar
+            </button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+
+  <div class="modal fade" id="modal_pesaje">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content bg-warning peso_cerdo_old">
+
+            <div class="modal-header">
+                <h4 class="modal-title">Pesaje del cerdo</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body" style="background: white; color: black">
+
+                <div class="row">
+
+                    <input type="hidden" id="id_cerdo_p">
+
+                    <div class="card-body">
+                                  
+                        <div class="row">
+                            <div class="form-group col-lg-12 col-6 text-center">
+
+                                <div class="row" style="border: solid 0px;">
+
+                                <div class="form-group col-lg-2 col-6">
+                                    <label for="fecha_pe">Fecha</label>
+                                    <input type="date" readonly class="form-control" id="fecha_pe" />
+                                    <span style="color: red" id="fecha_pe_obligg"></span>
+                                </div>  
+
+                                <div class="form-group col-lg-3 col-6">
+                                  <label for="semana_alimentacion_p">Semana peso:</label>
+                                  <input type="text" readonly class="form-control" id="semana_alimentacion_p" /> 
+                                </div>
+
+                                <div class="form-group col-lg-3 col-6">
+                                  <label for="peso_actual">Peso actual (Kg)</label>
+                                  <input readonly type="text" class="form-control" id="peso_actual" /> 
+                                </div>
+                            
+                                <div class="form-group col-lg-4 col-6">
+                                    <label for="metodo">Metodo pesaje:</label>
+                                    <select class="form-control" style="width: 100%" id="metodo">
+                                        <option value="exacto">Peso exacto (Bascula)</option>   
+                                        <option value="vivo">Peso vivo aproximado</option>     
+                                    </select>
+                                </div>                       
+
+                                <div class="form-group col-lg-9 col-6">
+                                    <label for="observacion">Observación:</label>
+                                    <input type="text" maxlength="150" class="form-control" id="observacion" placeholder="Ingrese observación" />
+                                    <span style="color: red" id="observacion_obligg"></span>
+                                </div>    
+                                
+                                <div class="form-group col-lg-3 col-6">
+                                  <label for="etapa_fase">Etapa/Fase:</label>
+                                  <input type="text" readonly maxlength="30" class="form-control" id="etapa_fase" placeholder="Etapa/Fase" onkeypress="return soloLetras(event)" />
+                                   <span style="color: red" id="etapa_fase_obligg"></span>
+                                </div>
+
+                                <div class="form-group col-lg-12 col-6 text-center">
+
+                                    <div class="row" style="border: solid 1px #20c997; border-radius: 10px;">
+
+                                        <div id="peso_exacto" class="form-group col-lg-4 col-6">
+                                            <label for="nuevo_pesaje">Nuevo pesaje (Kg):</label>
+                                            <input type="text" class="form-control" onkeypress="return filterfloat(event, this);" id="nuevo_pesaje" onkeypress="return filterfloat(event, this);" placeholder="Ingrese nuevo pesaje" />
+                                            <span style="color: red" id="nuevo_pesaje_obligg"></span>
+                                        </div>
+                                    
+                                        <div  id="peso_vivo1" style="display: none;" class="form-group col-lg-3 col-6">
+                                            <label for="perimetro_t">Perimetro torácico(cm):</label>
+                                            <input type="text" maxlength="5" onkeypress="return filterfloat(event, this);" class="form-control" id="perimetro_t" placeholder="Perimetro toracico(cm)" />
+                                            <span style="color: red" id="perimetro_t_obligg"></span>
+                                        </div>
+
+                                        <div  id="peso_vivo2" style="display: none;" class="form-group col-lg-3 col-6">
+                                            <label for="largo_c">Largo del cuerpo(cm):</label>
+                                            <input type="text" maxlength="5" onkeypress="return filterfloat(event, this);" class="form-control" id="largo_c" placeholder="Largo del cuerpo(cm)" />
+                                            <span style="color: red" id="largo_c_obligg"></span>
+                                        </div>
+
+                                        <div  id="peso_vivo4" style="display: none;" class="form-group col-lg-1 col-6">
+                                            <label for="peso_v">Calcular:</label>
+                                            <button onclick="calcular_peso();" class="btn btn-primary"><i class="fa fa-spinner"></i></button>
+                                        </div>                                           
+
+                                    </div>
+
+                                </div>
+
+                              </div>
+                            </div>
+
+                          </div> 
+                      
+                      </div> 
+  
+                </div>
+
+            </div>
+            <div class="modal-footer justify-content-between" style="background: #f5f4f3 !important">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">
+                    Cerrar
+                </button> 
+                <button onclick="registra_pesaje();" class="btn btn-success">
+                  <i class="fa fa-save"></i> Guardar
+              </button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+
+  <div class="modal fade" id="modal_vacunancion_cerdo">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content bg-success vacunacion_cerdo">
+            <div class="modal-header">
+                <h4 class="modal-title">Vacunación del cerdo</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="background: white; color: black">
+
+                <div class="row">
+
+                    <input type="hidden" id="id_cerdo_v">
+
+                    <div class="card-body">
+                                  
+                        <div class="row">
+                          <div class="form-group col-lg-12 col-6 text-center">
+                             <div class="row" style="border: solid 0px; border-radius: 10px;">
+
+                              <div class="form-group col-lg-3 col-6">
+                                <label for="semana_vacuna">Semana vacuna:</label>
+                                <input type="text" readonly class="form-control" id="semana_vacuna" /> 
+                              </div>
+
+                              <div class="form-group col-lg-3 col-6">
+                                <label for="fecha_vacuna">Fecha</label>
+                                <input type="date" readonly class="form-control" id="fecha_vacuna" /> 
+                              </div>
+ 
+                              <div class="form-group col-lg-6 col-6 text-center">
+                                <label for="tipo_vacuna">Tipo de vacuna:</label>
+                                <select class="form-control tipo_vacuna" style="width: 100%" id="tipo_vacuna">
+                                    <option value="0">--- Seleccione tipo ---</option>    
+                                    {% for datas in data.tipo_v %}
+                                    <option value="{{datas[0]}}"> {{datas[1]}} </option>
+                                    {% endfor %}
+                                </select>
+                                <span style="color: red" id="tipo_vacuna_obligg"></span>
+                            </div>
+
+                            <div class="espiner_vacuna form-group col-lg-12 col-6 text-center">
+                                <label for="vacuna">Lote vacuna:</label>
+                                <select class="form-control vacuna" style="width: 100%" id="vacuna">
+                                    <option value='0'>--- Seleccione tipo ---</option>
+                                </select>
+                                <span style="color: red" id="vacuna_obligg"></span>
+                            </div>
+
+                            <div class="espiner_disponible_c form-group col-lg-4 col-6">
+                              <label for="dosis_disponible">Dosis disponible:</label>
+                              <input readonly type="text" value="0" class="form-control" id="dosis_disponible" onkeypress="return soloNumeros(event)" />
+                              <span style="color: red" id="dosis_disponible_obligg"></span>
+                            </div>
+
+                            <div class="form-group col-lg-4 col-6">
+                                <label for="cantidad_dosis">Cantidad dosis:</label>
+                                <input type="text" class="form-control" id="cantidad_dosis" onkeypress="return soloNumeros(event)" />
+                                <span style="color: red" id="cantidad_dosis_obligg"></span>
+                            </div>
+
+                            </div>
+                          </div>
+
+                        </div> 
+                      
+                      </div> 
+  
+                </div>
+
+            </div>
+            <div class="modal-footer justify-content-between" style="background: #f5f4f3 !important">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">
+                    Cerrar
+                </button>
+              </button>    <button onclick="registrar_vacuncacion_cerdo();" class="btn btn-success">
+                <i class="fa fa-save"></i> Guardar
+            </button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+
+  <div class="modal fade" id="modal_vacunancion_cerdo_t">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content bg-success vacunacion_cerdo_total">
+            <div class="modal-header">
+                <h4 class="modal-title">Vacunación de todos los cerdos</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="background: white; color: black">
+
+                <div class="row">
+
+                    <div class="card-body">
+                                  
+                        <div class="row">
+                          <div class="form-group col-lg-12 col-6 text-center">
+                             <div class="row" style="border: solid 0px; border-radius: 10px;">
+
+                              <div class="form-group col-lg-3 col-6">
+                                <label for="semana_vacuna_t">Semana vacuna:</label>
+                                <input type="text" readonly class="form-control" id="semana_vacuna_t" /> 
+                              </div>
+
+                              <div class="form-group col-lg-3 col-6">
+                                <label for="fecha_vacuna_t">Fecha</label>
+                                <input type="date" readonly class="form-control" id="fecha_vacuna_t" /> 
+                              </div>
+ 
+                              <div class="form-group col-lg-6 col-6 text-center">
+                                <label for="tipo_vacuna_t">Tipo de vacuna:</label>
+                                <select class="form-control tipo_vacuna_t" style="width: 100%" id="tipo_vacuna_t">
+                                    <option value="0">--- Seleccione tipo ---</option>    
+                                    {% for datas in data.tipo_v %}
+                                    <option value="{{datas[0]}}"> {{datas[1]}} </option>
+                                    {% endfor %}
+                                </select>
+                                <span style="color: red" id="tipo_vacuna_t_obligg"></span>
+                            </div>
+
+                            <div class="espiner_vacuna form-group col-lg-12 col-6 text-center">
+                                <label for="vacuna_t">Lote vacuna:</label>
+                                <select class="form-control vacuna_t" style="width: 100%" id="vacuna_t">
+                                    <option value='0'>--- Seleccione tipo ---</option>
+                                </select>
+                                <span style="color: red" id="vacuna_t_obligg"></span>
+                            </div>
+
+                            <div class="espiner_disponible_c form-group col-lg-4 col-6">
+                              <label for="dosis_disponible_t">Dosis disponible:</label>
+                              <input readonly type="text" value="0" class="form-control" id="dosis_disponible_t" onkeypress="return soloNumeros(event)" />
+                              <span style="color: red" id="dosis_disponible_t_obligg"></span>
+                            </div>
+
+                            <div class="form-group col-lg-4 col-6">
+                                <label for="cantidad_dosis_t">Cantidad dosis por cerdo:</label>
+                                <input type="text" value="0" class="form-control" id="cantidad_dosis_t" onkeypress="return soloNumeros(event)" />
+                                <span style="color: red" id="cantidad_dosis_t_obligg"></span>
+                            </div>
+
+                            <div class="form-group col-lg-4 col-6">
+                              <label for="total_dosis">Total dosis:</label>
+                              <input type="text" value="0" class="form-control" id="total_dosis" readonly/>
+                              <span style="color: red" id="total_dosis_obligg"></span>
+                          </div>
+
+                            </div>
+                          </div>
+
+                        </div> 
+                      
+                      </div> 
+  
+                </div>
+
+            </div>
+            <div class="modal-footer justify-content-between" style="background: #f5f4f3 !important">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">
+                    Cerrar
+                </button>
+              </button>    <button onclick="registrar_todo_vacuncacion_cerdo();" class="btn btn-success">
+                <i class="fa fa-save"></i> Guardar
+            </button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+
+  <div class="modal fade" id="modal_cerdo_muerto">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content bg-danger muerte_cerdo">
+            <div class="modal-header">
+                <h4 class="modal-title">Registro muerte del cerdo</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="background: white; color: black">
+
+                <div class="row">
+
+                    <div class="card-body">
+                                  
+                        <div class="row">
+                          <div class="form-group col-lg-12 col-6 text-center">
+                             <div class="row" style="border: solid 0px; border-radius: 10px;">
+
+                              <input type="hidden" id="id_cerdo_m">
+
+                              <div class="form-group col-lg-4 col-6">
+                                <label for="semana_vacuna_m">Semana:</label>
+                                <input type="text" readonly class="form-control" id="semana_vacuna_m" /> 
+                              </div>
+
+                              <div class="form-group col-lg-4 col-6">
+                                <label for="fecha_vacuna_m">Fecha muerte</label>
+                                <input type="date" class="form-control calendario" id="fecha_vacuna_m" /> 
+                                <span style="color: red" id="fecha_m_obligg"></span>
+                              </div>
+
+                              <div class="form-group col-lg-4 col-6">
+                                <label for="hora_muerte">Hora muerte</label>
+                                <input type="time" class="form-control" id="hora_muerte" /> 
+                                <span style="color: red" id="hora_obligg"></span>
+                              </div>
+
+                              <div class="form-group col-lg-12 col-6">
+                                <label for="motivo_muerte">Causas de muerte</label>
+                                <input type="text" class="form-control" id="motivo_muerte" /> 
+                                <span style="color: red" maxlength="150" id="causa_obligg"></span>
+                              </div>
+ 
+                            </div>
+                          </div>
+
+                        </div> 
+                      
+                      </div> 
+  
+                </div>
+
+            </div>
+            <div class="modal-footer justify-content-between" style="background: #f5f4f3 !important">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">
+                    Cerrar
+                </button> 
+                <button onclick="registrar_muerte_cerdo();" class="btn btn-success">
+                <i class="fa fa-save"></i> Guardar
+            </button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+
+  <div class="modal fade" id="modal_medicamento_cerdo">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content bg-success desparasitante_cerdo">
+            <div class="modal-header">
+                <h4 class="modal-title">Desparasitantes del cerdo</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="background: white; color: black">
+
+                <div class="row">
+
+                    <input type="hidden" id="id_cerdo_despa">
+
+                    <div class="card-body">
+                                  
+                        <div class="row">
+                          <div class="form-group col-lg-12 col-6 text-center">
+                             <div class="row" style="border: solid 0px; border-radius: 10px;">
+
+                              <div class="form-group col-lg-3 col-6">
+                                <label for="semana_desparasitacion">Semana:</label>
+                                <input type="text" readonly class="form-control" id="semana_desparasitacion" /> 
+                              </div>
+
+                              <div class="form-group col-lg-3 col-6">
+                                <label for="fecha_desparasitacion">Fecha</label>
+                                <input type="date" readonly class="form-control" id="fecha_desparasitacion" /> 
+                              </div>
+ 
+                              <div class="form-group col-lg-6 col-6 text-center">
+                                <label for="tipo_desparasitacion">Tipo de Desparasitante:</label>
+                                <select class="form-control tipo_desparasitacion" style="width: 100%" id="tipo_desparasitacion">
+                                    <option value="0">--- Seleccione tipo ---</option>    
+                                    {% for datas in data.tipo_m %}
+                                    <option value="{{datas[0]}}"> {{datas[1]}} </option>
+                                    {% endfor %}
+                                </select>
+                                <span style="color: red" id="tipo_desparasitacion_obligg"></span>
+                            </div>
+
+                            <div class="espiner_desparasitante form-group col-lg-12 col-6 text-center">
+                                <label for="desparasitante">Lote desparasitantes:</label>
+                                <select class="form-control desparasitante" style="width: 100%" id="desparasitante">
+                                    <option value='0'>--- Seleccione tipo ---</option>
+                                </select>
+                                <span style="color: red" id="desparasitante_obligg"></span>
+                            </div>
+
+                            <div class="espiner_disponible_d form-group col-lg-4 col-6">
+                              <label for="desparasitante_disponible">Disponible:</label>
+                              <input readonly type="text" value="0" class="form-control" id="desparasitante_disponible" onkeypress="return soloNumeros(event)" />
+                              <span style="color: red" id="desparasitante_disponible_obligg"></span>
+                            </div>
+
+                            <div class="form-group col-lg-4 col-6">
+                                <label for="cantidad_desparasitante">Cantidad:</label>
+                                <input type="text" class="form-control" id="cantidad_desparasitante" onkeypress="return soloNumeros(event)" />
+                                <span style="color: red" id="cantidad_desparasitante_obligg"></span>
+                            </div>
+
+                            </div>
+                          </div>
+
+                        </div> 
+                      
+                      </div> 
+  
+                </div>
+
+            </div>
+            <div class="modal-footer justify-content-between" style="background: #f5f4f3 !important">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">
+                    Cerrar
+                </button>
+              </button>    <button onclick="registrar_medicamento_cerdo();" class="btn btn-success">
+                <i class="fa fa-save"></i> Guardar
+            </button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+
+  <div class="modal fade" id="modal_medicamento_cerdo_t">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content bg-success desprasitacion_cerdo_total">
+            <div class="modal-header">
+                <h4 class="modal-title">Desparasitar a todos los cerdos</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="background: white; color: black">
+
+                <div class="row">
+
+                    <div class="card-body">
+                                  
+                        <div class="row">
+                          <div class="form-group col-lg-12 col-6 text-center">
+                             <div class="row" style="border: solid 0px; border-radius: 10px;">
+
+                              <div class="form-group col-lg-3 col-6">
+                                <label for="semana_desparasitacion_t">Semana:</label>
+                                <input type="text" readonly class="form-control" id="semana_desparasitacion_t" /> 
+                              </div>
+
+                              <div class="form-group col-lg-3 col-6">
+                                <label for="fecha_desparasitacion_t">Fecha</label>
+                                <input type="date" readonly class="form-control" id="fecha_desparasitacion_t" /> 
+                              </div>
+ 
+                              <div class="form-group col-lg-6 col-6 text-center">
+                                <label for="tipo_desparasitacion_t">Tipo de Desparasitante:</label>
+                                <select class="form-control tipo_desparasitacion_t" style="width: 100%" id="tipo_desparasitacion_t">
+                                    <option value="0">--- Seleccione tipo ---</option>    
+                                    {% for datas in data.tipo_m %}
+                                    <option value="{{datas[0]}}"> {{datas[1]}} </option>
+                                    {% endfor %}
+                                </select>
+                                <span style="color: red" id="tipo_desparasitacion_t_obligg"></span>
+                            </div>
+
+                            <div class="espiner_desparasitante form-group col-lg-12 col-6 text-center">
+                                <label for="desparasitante_t">Lote desparasitantes:</label>
+                                <select class="form-control desparasitante_t" style="width: 100%" id="desparasitante_t">
+                                    <option value='0'>--- Seleccione tipo ---</option>
+                                </select>
+                                <span style="color: red" id="desparasitante_t_obligg"></span>
+                            </div>
+
+                            <div class="espiner_disponible_d form-group col-lg-4 col-6">
+                              <label for="desparasitante_disponible_t">Disponible:</label>
+                              <input readonly type="text" value="0" class="form-control" id="desparasitante_disponible_t" onkeypress="return soloNumeros(event)" />
+                              <span style="color: red" id="desparasitante_disponible_t_obligg"></span>
+                            </div>
+
+                            <div class="form-group col-lg-4 col-6">
+                                <label for="cantidad_desparasitante_t">Cantidad por cerdo:</label>
+                                <input type="text" class="form-control" id="cantidad_desparasitante_t" onkeypress="return soloNumeros(event)" />
+                                <span style="color: red" id="cantidad_desparasitante_t_obligg"></span>
+                            </div>
+
+                            <div class="form-group col-lg-4 col-6">
+                              <label for="total_desparasitacion">Total:</label>
+                              <input type="text" readonly class="form-control" id="total_desparasitacion" onkeypress="return soloNumeros(event)" />
+                              <span style="color: red" id="total_desparasitacion_obligg"></span>
+                          </div>
+
+                            </div>
+                          </div>
+
+                        </div> 
+                      
+                      </div> 
+  
+                </div>
+
+            </div>
+            <div class="modal-footer justify-content-between" style="background: #f5f4f3 !important">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">
+                    Cerrar
+                </button>
+              </button>    <button onclick="registrar_medicamento_cerdo_todo();" class="btn btn-success">
+                <i class="fa fa-save"></i> Guardar
+            </button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+
+
+
+
+  <div class="modal fade" id="modal_listado_alimento_cerdo">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content bg-success">
+            <div class="modal-header">
+                <h4 class="modal-title">Listado de alimentación</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="background: white; color: black">
+
+                <div class="row">
+
+                  <div class="card-body">
+                                
+                      <div class="row">
+
+                        <div class="form-group col-lg-12 col-6">
+                          <table id="tabla_l_alimento" class="table table-display table-hover responsive nowrap text-center" style="width: 100%">
+                            <thead style="background: orange;">
+                                <tr>
+                                    <th>Fecha y hora</th>
+                                    <th>Tipo alimentación</th>
+                                    <th>Alimento</th>
+                                    <th>Cantidad Kg</th>
+                                    <th>alimentación</th>
+                                    <th>Semana</th> 
+                                    <th>Observación</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbody_tabla_l_alimento">
+                                
+                            </tbody>
+                          </table>
+                        </div>
+
+                      </div> 
+                    
+                    </div>   
+                  </div>
+
+            </div>
+            <div class="modal-footer justify-content-between" style="background: #f5f4f3 !important">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">
+                    Cerrar
+                </button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+
+  <div class="modal fade" id="modal_listado_pesaje_cerdo">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content bg-warning">
+            <div class="modal-header">
+                <h4 class="modal-title">Listado de pesaje</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="background: white; color: black">
+
+                <div class="row">
+
+                  <div class="card-body">
+                                
+                      <div class="row">
+
+                        <div class="form-group col-lg-12 col-6">
+                          <table id="tabla_l_pesaje" class="table table-display table-hover responsive nowrap text-center" style="width: 100%">
+                            <thead style="background: orange;">
+                                <tr>
+                                    <th>Fecha y hora</th>
+                                    <th>Semana</th>
+                                    <th>Metodo</th>
+                                    <th>Peso registrado</th> 
+                                    <th>Etapa/Fase</th> 
+                                    <th>Observación</th>
+                                    <th>P. torácico (cm)</th> 
+                                    <th>L. cuerpo (cm)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbody_tabla_l_pesaje">
+                                
+                            </tbody>
+                          </table>
+                        </div>
+
+                      </div> 
+                    
+                    </div>   
+                  </div>
+
+            </div>
+            <div class="modal-footer justify-content-between" style="background: #f5f4f3 !important">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">
+                    Cerrar
+                </button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+
+  <div class="modal fade" id="modal_listado_vacunas_cerdo">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content bg-success">
+            <div class="modal-header">
+                <h4 class="modal-title">Listado de vacunas</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="background: white; color: black">
+
+                <div class="row">
+
+                  <div class="card-body">
+                                
+                      <div class="row">
+
+                        <div class="form-group col-lg-12 col-6">
+                          <table id="tabla_l_vacunas" class="table table-display table-hover responsive nowrap text-center" style="width: 100%">
+                            <thead style="background: orange;">
+                                <tr>
+                                    <th>Fecha y hora</th>
+                                    <th>Semana</th> 
+                                    <th>Vacunas</th>
+                                    <th>Dosis</th> 
+                                </tr>
+                            </thead>
+                            <tbody id="tbody_tabla_l_vacunas">
+                                
+                            </tbody>
+                          </table>
+                        </div>
+
+                      </div> 
+                    
+                    </div>   
+                </div>
+
+            </div>
+            <div class="modal-footer justify-content-between" style="background: #f5f4f3 !important">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">
+                    Cerrar
+                </button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+
+  <div class="modal fade" id="modal_cerdo_muerto_ver">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content bg-danger">
+            <div class="modal-header">
+                <h4 class="modal-title">Listado de cerdos muertos</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="background: white; color: black">
+
+              <div class="row">
+
+                <div class="card-body">
+                              
+                    <div class="row">
+
+                      <div class="form-group col-lg-12 col-6">
+                        <table id="tabla_l_muertos" class="table table-display table-hover responsive nowrap text-center" style="width: 100%">
+                          <thead style="background: orange;">
+                              <tr>
+                                  <th>Cerdo</th>
+                                  <th>Fecha y hora muerte</th>
+                                  <th>Semana</th> 
+                                  <th>Motivo muerte</th> 
+                                  <th>Fecha y hora registro</th> 
+                              </tr>
+                          </thead>
+                          <tbody id="tbody_tabla_l_muertos">
+                              
+                          </tbody>
+                        </table>
+                      </div>
+
+                    </div> 
+                  
+                  </div>   
+              </div>
+
+            </div>
+            <div class="modal-footer justify-content-between" style="background: #f5f4f3 !important">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">
+                    Cerrar
+                </button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+
+  <div class="modal fade" id="modal_cerdo_desparasitacion_ver">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content bg-primary">
+            <div class="modal-header">
+                <h4 class="modal-title">Desparasitantes del cerdos</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="background: white; color: black">
+
+              <div class="row">
+
+                <div class="card-body">
+                              
+                  <div class="row">
+
+                    <div class="card-body">
+                                  
+                        <div class="row">
+  
+                          <div class="form-group col-lg-12 col-6">
+                            <table id="tabla_l_desparasitante" class="table table-display table-hover responsive nowrap text-center" style="width: 100%">
+                              <thead style="background: orange;">
+                                  <tr>
+                                      <th>Fecha y hora</th>
+                                      <th>Semana</th> 
+                                      <th>Desparasitante</th>
+                                      <th>Cantidad</th> 
+                                  </tr>
+                              </thead>
+                              <tbody id="tbody_tabla_l_desparasitante">
+                                  
+                              </tbody>
+                            </table>
+                          </div>
+  
+                        </div> 
+                      
+                      </div>   
+                  </div>
+                  
+                  </div>   
+              </div>
+
+            </div>
+            <div class="modal-footer justify-content-between" style="background: #f5f4f3 !important">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">
+                    Cerrar
+                </button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+
+<script src="static/js/galpon.js"></script>
+<script src="static/js/procesos.js"></script>
+  
+<script>
+    $("#tabla_l_alimento").DataTable({
+      language: {
+        rows: "%d fila seleccionada",
+        processing: "Tratamiento en curso...",
+        search: "Buscar&nbsp;:",
+        lengthMenu: "Agrupar en _MENU_ items",
+        info: "Mostrando los item (_START_ al _END_) de un total _TOTAL_ items",
+        infoEmpty: "No existe datos.",
+        infoFiltered: "(filtrado de _MAX_ elementos en total)",
+        infoPostFix: "",
+        loadingRecords: "Cargando...",
+        zeroRecords: "No se encontro resultados en tu busqueda",
+        emptyTable: "No hay datos disponibles en la tabla",
+        paginate: {
+          first: "Primero",
+          previous: "Anterior",
+          next: "Siguiente",
+          last: "Ultimo",
+        },
+        select: {
+          rows: "%d fila seleccionada",
+        },
+        aria: {
+          sortAscending: ": active para ordenar la columa en orden ascendente",
+          sortDescending: ": active para ordenar la columna en orden descendente",
+        },
+        },
+    });
+
+    var semana;
+    $(".tipo_alimento").select2();
+    $(".alimento").select2();
+    $(".tipo_alimentacion").select2();
+    $(".tipo_vacuna").select2();
+    $(".vacuna").select2();
+    $(".tipo_vacuna_t").select2();
+    $(".vacuna_t").select2();
+    $(".tipo_desparasitacion").select2();
+    $(".desparasitante").select2();
+    $(".tipo_desparasitacion_t").select2();
+    $(".desparasitante_t").select2();
+
+    traer_detalle_galpon_cerdo();
+
+    function calcularDiferenciaSemanas(fecha1, fecha2) {
+        if (!(fecha1 instanceof Date) || !(fecha2 instanceof Date)) {
+            throw TypeError('Ambos argumentos deben ser objetos de tipo fecha (Date).');
+        }
+    
+        let diferencia = (fecha2.getTime() - fecha1.getTime()) / 1000;
+        diferencia /= (60 * 60 * 24 * 7);
+    
+        return Math.abs(Math.round(diferencia));
+    }
+
+    $(document).ready(function() {
+        mostar_fecha(fecha_atras, fecha_adelante)
+
+        var n = new Date();
+        var y = n.getFullYear();
+        var m = n.getMonth() + 1;
+        var d = n.getDate();
+        if (d < 10) {
+            d = '0' + d;
+        }
+        if (m < 10) {
+            m = '0' + m;
+        }
+        
+        fecha_hoy = y + "-" + m + "-" + d;
+        document.getElementById("fecha_alimentaion").value = fecha_hoy;
+        document.getElementById("fecha_alimentaion_t").value = fecha_hoy;
+        document.getElementById("fecha_pe").value = fecha_hoy;
+        document.getElementById("fecha_vacuna").value = fecha_hoy;
+        document.getElementById("fecha_vacuna_t").value = fecha_hoy;
+        document.getElementById("fecha_vacuna_m").value = fecha_hoy;
+        document.getElementById("fecha_desparasitacion").value = fecha_hoy;
+        document.getElementById("fecha_desparasitacion_t").value = fecha_hoy;
+        
+        fecha_ini = document.getElementById("fecha_i").value;
+        let d_fechaf = fecha_ini.split('-');
+
+        semana = calcularDiferenciaSemanas(new Date(d_fechaf[0], d_fechaf[1], d_fechaf[2]), new Date(y, m, d)); // 52
+        if(semana == 0 || semana == "0"){
+            semana = parseInt(1);
+        }
+        $("#semanas_actual").val(semana);
+    });
+
+    function traer_detalle_galpon_cerdo(){
+        var id = $("#id_galpon_cerdo").val();
+
+        $.ajax({
+            url: "/galpon/traer_cerdo_dentro_galpon",
+            type: "POST",
+            data: { id: id },
+            success: function (resp) {
+
+                $("#tbody_tabla_galpo_cerdo").empty();   
+                let count = 0; 
+                var llenat = ""; 
+                resp.forEach((row) => {  
+
+                  llenat += `<tr>
+                              <td style="display: none;"> ${row[1]} </td> 
+                              <td> ${row[2]}  </td>
+                              <td> ${row[3]}  </td>
+                              <td> ${row[4]} </td>
+                              <td> ${row[5]}  </td> 
+                              <td> ${row[6]} Kg </td>            
+                              <td> <span style="font-size: 14px;" class="badge badge-warning">${row[7]}</span> </td>   
+                              <td> 
+                                
+                                <div class="btn-group">
+                                <button type="button" class="btn btn-success">Registro</button>
+                                <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+                                  <span class="sr-only">Toggle Dropdown</span>
+                                </button>
+                                <div class="dropdown-menu" role="menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(68px, 38px, 0px); top: 0px; left: 0px; will-change: transform;">
+                                  <a style="cursor: pointer;" class="dropdown-item" onclick="modal_alimentar( ${row[1]} );">Alimentar</a>
+                                  <a style="cursor: pointer;" class="dropdown-item" onclick="modal_pesaje( ${row[1]}, ${row[6]} );">Pesar</a>
+                                  <a style="cursor: pointer;" class="dropdown-item" onclick="modal_vacunar_cerdo( ${row[1]} );">Vacunar</a>
+                                  <a style="cursor: pointer;" class="dropdown-item" onclick="modal_desparasitante_cerdo( ${row[1]} );">Desparasitar</a> 
+                                  <a style="background: red; color: white; cursor: pointer;" class="dropdown-item" onclick="modal_cerdo_muerto_galpo( ${row[1]} );">Muerte del cerdo</a> 
+                                </div>
+                              </div> 
+                              - 
+                              <div class="btn-group">
+                                <button type="button" class="btn btn-danger">Listado</button>
+                                <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+                                  <span class="sr-only">Toggle Dropdown</span>
+                                </button>
+                                <div class="dropdown-menu" role="menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(68px, 38px, 0px); top: 0px; left: 0px; will-change: transform;">
+                                  <a style="cursor: pointer;" class="dropdown-item" onclick="modal_listar_alimentos( ${row[1]} );">Alimento</a>
+                                  <a style="cursor: pointer;" class="dropdown-item" onclick="modal_listar_pesaje( ${row[1]} );">Pesaje</a>
+                                  <a style="cursor: pointer;" class="dropdown-item" onclick="modal_listar_vacunass( ${row[1]} );">Vacunas</a>
+                                  <a style="cursor: pointer;" class="dropdown-item" onclick="modal_listar_desparasitantess( ${row[1]} );">Desparasitaciones</a>  
+                                </div>
+                              </div>
+                            
+                            </td>                     
+                            </tr>`;           
+                  $("#tbody_tabla_galpo_cerdo").html(llenat);   
+
+                }); 
+                
+            },
+        });
+    }
+
+    function buscar_cerdo_galpon(valor){
+      var id = $("#id_galpon_cerdo").val();
+
+      $.ajax({
+          url: "/galpon/traer_cerdo_dentro_galpon_buscar",
+          type: "POST",
+          data: { id: id, valor: valor },
+          success: function (resp) {
+              $("#tbody_tabla_galpo_cerdo").empty();   
+              let count = 0; 
+              var llenat = ""; 
+              resp.forEach((row) => {  
+
+                llenat += `<tr>
+                            <td style="display: none;"> ${row[1]} </td> 
+                            <td> ${row[2]}  </td>
+                            <td> ${row[3]}  </td>
+                            <td> ${row[4]} </td>
+                            <td> ${row[5]}  </td> 
+                            <td> ${row[6]} Kg </td>            
+                            <td> <span style="font-size: 14px;" class="badge badge-warning">${row[7]}</span> </td>   
+                            <td> 
+                              
+                              <div class="btn-group">
+                              <button type="button" class="btn btn-success">Registro</button>
+                              <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+                                <span class="sr-only">Toggle Dropdown</span>
+                              </button>
+                              <div class="dropdown-menu" role="menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(68px, 38px, 0px); top: 0px; left: 0px; will-change: transform;">
+                                <a style="cursor: pointer;" class="dropdown-item" onclick="modal_alimentar( ${row[1]} );">Alimentar</a>
+                                <a style="cursor: pointer;" class="dropdown-item" onclick="modal_pesaje( ${row[1]}, ${row[6]} );">Pesar</a>
+                                <a style="cursor: pointer;" class="dropdown-item" onclick="modal_vacunar_cerdo( ${row[1]} );">Vacunar</a>
+                                <a style="cursor: pointer;" class="dropdown-item" onclick="modal_desparasitante_cerdo( ${row[1]} );">Desparasitar</a> 
+                                <a style="background: red; color: white; cursor: pointer;" class="dropdown-item" onclick="modal_cerdo_muerto_galpo( ${row[1]} );">Muerte del cerdo</a> 
+                              </div>
+                            </div> 
+                            - 
+                            <div class="btn-group">
+                              <button type="button" class="btn btn-danger">Listado</button>
+                              <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+                                <span class="sr-only">Toggle Dropdown</span>
+                              </button>
+                              <div class="dropdown-menu" role="menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(68px, 38px, 0px); top: 0px; left: 0px; will-change: transform;">
+                                <a style="cursor: pointer;" class="dropdown-item" onclick="modal_listar_alimentos( ${row[1]} );">Alimento</a>
+                                <a style="cursor: pointer;" class="dropdown-item" onclick="modal_listar_pesaje( ${row[1]} );">Pesaje</a>
+                                <a style="cursor: pointer;" class="dropdown-item" onclick="modal_listar_vacunass( ${row[1]} );">Vacunas</a>
+                                <a style="cursor: pointer;" class="dropdown-item" onclick="modal_listar_desparasitantess( ${row[1]} );">Desparasitaciones</a>  
+                              </div>
+                            </div>
+                          
+                          </td>                     
+                          </tr>`;           
+                $("#tbody_tabla_galpo_cerdo").html(llenat);   
+
+              }); 
+              
+          },
+      });
+    }
+
+
+    //////////////////////
+    ///////// vacunar todo galpon
+    function modal_vacunar_todo_galpon(){
+          $("#semana_vacuna_t").val(semana);
+          $("#modal_vacunancion_cerdo_t").modal({ backdrop: "static", keyboard: false });
+          $("#modal_vacunancion_cerdo_t").modal("show");
+    }
+
+    $("#tipo_vacuna_t").on("change", function(){
+      var id = $(this).val();
+      listar_vacunas_lote_t(id)
+    });
+  
+    function listar_vacunas_lote_t(id) { 
+        
+        $("#dosis_disponible_t").val("");
+
+        if(id == 0){
+            return $("#vacuna_t").html("<option value='0'>--- Seleccione tipo ---</option>");
+        }
+
+        $(".espiner_vacuna").LoadingOverlay("show");
+        $.ajax({
+            url: "/alimento/select_vacuna_lote_all",
+            type: "POST",
+            data: {
+                id: id
+            },
+        }).done(function(data) { 
+
+            $("#vacuna_t").empty();
+            var cadena = "<option value='0'>--- Seleccione vacuna ---</option>";
+            if (data != 0) {
+              $(".espiner_vacuna").LoadingOverlay("hide");
+                //bucle para extraer los datos del rol
+                for (var i = 0; i < data.length; i++) {
+                    cadena += "<option value='" + data[i]['id_v'] + " - " + data[i]['id_l'] + "'> " + data[i]['codigo'] + " - " + data[i]['nombre'] + " - " + data[i]['fecha'] + " - " + data[i]['cantidad'] + " Dosis </option>";
+                }
+                //aqui concadenamos al id del select
+                $("#vacuna_t").html(cadena);
+            } else {
+                $(".espiner_vacuna").LoadingOverlay("hide");
+                cadena += "<option value='0'>No hay vacuna en lote</option>";
+                $("#vacuna_t").html(cadena);
+
+                $("#dosis_disponible_t").val("")
+            }
+
+        });
+    }
+
+    $("#vacuna_t").on("change", function(){
+      var id = $(this).val();
+
+      if(id == 0){
+        return  $("#dosis_disponible_t").val("");
+      }
+
+      var desc = id.split(" - ");
+      $(".espiner_disponible_c").LoadingOverlay("show");
+
+      $.ajax({
+          url: "/alimento/traer_cantidad_dosis_lote",
+          type: "POST",
+          data: {
+              id: desc[1]
+          },
+      }).done(function(data) { 
+        $(".espiner_disponible_c").LoadingOverlay("hide");
+        if(data != 0){
+          $("#dosis_disponible_t").val(data[0])
+        }else{
+          $("#dosis_disponible_t").val("")
+        }
+      });
+    });
+
+    $("#cantidad_dosis_t").on("keyup", function(){
+      var cantidad = $(this).val();
+      var disponibles = $("#dosis_disponible_t").val();
+
+      if(disponibles.length == 0 || disponibles.trim() == "" || disponibles == 0){
+        $(this).val("0")
+        $("#dosis_disponible_t_obligg").html("");
+        return swal.fire(
+          "No hay cantidad disponible",
+          "Sin cantidad",
+          "warning"
+        );
+      }else{
+        if(cantidad != ""){
+          var count = 0;
+          $("#tabla_galpo_cerdo tbody#tbody_tabla_galpo_cerdo tr").each(
+            function () {
+                count++;
+            }
+          );
+          var racion = parseInt(cantidad * count);
+          $("#total_dosis").val(racion);
+        }else{
+          $("#total_dosis").val("");
+        }
+      }
+
+    });
+
+
+    ////////////////alimenta todo galpon
+    function modal_alimenar_todo_galpon(){ 
+      $("#semana_alimentacion_t").val(semana);
+
+      $("#alimento_t_obligg").html("");
+      $("#tipo_alimentacion_t_obligg").html("");
+      $("#fecha_to_obligg").html("");
+      $("#cantidad_kg_t_obligg").html("");
+      $("#observacion_t_obligg").html("");
+
+      $("#modal_alimenar_todo_galpon").modal({ backdrop: "static", keyboard: false });
+      $("#modal_alimenar_todo_galpon").modal("show");
+    }
+
+    $("#tipo_alimento_t").on("change", function(){
+      var id = $(this).val();
+      listar_alimento_t(id)
+    });
+  
+    function listar_alimento_t(id) { 
+        if(id == 0){
+            return $("#alimento_t").html("<option value='0'>--- Seleccione tipo ---</option>");
+        }
+
+        $(".espiner_alimento").LoadingOverlay("show");
+
+        $.ajax({
+            url: "/alimento/select_alimento_cerdo_lote",
+            type: "POST",
+            data: {
+                id: id
+            },
+        }).done(function(data) { 
+            $("#alimento_t").empty();
+            var cadena = "<option value='0'>--- Seleccione alimento ---</option>";
+            if (data != 0) {
+              $(".espiner_alimento").LoadingOverlay("hide");
+                //bucle para extraer los datos del rol
+                for (var i = 0; i < data.length; i++) {
+                  cadena += "<option value='" + data[i]['id_alimento'] + " - " + data[i]['id_lote'] + "'> " + data[i]['codigo'] + " - " + data[i]['nombre'] + " - " + data[i]['fecha_f'] + " - " + data[i]['total_kg'] + " Kg </option>";
+                }
+                //aqui concadenamos al id del select
+                $("#alimento_t").html(cadena);
+            } else {
+              $(".espiner_alimento").LoadingOverlay("hide");
+              cadena += "<option value='0'>No hay alimento en lote</option>";
+              $("#alimento_t").html(cadena);
+              $("#disponibles_kg_t").val("")
+            }
+        });
+    }
+
+    $("#alimento_t").on("change", function(){
+      var id = $(this).val();
+
+      if(id == 0){
+        return  $("#disponibles_kg_t").val("");
+      }
+
+      var desc = id.split(" - ");
+      $(".espiner_disponible").LoadingOverlay("show");
+
+      $.ajax({
+          url: "/alimento/traer_cantidad_lote_kg",
+          type: "POST",
+          data: {
+              id: desc[1]
+          },
+      }).done(function(data) { 
+        $(".espiner_disponible").LoadingOverlay("hide");
+        if(data != 0){
+          $("#disponibles_kg_t").val(data[0])
+        }else{
+          $("#disponibles_kg_t").val("")
+        }
+      });
+    });
+
+    $("#cantidad_kg_t").on("keyup", function(){
+      var cantidad = $(this).val();
+      var disponibles_kg = $("#disponibles_kg_t").val();
+      if(disponibles_kg.length == 0 || disponibles_kg.trim() == "" || disponibles_kg == 0){
+        $("#disponibles_kg_t_obligg").html("");
+        $(this).val("0");
+        return swal.fire(
+          "No hay cantidad disponible",
+          "Sin cantidad",
+          "warning"
+        );
+      }else{
+        if(cantidad != ""){
+          var count = 0;
+          $("#tabla_galpo_cerdo tbody#tbody_tabla_galpo_cerdo tr").each(
+            function () {
+                count++;
+            }
+          );
+          var racion = parseInt(cantidad * count);
+          $("#racion_ali").val(racion);
+        }else{
+          $("#racion_ali").val("");
+        }
+      }
+
+     
+    });
+
+
+    /////// alimentar
+    function modal_alimentar(id){
+        $("#id_cerdo").val(id);
+        $("#semana_alimentacion").val(semana);
+
+        $("#alimento_obligg").html("");
+        $("#tipo_alimentacion_obligg").html("");
+        $("#fecha_alimentaion").html("");
+        $("#cantidad_kg_obligg").html("");
+        $("#observacion_a_u_obligg").html("");
+
+        $("#modaal_cerdo_alimentar").modal({ backdrop: "static", keyboard: false });
+        $("#modaal_cerdo_alimentar").modal("show");
+    }
+
+    $("#tipo_alimento").on("change", function(){
+      var id = $(this).val();
+      listar_alimento(id)
+      $("#disponibles_kg").val("")
+    });
+  
+    function listar_alimento(id) { 
+        if(id == 0){
+            return $("#alimento").html("<option value='0'>--- Seleccione tipo ---</option>");
+        }
+        $(".espiner_alimento").LoadingOverlay("show");
+        $.ajax({
+            url: "/alimento/select_alimento_cerdo_lote",
+            type: "POST",
+            data: {
+                id: id
+            },
+        }).done(function(data) { 
+            $("#alimento").empty();
+            var cadena = "<option value='0'>--- Seleccione alimento ---</option>";
+            if (data != 0) {
+              $(".espiner_alimento").LoadingOverlay("hide");
+                //bucle para extraer los datos del rol
+                for (var i = 0; i < data.length; i++) {
+                    cadena += "<option value='" + data[i]['id_alimento'] + " - " + data[i]['id_lote'] + "'> " + data[i]['codigo'] + " - " + data[i]['nombre'] + " - " + data[i]['fecha_f'] + " - " + data[i]['total_kg'] + " Kg </option>";
+                }
+                //aqui concadenamos al id del select
+                $("#alimento").html(cadena);
+            } else {
+                $(".espiner_alimento").LoadingOverlay("hide");
+                cadena += "<option value='0'>No hay alimento en lote</option>";
+                $("#alimento").html(cadena);
+                $("#disponibles_kg").val("")
+            }
+        });
+    }
+
+    $("#alimento").on("change", function(){
+      var id = $(this).val();
+
+      if(id == 0){
+        return  $("#disponibles_kg").val("");
+      }
+
+      var desc = id.split(" - ");
+      $(".espiner_disponible").LoadingOverlay("show");
+
+      $.ajax({
+          url: "/alimento/traer_cantidad_lote_kg",
+          type: "POST",
+          data: {
+              id: desc[1]
+          },
+      }).done(function(data) { 
+        $(".espiner_disponible").LoadingOverlay("hide");
+        if(data != 0){
+          $("#disponibles_kg").val(data[0])
+        }else{
+          $("#disponibles_kg").val("")
+        }
+      });
+    });
+  
+
+    /////////// pesaje
+    function modal_pesaje(id, peso){
+        $("#id_cerdo_p").val(id);
+        $("#peso_actual").val(peso);
+
+        $("#nuevo_pesaje_obligg").html("");
+        $("#observacion_obligg").html(""); 
+
+        $("#semana_alimentacion_p").val(semana);
+        $("#modal_pesaje").modal({ backdrop: "static", keyboard: false });
+        $("#modal_pesaje").modal("show");
+    }
+
+    $("#metodo").change(function() {
+      $("#etapa_fase").val(""); 
+      var metodo = $("#metodo").val();
+      if (metodo == "vivo") {
+ 
+        $("#nuevo_pesaje").val("");
+        $("#peso_vivo1").css("display", "block");
+        $("#peso_vivo2").css("display", "block"); 
+        $("#peso_vivo4").css("display", "block");
+
+      } else { 
+
+          $("#nuevo_pesaje").val("");
+          $("#perimetro_t").val("");
+          $("#largo_c").val("");  
+
+          $("#peso_vivo1").css("display", "none");
+          $("#peso_vivo2").css("display", "none"); 
+          $("#peso_vivo4").css("display", "none");
+      }
+    });
+
+    function calcular_peso() {
+
+      var pt = $("#perimetro_t").val();
+      var lc = $("#largo_c").val();
+
+      if (pt.length == 0) {
+        $("#perimetro_t_obligg").html("Ingrese perimetro torácico");
+        return swal.fire(
+            "Mensaje de advertencia",
+            "Ingrese perimetro torácico",
+            "warning"
+        );
+      } else if (lc.length == 0) {
+        $("#perimetro_t_obligg").html("");
+        $("#largo_c_obligg").html("Ingrese largo de cuerpo");
+        return swal.fire(
+            "Mensaje de advertencia",
+            "Ingrese largo de cuerpo",
+            "warning"
+        );
+      }else{
+        $("#perimetro_t_obligg").html("");
+        $("#largo_c_obligg").html("");
+      }
+
+      var metro_pt = pt / 100;
+      var metro_lc = lc / 100;
+
+      var elevar = Math.pow(metro_pt, 2);
+      var pv = Math.trunc(elevar * metro_lc * parseFloat(69.3));
+
+      $("#nuevo_pesaje").val(pv);
+
+      var data = pv;
+
+      if(parseInt(data) > 0 && parseInt(data) <= 5.5){
+        return $("#etapa_fase").val("Lactancia");
+      } 
+      if(parseInt(data) >= 6.5 && parseInt(data) <= 15){
+          return $("#etapa_fase").val("Preiniciador");
+      } 
+      if(parseInt(data) >= 16 && parseInt(data) <= 30){
+          return $("#etapa_fase").val("Iniciador");
+      } 
+      if(parseInt(data) >= 31 && parseInt(data) <= 50){
+          return $("#etapa_fase").val("Crecimiento");
+      } 
+      if(parseInt(data) >= 51 && parseInt(data) <= 75){
+          return $("#etapa_fase").val("Desarrollo");
+      } 
+      if(parseInt(data) >= 76){
+          return $("#etapa_fase").val("Finalización");
+      }
+      if(data == ""){
+          return $("#etapa_fase").val(""); 
+      }
+
+    }
+
+    $("#nuevo_pesaje").on("keyup", function(){
+
+      var data = $("#nuevo_pesaje").val();
+
+      if(parseInt(data) > 0 && parseInt(data) <= 5.5){
+         return $("#etapa_fase").val("Lactancia");
+      } 
+      if(parseInt(data) >= 6.5 && parseInt(data) <= 15){
+         return $("#etapa_fase").val("Preiniciador");
+      } 
+      if(parseInt(data) >= 16 && parseInt(data) <= 30){
+         return $("#etapa_fase").val("Iniciador");
+      } 
+      if(parseInt(data) >= 31 && parseInt(data) <= 50){
+         return $("#etapa_fase").val("Crecimiento");
+      } 
+      if(parseInt(data) >= 51 && parseInt(data) <= 75){
+         return $("#etapa_fase").val("Desarrollo");
+      } 
+      if(parseInt(data) >= 76){
+         return $("#etapa_fase").val("Finalización");
+      }
+      if(data == ""){
+          return $("#etapa_fase").val(""); 
+      }
+     
+    });
+
+
+    /////////// vacunar cerdo
+    function modal_vacunar_cerdo(id){
+          $("#id_cerdo_v").val(id);
+          $("#semana_vacuna").val(semana);
+          $("#modal_vacunancion_cerdo").modal({ backdrop: "static", keyboard: false });
+          $("#modal_vacunancion_cerdo").modal("show");
+    }
+
+    $("#tipo_vacuna").on("change", function(){
+      var id = $(this).val();
+      listar_vacunas_lote(id)
+    });
+  
+    function listar_vacunas_lote(id) { 
+        
+        $("#dosis_disponible").val("");
+
+        if(id == 0){
+            return $("#vacuna").html("<option value='0'>--- Seleccione tipo ---</option>");
+        }
+
+        $(".espiner_vacuna").LoadingOverlay("show");
+        $.ajax({
+            url: "/alimento/select_vacuna_lote_all",
+            type: "POST",
+            data: {
+                id: id
+            },
+        }).done(function(data) { 
+
+            $("#vacuna").empty();
+            var cadena = "<option value='0'>--- Seleccione vacuna ---</option>";
+            if (data != 0) {
+              $(".espiner_vacuna").LoadingOverlay("hide");
+                //bucle para extraer los datos del rol
+                for (var i = 0; i < data.length; i++) {
+                    cadena += "<option value='" + data[i]['id_v'] + " - " + data[i]['id_l'] + "'> " + data[i]['codigo'] + " - " + data[i]['nombre'] + " - " + data[i]['fecha'] + " - " + data[i]['cantidad'] + " Dosis </option>";
+                }
+                //aqui concadenamos al id del select
+                $("#vacuna").html(cadena);
+            } else {
+                $(".espiner_vacuna").LoadingOverlay("hide");
+                cadena += "<option value='0'>No hay vacuna en lote</option>";
+                $("#vacuna").html(cadena);
+
+                $("#dosis_disponible").val("")
+            }
+
+        });
+    }
+
+    $("#vacuna").on("change", function(){
+      var id = $(this).val();
+
+      if(id == 0){
+        return  $("#dosis_disponible").val("");
+      }
+
+      var desc = id.split(" - ");
+      $(".espiner_disponible_c").LoadingOverlay("show");
+
+      $.ajax({
+          url: "/alimento/traer_cantidad_dosis_lote",
+          type: "POST",
+          data: {
+              id: desc[1]
+          },
+      }).done(function(data) { 
+        $(".espiner_disponible_c").LoadingOverlay("hide");
+        if(data != 0){
+          $("#dosis_disponible").val(data[0])
+        }else{
+          $("#dosis_disponible").val("")
+        }
+      });
+    });
+
+
+    ///// desparasitanción de cerdo
+    function modal_desparasitante_cerdo(id)
+    {
+      $("#id_cerdo_despa").val(id);
+      $("#semana_desparasitacion").val(semana);
+      $("#modal_medicamento_cerdo").modal({ backdrop: "static", keyboard: false });
+      $("#modal_medicamento_cerdo").modal("show");
+    }
+
+    $("#tipo_desparasitacion").on("change", function(){
+      var id = $(this).val();
+      listar_desparasitante_lote(id)
+    });
+  
+    function listar_desparasitante_lote(id) { 
+        $("#desparasitante_disponible").val("");
+        if(id == 0){
+            return $("#desparasitante").html("<option value='0'>--- Seleccione tipo ---</option>");
+        }
+        $(".espiner_desparasitante").LoadingOverlay("show");
+        $.ajax({
+            url: "/alimento/select_desparasitante_lote_all",
+            type: "POST",
+            data: {
+                id: id
+            },
+        }).done(function(data) { 
+            $("#desparasitante").empty();
+            var cadena = "<option value='0'>--- Seleccione desparasitante ---</option>";
+            if (data != 0) {
+              $(".espiner_desparasitante").LoadingOverlay("hide");
+                //bucle para extraer los datos del rol
+                for (var i = 0; i < data.length; i++) {
+                    cadena += "<option value='" + data[i]['id_m'] + " - " + data[i]['id_l'] + "'> " + data[i]['codigo'] + " - " + data[i]['nombre'] + " - " + data[i]['fecha'] + " - " + data[i]['cantidad'] + " disponible </option>";
+                }
+                //aqui concadenamos al id del select
+                $("#desparasitante").html(cadena);
+            } else {
+                $(".espiner_desparasitante").LoadingOverlay("hide");
+                cadena += "<option value='0'>No hay desparasitantes en lote</option>";
+                $("#desparasitante").html(cadena);
+                $("#desparasitante_disponible").val("")
+            }
+
+        });
+    }
+    
+    $("#desparasitante").on("change", function(){
+      var id = $(this).val();
+
+      if(id == 0){
+        return  $("#desparasitante_disponible").val("");
+      }
+      var desc = id.split(" - ");
+      $(".espiner_disponible_d").LoadingOverlay("show");
+      $.ajax({
+          url: "/alimento/traer_cantidad_desparasitante_lote",
+          type: "POST",
+          data: {
+              id: desc[1]
+          },
+      }).done(function(data) { 
+        $(".espiner_disponible_d").LoadingOverlay("hide");
+        if(data != 0){
+          $("#desparasitante_disponible").val(data[0])
+        }else{
+          $("#desparasitante_disponible").val("")
+        }
+      });
+    });
+</script>

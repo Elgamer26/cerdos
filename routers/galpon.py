@@ -93,6 +93,17 @@ def traer_disponible_capacidad():
         _id = request.form['id']
         dato = Galpon.Traer_disponible_capacidad(_id)
         return jsonify(dato)
+    
+##############
+############# coreccion
+# controlador para traer la capacidad y disponibilidad
+@galpon.route('/traer_capacidad_galponn', methods=['POST'])
+def traer_capacidad_galponn():
+    if request.method == 'POST':
+        _id = request.form['id']
+        dato = Galpon.Traer_capacidad_galponn(_id)
+        return jsonify(dato)
+##############
 
 # controlador para registra el galpn con el cerdo
 @galpon.route('/registrar_cerdo_galpon', methods=['POST'])
@@ -109,6 +120,37 @@ def registrar_cerdo_galpon():
         for valor in zip(id_c, fecha):
             dato = Galpon.Registrar_cerdo_galpon(_id, valor[0], valor[1])         
         return jsonify(dato)
+    
+#####################
+# controlador para registra el galpn con el cerdo
+@galpon.route('/registrar_cerdo_galpon_new', methods=['POST'])
+def registrar_cerdo_galpon_new():
+    if request.method == 'POST':
+
+        id_galpon = request.form['id_galpon']
+        fecha_i = request.form['fecha_i']
+        fecha_f = request.form['fecha_f'] 
+        semanas = request.form['semanas']  
+
+        dato = Galpon.Registrar_cerdo_galpon_new(id_galpon, fecha_i, fecha_f, semanas)         
+        return jsonify(dato)
+
+@galpon.route('/registrar_detalle_cerdo_galpon', methods=['POST'])
+def registrar_detalle_cerdo_galpon():
+    if request.method == 'POST':
+
+        _id = request.form['id']
+        _id_c = request.form['id_c']
+        _fecha = request.form['fecha'] 
+
+        id_c = _id_c.split(",")
+        fecha = _fecha.split(",") 
+
+        for valor in zip(id_c, fecha):
+            dato = Galpon.Registrar_detalle_cerdo_galpon(_id, valor[0], valor[1])         
+        return jsonify(dato)
+    
+#############
 
 # controlador para pasar el cerdo a otro galpon
 @galpon.route('/editar_cerdo_galpon', methods=['POST'])
@@ -130,3 +172,23 @@ def editar_cerdo_galpon():
             dato = Galpon.Editar_cerdo_galpon(_id_a, _id_n, valor[0], valor[1], valor[2], _text)  
         return jsonify(dato)
 
+
+
+######################
+####################### correcciones
+@galpon.route('/traer_cerdo_dentro_galpon', methods=['POST'])
+def traer_cerdo_dentro_galpon():
+    if request.method == 'POST':
+        id = request.form['id']
+        dato = Galpon.Traer_cerdo_dentro_galpon(id)         
+        return jsonify(dato)
+    
+@galpon.route('/traer_cerdo_dentro_galpon_buscar', methods=['POST'])
+def traer_cerdo_dentro_galpon_buscar():
+    if request.method == 'POST':
+        id = request.form['id']
+        valor = request.form['valor']
+        dato = Galpon.Traer_cerdo_dentro_galpon_buscar(id, valor)         
+        return jsonify(dato)
+    
+    

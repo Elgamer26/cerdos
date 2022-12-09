@@ -88,15 +88,23 @@ def registrar_detalle_compra_alimento():
         _cantidad = request.form['cantidad'] 
         _descuento = request.form['descuento'] 
         _total = request.form['total'] 
+        _fecha_i = request.form['fecha_i'] 
+        _fecha_f = request.form['fecha_f'] 
+        _caodigo = request.form['caodigo'] 
+        _peso = request.form['peso'] 
 
         ida = _ida.split(",")
         precio = _precio.split(",")
         cantidad = _cantidad.split(",") 
         descuento = _descuento.split(",")
         total = _total.split(",") 
+        fecha_i = _fecha_i.split(",") 
+        fecha_f = _fecha_f.split(",")
+        caodigo = _caodigo.split(",") 
+        peso = _peso.split(",") 
 
-        for valor in zip(ida, precio, cantidad, descuento, total):
-            dato = Compras.Registrar_detalle_compra_alimento(_id, valor[0], valor[1], valor[2], valor[3], valor[4])  
+        for valor in zip(ida, precio, cantidad, descuento, total, fecha_i, fecha_f, caodigo, peso):
+            dato = Compras.Registrar_detalle_compra_alimento(_id, valor[0], valor[1], valor[2], valor[3], valor[4], valor[5], valor[6], valor[7], valor[8])  
         return jsonify(dato)
 
 # controlador para anular la compra de alimentos
@@ -337,6 +345,19 @@ def listar_medicamento():
         dato = Compras.Listar_medicamento()
         return jsonify(dato)
 
+@compras.route('/listar_lote_medicmaneto', methods=['GET'])
+def listar_lote_medicmaneto():
+    if request.method == 'GET':
+        dato = Compras.Listar_lote_medicmaneto()
+        return jsonify(dato)
+
+@compras.route('/eliminar_lote_medicamento', methods=['POST'])
+def eliminar_lote_medicamento():
+    if request.method == 'POST':   
+        _id = request.form['id']     
+        dato = Compras.Eliminar_lote_medicamento(_id)
+        return jsonify(dato)
+
 # controlador para cambiar el estado del medicamento
 @compras.route('/estado_medicamento', methods=['POST'])
 def estado_medicamento():
@@ -389,15 +410,27 @@ def registrar_detalle_compra_medicamento():
         _cantidad = request.form['cantidad'] 
         _descuento = request.form['descuento'] 
         _total = request.form['total'] 
-
+        
+        _unidades = request.form['unidades'] 
+        _total_unidades = request.form['total_unidades'] 
+        _fecha_i = request.form['fecha_i'] 
+        _fecha_f = request.form['fecha_f'] 
+        _codigo = request.form['codigo'] 
+        
         ida = _ida.split(",")
         precio = _precio.split(",")
         cantidad = _cantidad.split(",") 
         descuento = _descuento.split(",")
         total = _total.split(",") 
+        
+        unidades = _unidades.split(",")
+        total_unidades = _total_unidades.split(",") 
+        fecha_i = _fecha_i.split(",")
+        fecha_f = _fecha_f.split(",") 
+        codigo = _codigo.split(",") 
 
-        for valor in zip(ida, precio, cantidad, descuento, total):
-            dato = Compras.Registrar_detalle_compra_medicamento(_id, valor[0], valor[1], valor[2], valor[3], valor[4])  
+        for valor in zip(ida, precio, cantidad, descuento, total, unidades, total_unidades, fecha_i, fecha_f, codigo):
+            dato = Compras.Registrar_detalle_compra_medicamento(_id, valor[0], valor[1], valor[2], valor[3], valor[4], valor[5], valor[6], valor[7], valor[8], valor[9])  
         return jsonify(dato)
 
 # controlador para anular la compra de medicamento
@@ -465,15 +498,24 @@ def registrar_detalle_compra_vacuna():
         _cantidad = request.form['cantidad'] 
         _descuento = request.form['descuento'] 
         _total = request.form['total'] 
+        
+        _fecha_i = request.form['fecha_i'] 
+        _fecha_f = request.form['fecha_f'] 
+        _codigo = request.form['codigo'] 
+        _dosis = request.form['dosis'] 
 
         ida = _ida.split(",")
         precio = _precio.split(",")
         cantidad = _cantidad.split(",") 
         descuento = _descuento.split(",")
-        total = _total.split(",") 
+        total = _total.split(",")         
+        fecha_i = _fecha_i.split(",") 
+        fecha_f = _fecha_f.split(",")
+        codigo = _codigo.split(",") 
+        dosis = _dosis.split(",") 
 
-        for valor in zip(ida, precio, cantidad, descuento, total):
-            dato = Compras.Registrar_detalle_compra_vacuna(_id, valor[0], valor[1], valor[2], valor[3], valor[4])  
+        for valor in zip(ida, precio, cantidad, descuento, total, fecha_i, fecha_f, codigo, dosis):
+            dato = Compras.Registrar_detalle_compra_vacuna(_id, valor[0], valor[1], valor[2], valor[3], valor[4], valor[5], valor[6], valor[7], valor[8])  
         return jsonify(dato)
 
 # controlador para anular la compra de vacuna

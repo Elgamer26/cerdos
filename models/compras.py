@@ -150,18 +150,17 @@ class Compras():
         return 0
     
     # controlador para registra el detalle de compra del alimento
-    def Registrar_detalle_compra_alimento(_id, ida, precio, cantidad, descuento, total):
+    def Registrar_detalle_compra_alimento(_id, ida, precio, cantidad, descuento, total, fecha_i, fecha_f, codigo, peso):
         try:
             query = mysql.connection.cursor()         
             query.execute('INSERT INTO detalle_compra_alimento (compra_alimento_id,alimento_id,precio,cantidad,descuento,total) VALUES ("{0}","{1}","{2}","{3}","{4}","{5}")'.format(_id,ida,precio,cantidad,descuento,total))
             query.connection.commit()
-
+            query.execute('INSERT INTO lote_alimento (alimento_id,cantidad,fecha_i,fecha_f,codigo) VALUES ("{0}","{1}","{2}","{3}","{4}")'.format(ida,peso,fecha_i,fecha_f,codigo))
+            query.connection.commit()
             query.execute('UPDATE alimento SET cantidad = cantidad + "{0}" WHERE id = "{1}" '.format(cantidad,ida))
             query.connection.commit()
-
             query.close()
             return 1  # se inserto correcto
-
         except Exception as e:
             query.close()
             error = "Ocurrio un problema: " + str(e)
@@ -705,7 +704,63 @@ class Compras():
             error = "Ocurrio un problema: " + str(e)
             return error
         return 0
+    
+    def Listar_lote_medicmaneto():
+        try:
+            query = mysql.connection.cursor()
+            query.execute("""SELECT
+                        lote_medicamento.id,
+                        CONCAT_WS( ' ', medicamento.nombre, tipo_medicamento.tipo ) AS medicamento,
+                        lote_medicamento.cantidad,
+                        lote_medicamento.fecha_i,
+                        lote_medicamento.fecha_f,
+                        lote_medicamento.codigo,
+                        DATE( lote_medicamento.fecha ) AS fecha,
+                        TIME( lote_medicamento.fecha ) AS hora 
+                    FROM
+                        tipo_medicamento
+                        INNER JOIN medicamento ON tipo_medicamento.id = medicamento.tipo_id
+                        INNER JOIN lote_medicamento ON medicamento.id = lote_medicamento.medicamento_id 
+                    ORDER BY
+                        lote_medicamento.id DESC""")
+            data = query.fetchall()
+            query.close()
+            new_lista = []
+            for datos in data:
+                dic = {} 
+                dic["id"] = datos[0]
+                dic["medicamento"] = datos[1] 
+                dic["cantidad"] = datos[2]           
+                Convert = datetime.strptime(str(datos[3]), '%Y-%m-%d')
+                dic["fecha_i"] = Convert.strftime('%Y-%m-%d') 
+                Convert = datetime.strptime(str(datos[4]), '%Y-%m-%d')
+                dic["fecha_f"] = Convert.strftime('%Y-%m-%d') 
+                dic["codigo"] = datos[5]  
+                Convert = datetime.strptime(str(datos[6]), '%Y-%m-%d')
+                dic["fecha"] = Convert.strftime('%Y-%m-%d')              
+                Convert = datetime.strptime(str(datos[7]), '%H:%M:%S')
+                dic["hora"] = Convert.strftime('%H:%M:%S')            
+                new_lista.append(dic)
+            return {"data": new_lista}
+        except Exception as e:
+            query.close()
+            error = "Ocurrio un problema: " + str(e)
+            return error
+        return 0
 
+    def Eliminar_lote_medicamento(_id):
+        try:
+            query = mysql.connection.cursor()
+            query.execute('DELETE FROM lote_medicamento WHERE id="{0}"'.format(_id))
+            query.connection.commit()
+            query.close()
+            return 1  # se inserto correcto
+        except Exception as e:
+            query.close()
+            error = "Ocurrio un problema: " + str(e)
+            return error
+        return 0
+    
     # modelo para cambiar el estado del medicamento
     def Estado_medicamento(_id,_dato):
         try:
@@ -790,14 +845,17 @@ class Compras():
         return 0
     
     # modelo para registra el detalle de compra del medicamento
-    def Registrar_detalle_compra_medicamento(_id, ida, precio, cantidad, descuento, total):
+    def Registrar_detalle_compra_medicamento(_id, ida, precio, cantidad, descuento, total, unidades, total_unidades, fecha_i, fecha_f, codigo):
         try:
             query = mysql.connection.cursor()         
-            query.execute('INSERT INTO detalle_compra_medicamento (compra_medicamento_id,medicamento_id,precio,cantidad,descuento,total) VALUES ("{0}","{1}","{2}","{3}","{4}","{5}")'.format(_id,ida,precio,cantidad,descuento,total))
+            query.execute('INSERT INTO detalle_compra_medicamento (compra_medicamento_id,medicamento_id,precio,cantidad,descuento,total,unidad) VALUES ("{0}","{1}","{2}","{3}","{4}","{5}","{6}")'.format(_id,ida,precio,cantidad,descuento,total,unidades))
+            query.connection.commit()
+            
+            query.execute('INSERT INTO lote_medicamento (medicamento_id,cantidad,fecha_i,fecha_f,codigo) VALUES ("{0}","{1}","{2}","{3}","{4}")'.format(ida,total_unidades,fecha_i,fecha_f,codigo))
             query.connection.commit()
 
-            query.execute('UPDATE medicamento SET cantidad = cantidad + "{0}" WHERE id = "{1}" '.format(cantidad,ida))
-            query.connection.commit()
+            # query.execute('UPDATE medicamento SET cantidad = cantidad + "{0}" WHERE id = "{1}" '.format(cantidad,ida))
+            # query.connection.commit()
 
             query.close()
             return 1  # se inserto correcto
@@ -907,10 +965,13 @@ class Compras():
         return 0
     
     # modelo para registra el detalle de compra de vacuna
-    def Registrar_detalle_compra_vacuna(_id, ida, precio, cantidad, descuento, total):
+    def Registrar_detalle_compra_vacuna(_id, ida, precio, cantidad, descuento, total, fecha_i, fecha_f, codigo, dosis):
         try:
             query = mysql.connection.cursor()         
             query.execute('INSERT INTO detalle_compra_vacuna (compra_vacuna_id,vacuna_id,precio,cantidad,descuento,total) VALUES ("{0}","{1}","{2}","{3}","{4}","{5}")'.format(_id,ida,precio,cantidad,descuento,total))
+            query.connection.commit()
+            
+            query.execute('INSERT INTO lote_vacuna (vacuna_id,cantidad,fecha_i,fecha_f,codigo) VALUES ("{0}","{1}","{2}","{3}","{4}")'.format(ida,dosis,fecha_i,fecha_f,codigo))
             query.connection.commit()
 
             query.execute('UPDATE vacuna SET cantidad = cantidad + "{0}" WHERE id = "{1}" '.format(cantidad,ida))

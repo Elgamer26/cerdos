@@ -1,0 +1,295 @@
+<div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1 class="m-0"><i class="fa fa-home"></i><i class="fa fa-paw"></i> Crear galpón cerdo</h1>
+        </div>
+  
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="/Admin">Inicio</a></li>
+            <li class="breadcrumb-item active">Crear galpón</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-lg-12 col-12">
+            <div class="card card-success">
+              <div class="card-header">
+                <h3 class="card-title">Nuevo galpón</h3>
+              </div>
+  
+              <div class="card-body">
+                <div class="row">
+
+                  <div class="form-group col-lg-4 col-6">
+                      <label for="id_galpon">Galpones</label>
+                      <select class="form-control id_galpon" style="width: 100%" id="id_galpon">
+                          <option value="0">--- Seleccione el galpón ---</option>
+      
+                          {% for datas in data %}
+                          <option value="{{datas[0]}}">N.: {{datas[1]}} - Tipo: {{datas[3]}}</option>
+                          {% endfor %}
+                      </select>
+                      <span style="color: red" id="id_galpon_obligg"></span>
+                  </div> 
+              
+                  <div class="Capacidad_C form-group col-lg-2 col-6">
+                      <label for="capacidad">Capacidad</label>
+                      <input type="text" disabled maxlength="3" class="form-control" id="capacidad" placeholder="Capacidad" />
+                      <span style="color: red" id="capacidad_obligg"></span>
+                  </div>
+
+                  <div class="form-group col-lg-2 col-6">
+                      <label for="fecha_i">Fecha inicio</label>
+                      <input type="date" class="calendario form-control" id="fecha_i" /> 
+                  </div>
+
+                  <div class="form-group col-lg-2 col-6">
+                    <label for="fecha_f">Fecha fin</label>
+                    <input type="date" class="calendario form-control" id="fecha_f" /> 
+                  </div>
+
+                  <div class="form-group col-lg-1 col-6">
+                    <label for="semanas">Semanas</label>
+                    <input type="text" readonly class="form-control" id="semanas" /> 
+                    <span style="color: red" id="semana_obligg"></span>
+                  </div>
+
+                  <div class="form-group col-lg-1 col-6">
+                    <label for="capacidad">Buscar</label>
+                    <button onclick="modal_cerdo_sin_galpon();" class="btn btn-primary"><i class="fa fa-search"></i></button>
+                  </div>
+
+                </div>
+              </div>
+ 
+            </div>
+          </div>
+
+          <div class="col-lg-12 col-12">
+            <div class="card card-info">
+              <div class="card-header">
+                <h3 class="card-title">Cerdos</h3>
+              </div>
+  
+              <div class="card-body">
+                <div class="row">
+             
+                <div class="form-group col-lg-12 col-6 text-center">
+                  <h4> <b><span style="color: red" id="detalle_tabla"></span></b> </h4>
+                </div>
+
+                  <div class="form-group col-lg-12 col-6">
+                      <table id="tabla_galpo_cerdo" class="table table-display table-hover responsive nowrap text-center" style="width: 100%">
+                          <thead style="background: orange;">
+                              <tr>
+                                  <th hidden>Id cerdo</th> 
+                                  <th>Fecha ingreso</th>
+                                  <th>Cód. cerdo</th>
+                                  <th>Sexo</th>
+                                  <th>Raza</th>
+                                  <th>Foto</th>
+                                  <th>Peso Kg</th>
+                                  <th>Origen</th>
+                                  <th>Remover</th>
+                              </tr>
+                          </thead>
+                          <tbody id="tbody_tabla_galpo_cerdo">
+                              
+                          </tbody>
+                      </table>
+                  </div>
+
+                  <div class="form-group col-lg-12 col-6">
+                    <button class="btn btn-success" onclick="registrar_cerdo_galpon_coreccion();"><i class="fa fa-save"></i> Guardar</button> - <button onclick="cargar_contenido('contenido_principal','/galpones_cerdoss');" class="btn btn-danger"><i class="fa fa-reply"></i> Volver</button>
+                </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+  
+        <div class="row"></div>
+      </div>
+    </section>
+  </div>
+  
+  <div class="modal fade" id="model_cerdos_sin_galpon">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content bg-primary">
+            <div class="modal-header">
+                <h4 class="modal-title">Cerdos sin galpón</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="background: white; color: black">
+
+                <div class="row">
+
+                    <div class="form-group col-lg-12 col-12">
+                        <table id="tabla_cerdo_sin_galpon" class="table table-display table-hover responsive nowrap text-center" style="width: 100%">
+                            <thead>
+                                <tr> 
+                                    <th>Acci&oacute;n</th>
+                                    <th>Codigo</th>
+                                    <th>Nombre o Alias</th>
+                                    <th>Sexo</th>
+                                    <th>Raza</th>
+                                    <th>Foto</th>
+                                    <th>Peso (Kg)</th>
+                                    <th>Origen</th>  
+                                </tr>
+                            </thead>
+
+                            <tfoot>
+                                <tr>
+                                    <th>Acci&oacute;n</th>
+                                    <th>Codigo</th>
+                                    <th>Nombre o Alias</th>
+                                    <th>Sexo</th>
+                                    <th>Raza</th>
+                                    <th>Foto</th>
+                                    <th>Peso (Kg)</th>
+                                    <th>Origen</th>  
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+  
+                  </div>
+
+            </div>
+            <div class="modal-footer justify-content-between" style="background: #f5f4f3 !important">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">
+                    Cerrar
+                </button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+
+<script src="static/js/galpon.js"></script>
+  
+<script>
+    //// para controlar las fecha de dias depues y dias antes
+    var fecha_inicioo;
+    var fecha_finn;
+    
+    fechai = new Date();
+    fechaf = new Date();
+    dia = fechai.getDate();
+    mes = fechai.getMonth()+1;// +1 porque los meses empiezan en 0
+    anio = fechai.getFullYear();
+    fechaf.setDate(fechaf.getDate() + 160);
+  
+    fecha_inicioo =  fechai.getFullYear() + "-" + (fechai.getMonth()+1) + "-" + (fechai.getDate()-6);  
+    fecha_finn = fechaf.getFullYear()  + "-" + (fechaf.getMonth()+1) + "-" + fechaf.getDate();
+
+    $(".id_galpon").select2();
+    listar_cerdo_galpon();
+
+    $(document).ready(function() {
+        var n = new Date();
+        var y = n.getFullYear();
+        var m = n.getMonth() + 1;
+        var d = n.getDate();
+        if (d < 10) {
+            d = '0' + d;
+        }
+        if (m < 10) {
+            m = '0' + m;
+        }
+        document.getElementById("fecha_i").value = y + "-" + m + "-" + d; 
+        document.getElementById("fecha_f").value = y + "-" + m + "-" + d; 
+
+        mostar_fecha(fecha_inicioo, fecha_finn);
+    });
+
+    $("#id_galpon").on("change", function(){
+
+      var id = $(this).val();
+      $("#tbody_tabla_galpo_cerdo").empty();
+
+      if(id == 0 || id == "0"){
+        $("#capacidad").val("0");
+        return false;
+      }
+      
+      $.ajax({
+        url: "/galpon/traer_capacidad_galponn",
+        type: "POST", 
+        data: {id: id}, 
+        success: function (resp) {
+          $("#capacidad").val(resp);
+          $(".Capacidad_C").LoadingOverlay("hide");
+        },
+        beforeSend: function () {
+          $(".Capacidad_C").LoadingOverlay("show");
+        },
+      });
+    });
+
+    ///para saber la semana que transcurren entre 2 fechas
+    function calcularDiferenciaSemanas(fecha1, fecha2) {
+        if (!(fecha1 instanceof Date) || !(fecha2 instanceof Date)) {
+            throw TypeError('Ambos argumentos deben ser objetos de tipo fecha (Date).');
+        }
+    
+        let diferencia = (fecha2.getTime() - fecha1.getTime()) / 1000;
+        diferencia /= (60 * 60 * 24 * 7);
+    
+        return Math.abs(Math.round(diferencia));
+    }
+
+    $("#fecha_i").on("change", function(){
+      ver_semanas();
+    });
+
+    $("#fecha_f").on("change", function(){
+      ver_semanas();
+    });
+ 
+    function ver_semanas(){
+
+      var fechaii = document.getElementById("fecha_i").value
+      var fechaff = document.getElementById("fecha_f").value
+
+      if (fechaii > fechaff) {
+        $("#semanas").val("");
+        return Swal.fire(
+            "Mensaje de advertencia",
+            "La fecha inicio '" +
+            fechaii +
+            "' es mayor a la fecha final '" +
+            fechaff +
+            "'",
+            "warning"
+        );
+      }
+
+      let d_fechai = fechaii.split('-');
+      let d_fechaf = fechaff.split('-');
+
+      try {
+        let semana = calcularDiferenciaSemanas(new Date(d_fechai[0], d_fechai[1], d_fechai[2]), new Date(d_fechaf[0], d_fechaf[1], d_fechaf[2])); // 52
+        if(semana == 0 || semana == "0"){
+          semana = parseInt(1);
+        }
+        $("#semanas").val(semana);
+      } catch (e) {
+          console.log(`Error: ${e.message}`);
+      }
+
+    }
+
+</script>

@@ -571,8 +571,11 @@ function listado_cerdos() {
         },
       },
       { data: "peso" },
+      { data: "etapa" },
       { data: "origen" },
       { data: "fecha" },
+      { data: "tipo_ingreso" },
+      { data: "costo" },
       { data: "detalle" },
       {
         data: "estado",
@@ -834,6 +837,10 @@ $("#tabla_cerdo_").on("click", ".editar", function () {
   $("#origen").val(data.origen);
   $("#fecha").val(data.fecha);
 
+  $("#tipo_ingreso").val(data.tipo_ingreso);
+  $("#costo").val(data.costo);
+  $("#etapa").val(data.etapa);
+
   mostar_fecha(data.fecha, fecha_adelante);
 
   $("#detalle_c").val(data.detalle);
@@ -862,6 +869,10 @@ function editar_cerdos() {
   var origen = $("#origen").val();
   var fecha = $("#fecha").val();
   var detalle_c = $("#detalle_c").val();
+
+  var tipo_ingreso = $("#tipo_ingreso").val();
+  var costo = $("#costo").val();
+  var etapa = $("#etapa").val();
 
   if (
     codigo_cerdo.length == 0 ||
@@ -908,6 +919,21 @@ function editar_cerdos() {
     $("#detalle_c_obligg").html("");
   }
 
+  if(tipo_ingreso == 'Compra'){
+    if(costo == '0.00' || costo.trim() == "" || costo.length == 0) {
+      $("#costo_obligg").html("Ingrese costo de compra");
+      return swal.fire(
+        "No hay costo de compra",
+        "Ingrese costo de compra",
+        "warning"
+      );
+    }else{
+      $("#costo_obligg").html("");
+    }
+  }else{
+    $("#costo_obligg").html("");
+  }
+
   var formdata = new FormData();
 
   formdata.append("id", id);
@@ -919,6 +945,10 @@ function editar_cerdos() {
   formdata.append("origen", origen);
   formdata.append("fecha", fecha);
   formdata.append("detalle_c", detalle_c);
+
+  formdata.append("tipo_ingreso", tipo_ingreso);
+  formdata.append("costo", costo);
+  formdata.append("etapa", etapa);
 
   $.ajax({
     url: "/cerdo/editar_cerdo_chancho",

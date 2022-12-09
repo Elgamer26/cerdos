@@ -126,8 +126,8 @@ class Cerdo():
             query.execute("""SELECT
             cerdo.id_cerdo, cerdo.codigo, cerdo.nombre, cerdo.sexo, raza.raza, cerdo.raza,
             cerdo.peso, cerdo.origen, cerdo.fecha, cerdo.detalle,
-            cerdo.foto, cerdo.estado 
-            FROM cerdo INNER JOIN raza ON cerdo.raza = raza.id_raza ORDER BY id_cerdo DESC""")
+            cerdo.foto, cerdo.estado, cerdo.etapa, cerdo.tipo_ingreso, cerdo.costo
+            FROM cerdo INNER JOIN raza ON cerdo.raza = raza.id_raza WHERE cerdo.estado !=2 AND cerdo.estado !=3 ORDER BY id_cerdo DESC""")
             data = query.fetchall()
             query.close()
             new_lista = []
@@ -145,7 +145,10 @@ class Cerdo():
                 dic["fecha"] = Convert.strftime('%Y-%m-%d')
                 dic["detalle"] = datos[9]
                 dic["foto"] = datos[10]
-                dic["estado"] = datos[11]                
+                dic["estado"] = datos[11]
+                dic["etapa"] = datos[12]
+                dic["tipo_ingreso"] = datos[13]
+                dic["costo"] = datos[14]                
                 new_lista.append(dic)
             return {"data": new_lista}
         except Exception as e:
@@ -183,7 +186,7 @@ class Cerdo():
         return 0
 
     # modelo para editar el cerdo
-    def Editar_cerdo_chancho(_codigo_cerdo, _nombre, _sexo_cerdo, _raza_id, _peso, _origen, _fecha, _detalle_c, _id):
+    def Editar_cerdo_chancho(_codigo_cerdo, _nombre, _sexo_cerdo, _raza_id, _peso, _origen, _fecha, _detalle_c, _tipo_ingreso, _costo, _etapa, _id):
         try:
             query = mysql.connection.cursor()
             query.execute('SELECT * FROM cerdo WHERE codigo = "{0}" AND id_cerdo != "{1}"'. format(_codigo_cerdo,_id))
@@ -192,7 +195,7 @@ class Cerdo():
                 query.execute('SELECT * FROM cerdo WHERE nombre = "{0}" AND id_cerdo != "{1}"'. format(_nombre,_id))
                 data_n = query.fetchone()
                 if not data_n:
-                    query.execute('UPDATE cerdo SET codigo="{0}",nombre="{1}",sexo="{2}",raza="{3}",peso="{4}",origen="{5}",fecha="{6}",detalle="{7}" WHERE id_cerdo="{8}"'.format(_codigo_cerdo,_nombre,_sexo_cerdo,_raza_id,_peso,_origen,_fecha,_detalle_c,_id))
+                    query.execute('UPDATE cerdo SET codigo="{0}",nombre="{1}",sexo="{2}",raza="{3}",peso="{4}",origen="{5}",fecha="{6}",detalle="{7}",etapa="{8}",tipo_ingreso="{9}",costo="{10}" WHERE id_cerdo="{11}"'.format(_codigo_cerdo,_nombre,_sexo_cerdo,_raza_id,_peso,_origen,_fecha,_detalle_c,_etapa, _tipo_ingreso, _costo, _id))
                     query.connection.commit()
                     query.close()
                     return 1  # se inserto correcto
@@ -231,19 +234,20 @@ class Cerdo():
         try:
             query = mysql.connection.cursor()
             query.execute("""SELECT
-                        muertes.id,
-                        muertes.id_cerdo,
-                        cerdo.codigo,
-                        cerdo.sexo,
-                        raza.raza,
-                        cerdo.peso,
-                        muertes.fecha,
-                        muertes.detalle,
-                        muertes.estado 
-                    FROM
-                        cerdo
-                        INNER JOIN muertes ON cerdo.id_cerdo = muertes.id_cerdo
-                        INNER JOIN raza ON cerdo.raza = raza.id_raza ORDER BY id DESC""")
+                            muertes.id,
+                            CONCAT_WS( ' ', cerdo.codigo, raza.raza, cerdo.sexo ) AS cerdo,
+                            muertes.fecha,
+                            muertes.motivo, 
+                            muertes.hora,
+                            muertes.semana,
+                            DATE( muertes.f_registro ) AS fecha_r,
+                            TIME( muertes.f_registro ) AS hora_r 
+                            FROM
+                            cerdo
+                            INNER JOIN raza ON cerdo.raza = raza.id_raza
+                            INNER JOIN muertes ON cerdo.id_cerdo = muertes.id_cerdo  
+                            ORDER BY
+                            muertes.f_registro DESC""")
             data = query.fetchall()
             query.close()
             return data 

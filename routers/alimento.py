@@ -106,6 +106,13 @@ def listar_alimentos():
     if request.method == 'GET':
         dato = Alimento.Listar_alimentos()
         return jsonify(dato)
+    
+# controlador para listar marca de alimento lote
+@alimento.route('/listar_lote_alimento', methods=['GET'])
+def listar_lote_alimento():
+    if request.method == 'GET':
+        dato = Alimento.Listar_lote_alimento()
+        return jsonify(dato)
         
 # controlador para estado de alimento
 @alimento.route('/estado_alimento', methods=['POST'])
@@ -114,6 +121,14 @@ def estado_alimento():
         _id = request.form['id']     
         _dato = request.form['dato']
         dato = Alimento.Estado_alimento(_id,_dato)
+        return jsonify(dato)
+    
+# eliminar lote de alimento
+@alimento.route('/eliminar_lote_alimento', methods=['POST'])
+def eliminar_lote_alimento():
+    if request.method == 'POST':
+        _id = request.form['id']      
+        dato = Alimento.Eliminar_lote_alimento(_id)
         return jsonify(dato)
 
 # controlador para cambiar la foto del alimento
@@ -200,6 +215,22 @@ def select_alimento_cerdo():
         dato = Alimento.Select_alimento_cerdo(_id)
         return jsonify(dato)
     
+# controlador para el select del alimento del cerdo por lotes
+@alimento.route('/select_alimento_cerdo_lote', methods=['POST'])
+def select_alimento_cerdo_lote():
+    if request.method == 'POST':
+        _id = request.form['id'] 
+        dato = Alimento.Select_alimento_cerdo_lote(_id)
+        return jsonify(dato)
+    
+# controlador para traer cantidas kg lotes
+@alimento.route('/traer_cantidad_lote_kg', methods=['POST'])
+def traer_cantidad_lote_kg():
+    if request.method == 'POST':
+        _id = request.form['id'] 
+        dato = Alimento.Traer_cantidad_lote_kg(_id)
+        return jsonify(dato)
+    
 # controlador para traer la cantidad de sacos de alimento
 @alimento.route('/traer_cantida_saco_alimento', methods=['POST'])
 def traer_cantida_saco_alimento():
@@ -236,7 +267,7 @@ def guardar_la_alimentacion():
         _observacion = request.form['observacion'] 
         
         dato = Alimento.Guardar_la_alimentacion(_alimento_id, _tipo_id, _fecha_c, _cantidad_sacos, _observacion, _id)
-        print(dato)
+        
         return str(dato)
 
 # controlador para registra el detalle de alimentacion del cerdo
@@ -259,19 +290,19 @@ def guardar_detalle_alimentacion():
 @alimento.route('/guardar_pesaje_cerdo', methods=['POST'])
 def guardar_pesaje_cerdo():
     if request.method == 'POST':
-        _id = request.form['cerdo_id']
-        _fecha_c = request.form['fecha_c']
-        _metodo = request.form['metodo']  
-        _estado = request.form['estado_c']
-        _observacion = request.form['observacion']
-        _p_a = request.form['peso_actual']  
         
-        _p_b = request.form['p_b']  
-        _p_t = request.form['p_t']
-        _l_c = request.form['l_c']
-        _p_v = request.form['p_v'] 
+        id = request.form['id']
+        peso_pasado = request.form['peso_actual']
+        metodo = request.form['metodo']  
+        observacion = request.form['observacion']
+        etapa_fase = request.form['etapa_fase']
+        nuevo_pesaje = request.form['nuevo_pesaje']  
+        semana = request.form['semana'] 
+        
+        perimetro_t = request.form['perimetro_t']  
+        largo_c = request.form['largo_c'] 
 
-        dato = Alimento.Guardar_peso_cerdo(_id,_fecha_c,_metodo,_estado,_observacion,_p_a,_p_b,_p_t,_l_c,_p_v)  
+        dato = Alimento.Guardar_peso_cerdo(id,peso_pasado,metodo,observacion,etapa_fase,nuevo_pesaje,perimetro_t,largo_c,semana)  
         return str(dato)
 
 # controlador para traer los datos del pessaje del cerdo
@@ -298,3 +329,231 @@ def eliminar_peso():
         
         dato = Alimento.Eliminar_peso(_id)
         return str(dato)
+
+
+
+################
+############### corregido 
+@alimento.route('/registrar_toda_alimentacion', methods=['POST'])
+def registrar_toda_alimentacion():
+    if request.method == 'POST':
+        _id = session['id_usu']
+        _alimento_id = request.form['alimento_id']
+        _tipo_id = request.form['tipo_id']
+        _fecha_c = request.form['fecha_c']
+        _cantidad_kg = request.form['cantidad_kg']
+        _observacion = request.form['observacion'] 
+        _semana = request.form['semana'] 
+        _lote_id = request.form['lote_id'] 
+        _idcerdo = request.form['idcerdo'] 
+        
+        dato = Alimento.Registrar_toda_alimentacion(_alimento_id, _tipo_id, _fecha_c, _cantidad_kg, _observacion, _semana, _id, _lote_id, _idcerdo)
+        return str(dato)
+    
+@alimento.route('/registrar_toda_alimentacion_full', methods=['POST'])
+def registrar_toda_alimentacion_full():
+    if request.method == 'POST':
+
+        _id = session['id_usu']
+        _alimento_id = request.form['alimento_id']
+        _tipo_id = request.form['tipo_id']
+        _fecha_c = request.form['fecha_c']
+        _cantidad_kg = request.form['cantidad_kg']
+        _observacion = request.form['observacion'] 
+        _semana = request.form['semana'] 
+        _lote_id = request.form['lote_id'] 
+        _id_c = request.form['id_c'] 
+        
+        id_cerdo = _id_c.split(",") 
+        
+        for valor in zip(id_cerdo):
+            dato = Alimento.Registrar_toda_alimentacion(_alimento_id, _tipo_id, _fecha_c, _cantidad_kg, _observacion, _semana, _id, _lote_id, valor[0])
+        return jsonify(dato)
+
+@alimento.route('/guardar_detalle_alimentacion_todo', methods=['POST'])
+def guardar_detalle_alimentacion_todo():
+    if request.method == 'POST':
+
+        _id = request.form['id']
+        _id_c = request.form['id_c']  
+
+        id_c = _id_c.split(",") 
+
+        for valor in zip(id_c):
+            dato = Alimento.Guardar_detalle_alimentacion_todo(_id, valor[0])  
+        return jsonify(dato)
+
+# controlador para registra el detalle de alimentacion del cerdo
+@alimento.route('/guardar_detalle_alimentacion_uni', methods=['POST'])
+def guardar_detalle_alimentacion_uni():
+    if request.method == 'POST':
+
+        _id = request.form['id']
+        _idcerdo = request.form['idcerdo']  
+
+        dato = Alimento.Guardar_detalle_alimentacion_todo(_id, _idcerdo)  
+        return jsonify(dato)
+
+# controlador para traer los datos del pessaje del cerdo
+@alimento.route('/listar_aliento_cerdo', methods=['POST'])
+def listar_aliento_cerdo():
+    if request.method == 'POST':
+        _id = request.form['id'] 
+        dato = Alimento.Listar_aliento_cerdo(_id)  
+        return jsonify(dato)
+
+@alimento.route('/listar_aliento_cerdo_seguimineto', methods=['POST'])
+def listar_aliento_cerdo_seguimineto():
+    if request.method == 'POST':
+        _id = request.form['id'] 
+        dato = Alimento.Listar_aliento_cerdo_seguimiento(_id)  
+        return jsonify(dato)
+    
+@alimento.route('/listar_pesaje_cerdo', methods=['POST'])
+def listar_pesaje_cerdo():
+    if request.method == 'POST':
+        _id = request.form['id'] 
+        dato = Alimento.Listar_pesaje_cerdo(_id)  
+        return jsonify(dato)
+    
+@alimento.route('/listar_pesaje_cerdo_seguimiento', methods=['POST'])
+def listar_pesaje_cerdo_seguimiento():
+    if request.method == 'POST':
+        _id = request.form['id'] 
+        dato = Alimento.Listar_pesaje_cerdo_seguimeinto(_id)  
+        return jsonify(dato)
+    
+@alimento.route('/select_vacuna_lote_all', methods=['POST'])
+def select_vacuna_lote_all():
+    if request.method == 'POST':
+        id = request.form['id']
+        dato = Alimento.Select_vacuna_lote_all(id)         
+        return jsonify(dato)
+
+@alimento.route('/select_desparasitante_lote_all', methods=['POST'])
+def select_desparasitante_lote_all():
+    if request.method == 'POST':
+        id = request.form['id']
+        dato = Alimento.Select_desparasitante_lote_all(id)         
+        return jsonify(dato)
+    
+@alimento.route('/traer_cantidad_dosis_lote', methods=['POST'])
+def traer_cantidad_dosis_lote():
+    if request.method == 'POST':
+        id = request.form['id']
+        dato = Alimento.Traer_cantidad_dosis_lote(id)         
+        return jsonify(dato)
+
+@alimento.route('/traer_cantidad_desparasitante_lote', methods=['POST'])
+def traer_cantidad_desparasitante_lote():
+    if request.method == 'POST':
+        id = request.form['id']
+        dato = Alimento.Traer_cantidad_desparasitante_lote(id)         
+        return jsonify(dato)
+
+@alimento.route('/guardar_vacunasaa_cerdoo', methods=['POST'])
+def guardar_vacunasaa_cerdoo():
+    if request.method == 'POST':
+        
+        _id_v = request.form['id_vacuna']
+        _id_l = request.form['id_lote']
+        _cantidad = request.form['cantidad']
+        _semana = request.form['semana'] 
+        _id_c = request.form['id_c'] 
+        
+        dato = Alimento.Guardar_vacunasaa_cerdoo(_id_v, _id_l, _cantidad, _semana, _id_c)
+        return str(dato)
+
+@alimento.route('/listar_vacunasa_cerdo', methods=['POST'])
+def listar_vacunasa_cerdo():
+    if request.method == 'POST':
+        _id = request.form['id'] 
+        dato = Alimento.Listar_vacunasa_cerdo(_id)  
+        return jsonify(dato)
+    
+@alimento.route('/listar_vacunasa_cerdo_seguimineto', methods=['POST'])
+def listar_vacunasa_cerdo_seguimineto():
+    if request.method == 'POST':
+        _id = request.form['id'] 
+        dato = Alimento.Listar_vacunasa_cerdo_seguimineto(_id)  
+        return jsonify(dato)
+    
+@alimento.route('/ver_cerdos_muertos_galpon', methods=['POST'])
+def ver_cerdos_muertos_galpon():
+    if request.method == 'POST':
+        _id = request.form['id'] 
+        dato = Alimento.Ver_cerdos_muertos_galpon(_id)  
+        return jsonify(dato)
+   
+# controlador para registra las vacunas de todo los cerdos
+@alimento.route('/guardar_vacunasaa_cerdoo_todo', methods=['POST'])
+def guardar_vacunasaa_cerdoo_todo():
+    if request.method == 'POST':
+
+        id_vacuna = request.form['id_vacuna']
+        id_lote = request.form['id_lote']
+        cantidad = request.form['cantidad']  
+        semana = request.form['semana']
+        _idc = request.form['id_c']   
+
+        id_cerdo = _idc.split(",") 
+
+        for valor in zip(id_cerdo):
+            dato = Alimento.Guardar_vacunasaa_cerdoo(id_vacuna, id_lote, cantidad, semana, valor[0])  
+        return jsonify(dato)
+
+@alimento.route('/guardar_muerte_cerdo', methods=['POST'])
+def guardar_muerte_cerdo():
+    if request.method == 'POST':
+        id_cerdo = request.form['id_cerdo']
+        ig_galpon = request.form['ig_galpon']
+        fecha = request.form['fecha']
+        hora = request.form['hora'] 
+        motivo_muerte = request.form['motivo_muerte'] 
+        semana = request.form['semana'] 
+        dato = Alimento.Guardar_muerte_cerdo(id_cerdo, ig_galpon, fecha, hora, motivo_muerte, semana)
+        return str(dato)
+
+@alimento.route('/guardar_desparasitantee_cerdoo', methods=['POST'])
+def guardar_desparasitantee_cerdoo():
+    if request.method == 'POST':
+        
+        _id_d = request.form['id_desparasitante']
+        _id_l = request.form['id_lote']
+        _cantidad = request.form['cantidad']
+        _semana = request.form['semana'] 
+        _id_c = request.form['id_c'] 
+        
+        dato = Alimento.Guardar_desparasitantee_cerdoo(_id_d, _id_l, _cantidad, _semana, _id_c)
+        return str(dato)
+
+@alimento.route('/guardar_desparasitantee_cerdoo_todo', methods=['POST'])
+def guardar_desparasitantee_cerdoo_todo():
+    if request.method == 'POST':
+
+        _id_d = request.form['id_desparasitante']
+        _id_l = request.form['id_lote']
+        _cantidad = request.form['cantidad']
+        _semana = request.form['semana'] 
+        _id_c = request.form['id_c'] 
+        
+        id_cerdo = _id_c.split(",") 
+        
+        for valor in zip(id_cerdo):
+            dato = Alimento.Guardar_desparasitantee_cerdoo(_id_d, _id_l, _cantidad, _semana, valor[0]) 
+        return jsonify(dato)
+
+@alimento.route('/listar_desparasitantess_cerdo', methods=['POST'])
+def listar_desparasitantess_cerdo():
+    if request.method == 'POST':
+        _id = request.form['id'] 
+        dato = Alimento.Listar_desparasitantess_cerdo(_id)  
+        return jsonify(dato)
+    
+@alimento.route('/listar_desparasitantess_cerdo_seguimiento', methods=['POST'])
+def listar_desparasitantess_cerdo_seguimiento():
+    if request.method == 'POST':
+        _id = request.form['id'] 
+        dato = Alimento.Listar_desparasitantess_cerdo_seguimiento(_id)  
+        return jsonify(dato)
+   

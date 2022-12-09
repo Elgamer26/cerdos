@@ -38,6 +38,9 @@
                             <li class="nav-item">
                               <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">Registro de vacunas</a>
                             </li> 
+                            <li class="nav-item">
+                              <a class="nav-link" id="lote-profile-tab" data-toggle="pill" href="#lote-profile" role="tab" aria-controls="lote-profile" aria-selected="false">Lote de vacunas</a>
+                            </li> 
                           </ul>
                           <div class="tab-content" id="pills-tabContent">
 
@@ -54,41 +57,39 @@
                                         <div class="form-group col-lg-12 col-12">
                   
                                           <table
-                                          id="tabla_vacunas"
-                                          class="table table-display table-hover responsive nowrap text-center"
-                                          style="width: 100%" >
-                                          <thead>
-                                            <tr>
-                                              <th>#</th>
-                                              <th>Acci&oacute;n</th>
-                                              <th>Código</th>
-                                              <th>Nombre</th>
-                                              <th>Tipo insumo</th> 
-                                              <th>Foto</th>
-                                              <th>Presentación</th>
-                                              <th>Cantidad</th>
-                                              <th>Precio</th>                                           
-                                              <th>Detalle del insumo</th>
-                                              <th>Estado</th> 
-                                            </tr>
-                                          </thead>
-                      
-                                          <tfoot>
-                                            <tr>
-                                              <th>#</th>
-                                              <th>Acci&oacute;n</th>
-                                              <th>Código</th>
-                                              <th>Nombre</th>
-                                              <th>Tipo insumo</th> 
-                                              <th>Foto</th>
-                                              <th>Presentación</th>
-                                              <th>Cantidad</th>
-                                              <th>Precio</th>                                           
-                                              <th>Detalle del insumo</th>
-                                              <th>Estado</th> 
-                                            </tr>
-                                          </tfoot>
-                                        </table>
+                                            id="tabla_vacunas"
+                                            class="table table-display table-hover responsive nowrap text-center"
+                                            style="width: 100%" >
+                                            <thead>
+                                              <tr>
+                                                <th>#</th>
+                                                <th>Acci&oacute;n</th>
+                                                <th>Código</th>
+                                                <th>Nombre</th>
+                                                <th>Tipo vacuna</th> 
+                                                <th>Foto</th>
+                                                <th>Presentación</th> 
+                                                <th>Precio</th>                                           
+                                                <th>Detalle del insumo</th>
+                                                <th>Estado</th> 
+                                              </tr>
+                                            </thead>
+                        
+                                            <tfoot>
+                                              <tr>
+                                                <th>#</th>
+                                                <th>Acci&oacute;n</th>
+                                                <th>Código</th>
+                                                <th>Nombre</th>
+                                                <th>Tipo vacuna</th> 
+                                                <th>Foto</th>
+                                                <th>Presentación</th> 
+                                                <th>Precio</th>                                           
+                                                <th>Detalle del insumo</th>
+                                                <th>Estado</th> 
+                                              </tr>
+                                            </tfoot>
+                                          </table>
  
                                         </div>
                       
@@ -136,23 +137,35 @@
                                           <span style="color: red" id="tipo_obligg"></span>
                                     </div>
 
-                                    <div class="form-group col-lg-3 col-6">
-                                          <label for="cantidad">Cantidad</label>
-                                          <input type="text" maxlength="5" class="form-control" value="1" id="cantidad" placeholder="Ingrese cantidad" onkeypress="return soloNumeros(event)" />
-                                          <span style="color: red" id="cantidad_obligg"></span>
+                                    <div class="form-group col-lg-2 col-6">
+                                          <label for="cantidad_dosis">Cantidad de dosis</label>
+                                          <input type="text" maxlength="5" class="form-control" onkeypress="return soloNumeros(event)" id="cantidad_dosis" placeholder="Cantidad de dosis" onkeypress="return soloNumeros(event)" />
+                                          <span style="color: red" id="cantidad_dosis_obligg"></span>
                                     </div>
 
-                                    <div class="form-group col-lg-3 col-6">
+                                    <div hidden class="form-group col-lg-3 col-6">
+                                      <label for="cantidad">Cantidad</label>
+                                      <input type="text" maxlength="5" class="form-control" value="1" id="cantidad" placeholder="Ingrese cantidad" onkeypress="return soloNumeros(event)" />
+                                      <span style="color: red" id="cantidad_obligg"></span>
+                                    </div>
+
+                                    <div class="form-group col-lg-2 col-6">
                                         <label for="precio_c">Precio compra</label>
                                         <input type="text" max="10" class="form-control" id="precio_c" placeholder="Ingrese precio" onkeypress="return filterfloat(event, this);"/>
                                         <span style="color: red" id="precio_obligg"></span>
                                     </div>
                                     
-                                    <div class="form-group col-lg-6 col-6">
+                                    <div class="form-group col-lg-4 col-6">
                                           <label for="presentacion">Presentación</label>
                                           <input type="text" maxlength="150" class="form-control" id="presentacion" placeholder="Ingrese presentación" />
                                           <span style="color: red" id="presentacion_obligg"></span>
-                                    </div>   
+                                    </div>  
+                                    
+                                    <div class="form-group col-lg-4 col-6">
+                                      <label for="registro_sani">Registro sanitario</label>
+                                      <input type="text" maxlength="150" class="form-control" id="registro_sani" placeholder="Ingrese registro sanitario" />
+                                      <span style="color: red" id="registro_sani_obligg"></span>
+                                    </div>  
         
                                     <div class="form-group col-lg-12 col-6">
                                             <label for="detalle_v">Detalle de la vacuna del cerdo</label>
@@ -186,7 +199,66 @@
 
                               </div>
 
-                          </div> 
+                            </div> 
+
+                            <div class="tab-pane fade" id="lote-profile" role="tabpanel" aria-labelledby="lote-profile-tab">
+
+                              <div class="card card-success">
+                                <div class="card-header">
+                                  <h3 class="card-title"> Lote de vacunas</h3>
+                                </div>
+                    
+                                    <div class="card-body">
+                                      <div class="row">
+                      
+                                        <div class="form-group col-lg-12 col-12">
+                  
+                                          <table
+                                              id="tabla_lote_vacuna"
+                                              class="table table-display table-hover responsive nowrap text-center"
+                                              style="width: 100%" >
+                                              <thead>
+                                            <tr>
+                                              <th>Acci&oacute;n</th>
+                                              <th>Código lote</th>
+                                              <th>Nombre</th> 
+                                              <th>Total dosis</th>  
+                                              <th>Fecha elaboración</th>
+                                              <th>Fecha expiración</th>                                           
+                                              <th>Fecha creación</th>
+                                            </tr>
+                                            </thead>
+                        
+                                            <tfoot>
+                                              <tr>
+
+                                                <th>Acci&oacute;n</th>
+                                                <th>Código lote</th>
+                                                <th>Nombre</th> 
+                                                <th>Total dosis</th>  
+                                                <th>Fecha elaboración</th>
+                                                <th>Fecha expiración</th>                                           
+                                                <th>Fecha creación</th>
+                                              </tr>
+                                            </tfoot>
+                                          </table>
+
+                                        </div>
+                      
+                                      </div>
+                                    </div>
+                
+
+                                  </div> 
+ 
+                                
+                                </div> 
+
+                           
+                              </div>
+
+                            </div> 
+
                         </div>
     
                     </div>
@@ -194,7 +266,7 @@
                 </div>
             </div>
             
-        </div>
+   
 
     </section>
   </div>
@@ -275,13 +347,13 @@
                         <span style="color: red" id="tipo_obligg_edi"></span>
                     </div>
 
-                    <div class="form-group col-lg-3 col-6">
+                    <div hidden class="form-group col-lg-3 col-6">
                         <label for="cantidad_edi">Cantidad</label>
-                        <input type="text" maxlength="5" class="form-control" value="1" id="cantidad_edi" placeholder="Ingrese cantidad" onkeypress="return soloNumeros(event)" />
+                        <input type="text" maxlength="5" class="form-control" value="0" id="cantidad_edi" placeholder="Ingrese cantidad" onkeypress="return soloNumeros(event)" />
                         <span style="color: red" id="cantidad_obligg_edi"></span>
                     </div>
 
-                    <div class="form-group col-lg-3 col-6">
+                    <div class="form-group col-lg-2 col-6">
                         <label for="precio_c_edi">Precio compra</label>
                         <input type="text" class="form-control" id="precio_c_edi" placeholder="Ingrese precio" onkeypress="return filterfloat(event, this);" />
                         <span style="color: red" id="precio_obligg_edi"></span>
@@ -291,7 +363,19 @@
                       <label for="presentacion_edit">Presentación</label>
                       <input type="text" maxlength="150" class="form-control" id="presentacion_edit" placeholder="Ingrese presentación" />
                       <span style="color: red" id="presentacion_edit_obligg"></span>
-                </div>   
+                    </div>   
+
+                    <div class="form-group col-lg-4 col-6">
+                      <label for="registro_sani_edit">Registro sanitario</label>
+                      <input type="text" maxlength="150" class="form-control" id="registro_sani_edit" placeholder="Ingrese registro sanitario" />
+                      <span style="color: red" id="registro_sani_edit_obligg"></span>
+                    </div>  
+
+                    <div class="form-group col-lg-3 col-6">
+                      <label for="cantidad_dosis_edit">Cantidad de dosis</label>
+                      <input type="text" maxlength="5" class="form-control" onkeypress="return soloNumeros(event)" id="cantidad_dosis_edit" placeholder="Cantidad de dosis" onkeypress="return soloNumeros(event)" />
+                      <span style="color: red" id="cantidad_dosis_edit_obligg"></span>
+                    </div>
 
                     <div class="form-group col-lg-12 col-6">
                           <label for="detalle_a_edi">Detalle de la vacuna del cerdo</label>
@@ -319,6 +403,8 @@
   
   <script>  
     listar_vacunas();
+    listar_lotes_vacunas();
+
     $(".tipo_id").select2(); 
     $(".tipo_id_edi").select2();
 

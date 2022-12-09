@@ -38,6 +38,9 @@
                             <li class="nav-item">
                               <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">Registro sacos de alimentos</a>
                             </li> 
+                            <li class="nav-item">
+                              <a class="nav-link" id="pills-lote-tab" data-toggle="pill" href="#pills-lote" role="tab" aria-controls="pills-lote" aria-selected="false">Lote alimento</a>
+                            </li> 
                           </ul>
                           <div class="tab-content" id="pills-tabContent">
 
@@ -150,7 +153,7 @@
                                             <span style="color: red" id="marca_obligg"></span>
                                     </div>
 
-                                    <div class="form-group col-lg-2 col-6">
+                                    <div hidden class="form-group col-lg-2 col-6">
                                           <label for="cantidad">Cantidad</label>
                                           <input type="text" maxlength="5" class="form-control" value="1" id="cantidad" placeholder="Ingrese cantidad" onkeypress="return soloNumeros(event)" />
                                           <span style="color: red" id="cantidad_obligg"></span>
@@ -164,7 +167,7 @@
                                     
                                     <div class="form-group col-lg-3 col-6">
                                           <label for="peso">Peso del saco (Kg)</label>
-                                          <input type="number" maxlength="10" class="form-control" id="peso" placeholder="Ingrese peso (Kg)" onkeypress="return filterfloat(event, this);" />
+                                          <input type="number" maxlength="10" class="form-control" id="peso" placeholder="Ingrese peso (Kg)" onkeypress="return soloNumeros(event);" />
                                           <span style="color: red" id="peso_obligg"></span>
                                     </div>    
         
@@ -200,7 +203,58 @@
 
                             </div>
 
+
                           </div> 
+
+
+                          <div class="tab-pane fade" id="pills-lote" role="tabpanel" aria-labelledby="pills-lote-tab">
+
+                            <div class="card card-info">
+                                <div class="card-header">
+                                  <h3 id="unir_texto" class="card-title"> Lote de alimento</h3>
+                                </div>
+                    
+                                <div class="card-body">
+                                  <div class="row">
+                  
+                                    <div class="form-group col-lg-12 col-12">
+              
+                                      <table
+                                      id="tabla_lote_alimento"
+                                      class="table table-display table-hover responsive nowrap text-center"
+                                      style="width: 100%" >
+                                      <thead>
+                                        <tr>
+                                          <th>Acci&oacute;n</th>
+                                          <th>Código lote</th>
+                                          <th>Nombre</th> 
+                                          <th>Total Kg</th>  
+                                          <th>Fecha elaboración</th>
+                                          <th>Fecha expiración</th>                                           
+                                          <th>Fecha creación</th>
+                                        </tr>
+                                      </thead>
+                  
+                                      <tfoot>
+                                        <tr>
+                                          <th>Acci&oacute;n</th>
+                                          <th>Código lote</th>
+                                          <th>Nombre</th> 
+                                          <th>Total Kg</th>  
+                                          <th>Fecha elaboración</th>
+                                          <th>Fecha expiración</th>                                           
+                                          <th>Fecha creación</th>
+                                        </tr>
+                                      </tfoot>
+                                    </table>
+
+                                    </div>
+                  
+                                  </div>
+                                </div>
+                            </div>
+
+                          </div>
                         </div>
     
                     </div>
@@ -301,7 +355,7 @@
                         <span style="color: red" id="marca_obligg_edi"></span>
                 </div>
 
-                <div class="form-group col-lg-2 col-6">
+                <div hidden class="form-group col-lg-2 col-6">
                       <label for="cantidad_edi">Cantidad</label>
                       <input type="text" maxlength="5" class="form-control" value="1" id="cantidad_edi" placeholder="Ingrese cantidad" onkeypress="return soloNumeros(event)" />
                       <span style="color: red" id="cantidad_obligg_edi"></span>
@@ -315,7 +369,7 @@
                 
                 <div class="form-group col-lg-3 col-6">
                       <label for="peso_edi">Peso del saco (Kg)</label>
-                      <input type="text" maxlength="10" class="form-control" id="peso_edi" placeholder="Ingrese peso (Kg)" onkeypress="return filterfloat(event, this);" />
+                      <input type="text" maxlength="10" class="form-control" id="peso_edi" placeholder="Ingrese peso (Kg)" onkeypress="return soloNumeros(event);" />
                       <span style="color: red" id="peso_obligg_edi"></span>
                 </div>    
 
@@ -346,6 +400,8 @@
   
   <script>  
     listado_alimento_cerdo();
+    listar_lote_alimento();
+
     $(".tipo_id").select2();
     $(".marca_id").select2();
 
@@ -377,6 +433,6 @@
               .height(197);
           return (document.getElementById("foto").value = "");
       }
-   }
+    }
   </script>
   

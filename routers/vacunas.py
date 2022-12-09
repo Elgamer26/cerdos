@@ -91,13 +91,17 @@ def crear_vacuna_cerdos():
         _precio = request.form['precio'] 
         _detalle = request.form['detalle']
         _presentacion = request.form['presentacion']
+        
+        _registro_sani = request.form['registro_sani']
+        _cantidad_dosis = request.form['cantidad_dosis']
+        
         _foto = request.files.get("foto", False)
 
         if _foto:
             # cerdo con foto
             hora_ac = time.strftime('%Y%m%d%H%M%S_', time.localtime())
             archivo = hora_ac + _foto.filename             
-            dato = Vacunas.Crear_vacuna(_codigo, _nombre, _tipo, _cantidad, _precio, _detalle, _presentacion, archivo)
+            dato = Vacunas.Crear_vacuna(_codigo, _nombre, _tipo, _cantidad, _precio, _detalle, _presentacion, archivo, _registro_sani, _cantidad_dosis)
             if dato == 1:
                 _foto.save(PATH_FILE + archivo)
                 return str(dato)
@@ -106,7 +110,7 @@ def crear_vacuna_cerdos():
         else:
             # cerdo sin foto
             archivo = "vacuna.jpg"
-            dato = Vacunas.Crear_vacuna(_codigo, _nombre, _tipo, _cantidad, _precio, _detalle, _presentacion, archivo)
+            dato = Vacunas.Crear_vacuna(_codigo, _nombre, _tipo, _cantidad, _precio, _detalle, _presentacion, archivo, _registro_sani, _cantidad_dosis)
             return str(dato)
 
 # controlador para listar la vacunas
@@ -114,6 +118,13 @@ def crear_vacuna_cerdos():
 def listar_vacunas():
     if request.method == 'GET':
         dato = Vacunas.Listar_vacunas()
+        return jsonify(dato)
+    
+# controlador para listar la vacunas lotes
+@vacunas.route('/listar_vacunas_lotes', methods=['GET'])
+def listar_vacunas_lotes():
+    if request.method == 'GET':
+        dato = Vacunas.Listar_vacunas_lotes()
         return jsonify(dato)
 
 # controlador para cambiar el estado de la vacuna
@@ -123,6 +134,14 @@ def estado_vacuna():
         _id = request.form['id']    
         _dato = request.form['dato']
         dato = Vacunas.Estado_vacuna(_id,_dato)
+        return jsonify(dato)
+    
+#para eliminra  el lot de vacunas
+@vacunas.route('/eliminar_lote_vacuna_a', methods=['POST'])
+def eliminar_lote_vacuna_a():
+    if request.method == 'POST':   
+        _id = request.form['id']     
+        dato = Vacunas.Eliminar_lote_vacuna(_id)
         return jsonify(dato)
 
 # controlador para editar la vacuna
@@ -137,8 +156,11 @@ def editar_vacuna():
         _precio = request.form['precio'] 
         _detalle = request.form['detalle']
         _presentacion = request.form['presentacion'] 
+        
+        _registro_sani = request.form['registro_sani']
+        _cantidad_dosis = request.form['cantidad_dosis'] 
 
-        dato = Vacunas.Editar_vacuna(_codigo, _nombre, _tipo, _cantidad, _precio, _detalle, _presentacion, _id)
+        dato = Vacunas.Editar_vacuna(_codigo, _nombre, _tipo, _cantidad, _precio, _detalle, _presentacion, _id, _registro_sani, _cantidad_dosis)
         return str(dato)
 
 # controlador para cambiar la foto de la vacuna

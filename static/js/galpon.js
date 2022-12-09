@@ -840,10 +840,11 @@ $("#tabla_cerdo_sin_galpon").on("click", ".enviar", function () {
   var foto = data.foto;
   var peso = data.peso;
   var origen = data.origen;
-  var fecha = $("#fecha_g").val();
+  var fecha = $("#fecha_i").val();
   var galpon_n = $("#id_galpon").val();
+  var count = 1;
 
-  var disponibe = $("#disponibe").val();
+  var capacidad = $("#capacidad").val();
 
   if (galpon_n == "0" || galpon_n.length == 0) {
     $("#model_cerdos_sin_galpon").modal("hide");
@@ -857,19 +858,33 @@ $("#tabla_cerdo_sin_galpon").on("click", ".enviar", function () {
     $("#id_galpon_obligg").html("");
   }
 
-  if (verificar_cerdo_id(id)) {
-    return Swal.fire(
-      "Mensaje de advertencia",
-      "El cerdo: '" +
-        codigo +
-        " - Raza: " +
-        raza +
-        "' , ya fue agregado al detalle",
+  $("#tabla_galpo_cerdo tbody#tbody_tabla_galpo_cerdo tr").each(function () {
+    count++;
+  });
+
+  if (count > capacidad) {
+    return swal.fire(
+      "No hay capacidad en gálpon",
+      "La capacidad del gálpon es: " + capacidad + ", no hay capacidad para mas de " + capacidad + " ",
       "warning"
     );
   }
 
-  $("#disponibe").val(parseInt(disponibe) + parseInt(1));
+
+
+  if (verificar_cerdo_id(id)) {
+    return Swal.fire(
+      "Mensaje de advertencia",
+      "El cerdo: '" +
+      codigo +
+      " - Raza: " +
+      raza +
+      "' , ya fue agregado al detalle",
+      "warning"
+    );
+  }
+
+
 
   var datos_agg = "<tr>";
   datos_agg += "<td hidden for='id'>" + id + "</td>";
@@ -899,12 +914,6 @@ function remove_cergo(t) {
   var tr = td.parentNode;
   var table = tr.parentNode;
   table.removeChild(tr);
-
-  var disponibe = $("#disponibe").val();
-  $("#disponibe").val(parseInt(disponibe) - parseInt(1));
-  if (parseInt($("#disponibe").val()) < 0) {
-    $("#disponibe").val("0");
-  }
 }
 
 function verificar_cerdo_id(id) {
@@ -1144,6 +1153,134 @@ function editar_cambios_galpon_datos() {
         return Swal.fire(
           "Error",
           "Error al pasar los cerdos a otro galpón!",
+          "error"
+        );
+      }
+    },
+    beforeSend: function () {
+      $(".card").LoadingOverlay("show", {
+        text: "Cargando...",
+      });
+    },
+  });
+}
+
+
+//////////////////coreccion del galpon
+function registrar_cerdo_galpon_coreccion() {
+  Swal.fire({
+    title: "Guardar registro?",
+    text: "El registro del galpón cerdo se guardará!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Si, guardar!",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      registra_datos_new();
+    }
+  });
+}
+
+function registra_datos_new() {
+  var id_galpon = $("#id_galpon").val();
+  var fecha_i = $("#fecha_i").val();
+  var fecha_f = $("#fecha_f").val();
+  var semanas = $("#semanas").val();
+
+  if (id_galpon == "0" || id_galpon.length == 0) {
+    $("#id_galpon_obligg").html("Seleccione el galpón");
+    return swal.fire(
+      "Seleccione el galpón",
+      "Debe seleccionar el galpón para ingresar al cerdo",
+      "warning"
+    );
+  } else {
+    $("#id_galpon_obligg").html("");
+  }
+
+  if (semanas == "0" || semanas.trim() == "" || semanas.length == 0) {
+    $("#semana_obligg").html("No hay semanas"); 
+
+    return swal.fire(
+      "No hay semanas",
+      "Ingrese semana de control de los cerdos",
+      "warning"
+    );
+  } else {
+    $("#semana_obligg").html(""); 
+  }
+
+  var count = 0;
+
+  $("#tabla_galpo_cerdo tbody#tbody_tabla_galpo_cerdo tr").each(function () {
+    count++;
+  });
+
+  if (parseInt(count) == 0) {
+    $("#detalle_tabla").html("No hay datos en la tabla de los cerdos");
+    return swal.fire("No hay cerdos", "Ingrese cerdos en la tabla", "warning");
+  } else {
+    $("#detalle_tabla").html("");
+  }
+
+  $.ajax({
+    url: "/galpon/registrar_cerdo_galpon_new",
+    type: "POST",
+    data: { id_galpon: id_galpon, fecha_i: fecha_i, fecha_f: fecha_f, semanas: semanas },
+    success: function (resp) {     
+      if (resp > 0) {
+        detalle_galpon_cerdo(parseInt(resp));
+      } else {
+        $(".card").LoadingOverlay("hide");
+        return Swal.fire(
+          "Error",
+          "Error al registra los datos en el sistema!",
+          "error"
+        );
+      }
+    },
+    beforeSend: function () {
+      $(".card").LoadingOverlay("show", {
+        text: "Cargando...",
+      });
+    },
+  });
+}
+
+function detalle_galpon_cerdo(id) {
+  var count = 0;
+  var arrego_id = new Array();
+  var arreglo_fecha = new Array();
+
+  $("#tabla_galpo_cerdo tbody#tbody_tabla_galpo_cerdo tr").each(function () {
+    arrego_id.push($(this).find("td").eq(0).text());
+    arreglo_fecha.push($(this).find("td").eq(1).text());
+    count++;
+  });
+
+  var id_c = arrego_id.toString();
+  var fecha = arreglo_fecha.toString();
+
+  $.ajax({
+    url: "/galpon/registrar_detalle_cerdo_galpon",
+    type: "POST",
+    data: { id: id, id_c: id_c, fecha: fecha },
+    success: function (resp) {
+
+      if (resp == 1) {
+        $(".card").LoadingOverlay("hide");
+        cargar_contenido("contenido_principal", "/galpones_cerdoss");
+        return Swal.fire(
+          "Datos registrados",
+          "Los cerdos se registrarón el en galpón!",
+          "success"
+        );
+      } else {
+        return Swal.fire(
+          "Error",
+          "Error al registra los datos en el sistema!",
           "error"
         );
       }

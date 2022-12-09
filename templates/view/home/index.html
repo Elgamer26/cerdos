@@ -286,12 +286,12 @@
                     <p>Tipo galpón</p>
                   </a>
                 </li>
-                <li class="nav-item">
+               <!--   <li class="nav-item">
                   <a onclick="cargar_contenido('contenido_principal','/create_galpon');" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Nuevo galpón</p>
                   </a>
-                </li>
+                </li>-->
                 <li class="nav-item">
                   <a onclick="cargar_contenido('contenido_principal','/list_galpon');" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
@@ -299,17 +299,19 @@
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a onclick="cargar_contenido('contenido_principal','/list_galpon_cerdo');" class="nav-link">
+                 <!--   <a onclick="cargar_contenido('contenido_principal','/list_galpon_cerdo');" class="nav-link">-->
+                    <a onclick="cargar_contenido('contenido_principal','/galpones_cerdoss');" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Galpón cerdos</p>
                   </a>
                 </li>
+                  <!-- Main Sidebar Container 
                 <li class="nav-item">
                   <a onclick="cargar_contenido('contenido_principal','/movimientos_cerdo');" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Movimientos de cerdos</p>
                   </a>
-                </li>
+                </li>-->
               </ul>
             </li>
 
@@ -537,6 +539,103 @@
 
             <li class="nav-item">
               <a href="#" class="nav-link">
+                <i class="nav-icon fa fa-syringe"></i> 
+                <p>
+                  Vacunación y desparasitación
+                  <i class="right fas fa-angle-left"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                  <a onclick="cargar_contenido('contenido_principal','/calendario_vacunas_despara');" class="nav-link">
+                    <i class="far fa-calendar nav-icon"></i>
+                    <p>Calendario vacunas o desparasitación </p>
+                  </a>
+                </li>
+
+                <li class="nav-item">
+                  <a onclick="cargar_contenido('contenido_principal','/historial_de_vacunacion');" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Listado de vacunación</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a onclick="cargar_contenido('contenido_principal','/listado_desparasitacion');" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Listado de desparasitación</p>
+                  </a>
+                </li>
+
+                <!-- <li class="nav-item">
+                  <a href="#" class="nav-link">
+                    <i class="nav-icon fas fa-circle"></i>
+                    <p>
+                      Vacunación
+                      <i class="right fas fa-angle-left"></i>
+                    </p>
+                  </a>
+                  <ul class="nav nav-treeview">
+
+                    <li class="nav-item">
+                      <a onclick="cargar_contenido('contenido_principal','/registro_vacunacion');" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Registro de vacunación</p>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a onclick="cargar_contenido('contenido_principal','/listado_vacunacion');" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Listado de vacunación</p>
+                      </a>
+                    </li>
+                   <li class="nav-item">
+                      <a onclick="cargar_contenido('contenido_principal','/historial_de_vacunacion');" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Historial de cerdo vacunados</p>
+                      </a>
+                    </li>
+             
+                  </ul>
+                </li> -->
+
+                <!--<li class="nav-item">
+                  <a href="#" class="nav-link">
+                    <i class="nav-icon fas fa-circle"></i>
+                    <p>
+                      Desparasitación 
+                      <i class="right fas fa-angle-left"></i>
+                    </p>
+                  </a>
+                  <ul class="nav nav-treeview">
+
+                    <li class="nav-item">
+                      <a onclick="cargar_contenido('contenido_principal','/registro_desparasitacion');" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Registro de desparasitación</p>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a onclick="cargar_contenido('contenido_principal','/listado_desparasitacion');" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Listado de desparasitación</p>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a onclick="cargar_contenido('contenido_principal','/historia_desparasitacion');" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Historial de desparasitación</p>
+                      </a>
+                    </li>
+ 
+             
+                  </ul>
+                </li>-->
+
+              </ul>
+            </li>
+
+            <li class="nav-item">
+              <a href="#" class="nav-link">
                 <i class="nav-icon fa fa-stethoscope"></i>
                 <p>
                   Enfermedades y tratamientos
@@ -615,90 +714,6 @@
                       <a onclick="cargar_contenido('contenido_principal','/listado_tratamientos');" class="nav-link">
                         <i class="far fa-circle nav-icon"></i>
                         <p>Listado de tratamientos</p>
-                      </a>
-                    </li>
- 
-             
-                  </ul>
-                </li>
-
-              </ul>
-            </li>
-
-            <li class="nav-item">
-              <a href="#" class="nav-link">
-                <i class="nav-icon fa fa-syringe"></i> 
-                <p>
-                  Vacunación y desparasitación
-                  <i class="right fas fa-angle-left"></i>
-                </p>
-              </a>
-              <ul class="nav nav-treeview">
-                <li class="nav-item">
-                  <a onclick="cargar_contenido('contenido_principal','/calendario_vacunas_despara');" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Calendario vacunas o desparasitación </p>
-                  </a>
-                </li>
-
-                <li class="nav-item">
-                  <a href="#" class="nav-link">
-                    <i class="nav-icon fas fa-circle"></i>
-                    <p>
-                      Vacunación
-                      <i class="right fas fa-angle-left"></i>
-                    </p>
-                  </a>
-                  <ul class="nav nav-treeview">
-
-                    <li class="nav-item">
-                      <a onclick="cargar_contenido('contenido_principal','/registro_vacunacion');" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
-                        <p>Registro de vacunación</p>
-                      </a>
-                    </li>
-                    <li class="nav-item">
-                      <a onclick="cargar_contenido('contenido_principal','/listado_vacunacion');" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
-                        <p>Listado de vacunación</p>
-                      </a>
-                    </li>
-                    <li class="nav-item">
-                      <a onclick="cargar_contenido('contenido_principal','/historial_de_vacunacion');" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
-                        <p>Historial de cerdo vacunados</p>
-                      </a>
-                    </li>
-             
-                  </ul>
-                </li>
-
-                <li class="nav-item">
-                  <a href="#" class="nav-link">
-                    <i class="nav-icon fas fa-circle"></i>
-                    <p>
-                      Desparasitación 
-                      <i class="right fas fa-angle-left"></i>
-                    </p>
-                  </a>
-                  <ul class="nav nav-treeview">
-
-                    <li class="nav-item">
-                      <a onclick="cargar_contenido('contenido_principal','/registro_desparasitacion');" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
-                        <p>Registro de desparasitación</p>
-                      </a>
-                    </li>
-                    <li class="nav-item">
-                      <a onclick="cargar_contenido('contenido_principal','/listado_desparasitacion');" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
-                        <p>Listado de desparasitación</p>
-                      </a>
-                    </li>
-                    <li class="nav-item">
-                      <a onclick="cargar_contenido('contenido_principal','/historia_desparasitacion');" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
-                        <p>Historial de desparasitación</p>
                       </a>
                     </li>
  
@@ -904,6 +919,189 @@
  
                   </div>
               </div>
+
+              <div class="col-lg-6 col-6">
+                <div class="card card-danger">
+                    <div class="card-header">
+                        <h3 class="card-title"><b>Lotes pronto a expirar</b></h3>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="row">
+
+                            <div class="form-group col-lg-12 col-6">
+
+                              <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                                <li class="nav-item">
+                                  <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true">Alimento</a>
+                                </li>
+                                <li class="nav-item">
+                                  <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">Vacunas</a>
+                                </li> 
+                                <li class="nav-item">
+                                  <a class="nav-link" id="despara-profile-tab" data-toggle="pill" href="#despara-profile" role="tab" aria-controls="despara-profile" aria-selected="false">Medicina y Desparasitante</a>
+                                </li> 
+                                <li class="nav-item">
+                                  <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">Insumos</a>
+                                </li> 
+                              </ul>
+
+                              <div class="tab-content" id="pills-tabContent">
+
+                                <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+    
+                                    <div class="card card-info">
+                                        <div class="card-header">
+                                          <h3 id="unir_texto" class="card-title"> Lote alimento</h3>
+                                        </div>
+                                        <div class="card-body">
+                                          <div class="row">
+                                            <div class="form-group col-lg-12 col-12">
+                                              <table id="tabla_lote_alimento_exper" class="table table-display table-hover responsive nowrap text-center" style="width: 100%" >
+                                                <thead>
+                                                  <tr>  
+                                                    <th>Lote</th>
+                                                    <th>Fecha expiración</th> 
+                                                    <th>Alimento</th>
+                                                  </tr>
+                                                </thead>
+                                                <tbody>
+                                                </tbody>
+                                                <tfoot>
+                                                  <tr> 
+                                                    <th>Lote</th>
+                                                    <th>Fecha expiración</th> 
+                                                    <th>Alimento</th>
+                                                  </tr>
+                                                </tfoot>
+                                              </table>
+                                            </div>
+                                          </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                 
+                                <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+    
+                                  <div class="card card-info">
+                                    <div class="card-header">
+                                      <h3 id="unir_texto" class="card-title"> Lote vacunas</h3>
+                                    </div>
+                        
+                                    <div class="card-body">
+                                      
+                                      <div class="row">
+     
+                                        <div class="form-group col-lg-12 col-6 text-center">
+ 
+                                            <table id="tabla_lote_vacunas_expe" class="table table-display table-hover responsive nowrap text-center">
+                                                <thead>
+                                                    <tr>                              
+                                                      <th>Lote</th> 
+                                                      <th>Fecha expiración</th>  
+                                                      <th>Vacunas</th>
+                                                    </tr>
+                                                </thead>
+
+                                                <tbody>                  
+                        
+                                                </tbody>
+
+                                                <tfoot>
+                                                  <tr> 
+                                                    <th>Lote</th> 
+                                                    <th>Fecha expiración</th>  
+                                                    <th>Vacunas</th>
+                                                  </tr>
+                                                </tfoot>
+                                            </table>
+                                        </div>
+    
+                                      </div> 
+                                    
+                                    </div> 
+     
+                                  </div>
+                                </div> 
+
+                                <div class="tab-pane fade" id="despara-profile" role="tabpanel" aria-labelledby="despara-profile-tab">
+    
+                                  <div class="card card-info">
+                                    <div class="card-header">
+                                      <h3 class="card-title"> Lote medicamento y desparasitante</h3>
+                                    </div>
+                        
+                                    <div class="card-body">
+                                      
+                                      <div class="row">
+     
+                                        <div class="form-group col-lg-12 col-6 text-center">
+ 
+                                            <table id="tabla_lote_desaparasitantes_expe" class="table table-display table-hover responsive nowrap text-center">
+                                                <thead>
+                                                    <tr>                              
+                                                      <th>Lote</th> 
+                                                      <th>Fecha expiración</th>  
+                                                      <th>Desaparasitantes</th>
+                                                    </tr>
+                                                </thead>
+
+                                                <tbody>                  
+                        
+                                                </tbody>
+
+                                                <tfoot>
+                                                  <tr> 
+                                                      <th>Lote</th> 
+                                                      <th>Fecha expiración</th>  
+                                                      <th>Desaparasitantes</th>
+                                                  </tr>
+                                                </tfoot>
+                                            </table>
+                                        </div>
+    
+                                      </div> 
+                                    
+                                    </div> 
+    
+ 
+    
+                                </div>
+                           
+                              </div> 
+
+                            </div>
+                          </div>
+                         
+                        </div>
+                    </div>
+                    <!-- /.card-body -->
+
+                </div>
+              </div>
+
+             <div class="col-lg-6 col-6">
+              <div class="card card-success">
+                  <div class="card-header">
+                      <h3 class="card-title"><b>Eventos de calendario para los cerdos</b></h3>
+                  </div>
+
+                  <div class="card-body">
+                      <div class="row">
+
+                          <div class="form-group col-lg-12 col-6">
+
+
+
+                          </div>
+                          
+                       
+                      </div>
+                  </div>
+                  <!-- /.card-body -->
+
+              </div>
+             </div>
       
           </div>
           <!-- /.row (main row) -->
@@ -1156,6 +1354,11 @@
   var G_correo = true;
   Diez_cerdos_gordos();
   datos_usuarios_logeo();
+  
+  // para los lotes por expirar
+  listar_lote_alimento_expirar();
+  listar_lote_vacunas_expirar();
+  listar_lote_desparasitante_expirar();
 
   function cargar_contenido(contenedor, contenido) {
     $("#" + contenedor).load(contenido);
@@ -1338,7 +1541,7 @@
 
     $("canvas#areaChart_c").remove();
     $("div.chart_c").append(
-      '<canvas id="areaChart_c" width="100" height="30"></canvas>'
+      '<canvas id="areaChart_c" height="60"></canvas>'
     );
 
     var ctx = document.getElementById("areaChart_c").getContext("2d");
@@ -1507,5 +1710,5 @@
           },
         },
         });
-    }
+  }
 </script>
