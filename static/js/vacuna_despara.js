@@ -3,6 +3,7 @@ var tabla_tipo_vacuna, tabla_vacunas, tabla_lote_vacuna;
 function registrar_calendario_cerdo() {
   var titulo = $("#evento_titulo").val();
   var cerdo = $("#cerdo").val();
+  var galpon = $("#galpon_cerdo").val();
   var cerdo_text = $("#cerdo option:selected").text();
   var descripcion = $("#descripcion").val();
   var tipo = $("#tipo").val();
@@ -46,6 +47,7 @@ function registrar_calendario_cerdo() {
   var formdata = new FormData();
   formdata.append("titulo", titulo);
   formdata.append("cerdo", cerdo);
+  formdata.append("galpon", galpon);
   formdata.append("descripcion", descripcion);
   formdata.append("tipo", tipo);
   formdata.append("fecha_evento", fecha_evento);
@@ -67,6 +69,7 @@ function registrar_calendario_cerdo() {
           $(".bg-success").LoadingOverlay("hide");
           $("#modal_canlendario_register").modal("hide");
           $("#calendar").fullCalendar("refetchEvents");
+          Listar_tabla_calendar();
 
           return Swal.fire(
             "Calendario creado con exito",
@@ -134,7 +137,7 @@ function validar_registro_calendario_save(titulo, cerdo, descripcion, tipo) {
 function editar_calendario_cerdo() {
   var id = $("#id_calendario").val();
   var titulo = $("#evento_titulo_edit").val();
-  var cerdo = $("#cerdo_edit").val();
+  // var cerdo = $("#cerdo_edit").val();
   var cerdo_text = $("#cerdo_edit option:selected").text();
   var descripcion = $("#descripcion_edit").val();
   var tipo = $("#tipo_edit").val();
@@ -144,11 +147,10 @@ function editar_calendario_cerdo() {
 
   if (
     titulo.trim() == "" ||
-    cerdo == 0 ||
     descripcion.trim() == "" ||
     tipo == 0
   ) {
-    validar_editar_calendario(titulo, cerdo, descripcion, tipo);
+    validar_editar_calendario(titulo, descripcion, tipo);
 
     return swal.fire(
       "Campo vacios",
@@ -178,7 +180,6 @@ function editar_calendario_cerdo() {
   var formdata = new FormData();
   formdata.append("id", id);
   formdata.append("titulo", titulo);
-  formdata.append("cerdo", cerdo);
   formdata.append("descripcion", descripcion);
   formdata.append("tipo", tipo);
   formdata.append("fecha_evento", fecha_evento);
@@ -200,6 +201,7 @@ function editar_calendario_cerdo() {
           $(".bg-primary").LoadingOverlay("hide");
           $("#modal_canlendario_editar").modal("hide");
           $("#calendar").fullCalendar("refetchEvents");
+          Listar_tabla_calendar();
 
           return Swal.fire(
             "Calendario editado con exito",
@@ -238,23 +240,17 @@ function editar_calendario_cerdo() {
   return false;
 }
 
-function validar_editar_calendario(titulo, cerdo, descripcion, tipo) {
+function validar_editar_calendario(titulo, descripcion, tipo) {
   if (titulo.trim() == "") {
     $("#titulo_obligg_edit").html("Ingrese el titulo");
   } else {
     $("#titulo_obligg_edit").html("");
   }
 
-  if (cerdo == 0) {
-    $("#cerdo_obligg_edit").html("Seleccione el cerdo");
-  } else {
-    $("#cerdo_obligg_edit").html("");
-  }
-
   if (descripcion.trim() == "") {
-    $("#descripcion_edit").html("Ingrese la descripción");
+    $("#descripcion_obligg_edit").html("Ingrese la descripción");
   } else {
-    $("#descripcion_edit").html("");
+    $("#descripcion_obligg_edit").html("");
   }
 
   if (tipo == 0) {
@@ -262,6 +258,52 @@ function validar_editar_calendario(titulo, cerdo, descripcion, tipo) {
   } else {
     $("#tipoo_obligg_edit").html("");
   }
+}
+
+/// eliminra  evento del calendario
+function eliminar_evento_calendario() {
+  var id = $("#id_calendario").val();
+
+  Swal.fire({
+    title: "Eliminar evento?",
+    text: "El evento se eliminará del calendario!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Si, eliminar!",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      eliminar_evento_calendario_ok(id);
+    }
+  });
+}
+
+function eliminar_evento_calendario_ok(id) {
+  $.ajax({
+    url: "/vacunas/eliminar_evento_calendario",
+    type: "POST",
+    data: { id: id },
+  }).done(function (response) {
+    if (response == 1) {
+      
+      $("#modal_canlendario_editar").modal("hide");
+      $("#calendar").fullCalendar("refetchEvents");  
+      Listar_tabla_calendar();
+          
+      return Swal.fire(
+        "Evento eliminado",
+        "El evento se eliminó con exito",
+        "success"
+      );
+    } else {
+      return Swal.fire(
+        "Error",
+        "No se pudo eliminar el evento, error en la matrix",
+        "error"
+      );
+    }
+  });
 }
 
 ///// tipo vacuna
@@ -834,7 +876,7 @@ function listar_vacunas() {
           );
         },
       },
-      { data: "presentacion" }, 
+      { data: "presentacion" },
       { data: "precio" },
       { data: "detalle" },
       {
@@ -937,13 +979,13 @@ function listar_lotes_vacunas() {
     columns: [
       {
         render: function (data, type, row) {
-            return `<button style='font-size:10px;' type='button' class='eliminar btn btn-outline-danger' title='Eliminar el lote'><i class='fa fa-times' style='font-size: 15px;'></i></button>`;
+          return `<button style='font-size:10px;' type='button' class='eliminar btn btn-outline-danger' title='Eliminar el lote'><i class='fa fa-times' style='font-size: 15px;'></i></button>`;
         },
       },
       { data: "codigo" },
-      { data: "nombre" }, 
+      { data: "nombre" },
       { data: "cantidad" },
-      { data: "fecha_i" }, 
+      { data: "fecha_i" },
       { data: "fecha_f" },
       { data: "fecha" },
     ],
@@ -1039,7 +1081,7 @@ function eliminar_lote_vacuna_a(id) {
         tabla_lote_vacuna.ajax.reload();
         return Swal.fire(
           "Lote eliminado",
-          "EL lote de vacuna se elimino con exito",
+          "EL lote de vacuna se eliminó con exito",
           "success"
         );
       }
@@ -1615,7 +1657,7 @@ function registrar_detalle_vacunacion(id) {
     },
   }).done(function (resp) {
     if (resp > 0) {
-      
+
       if (resp == 1) {
         $(".card-success").LoadingOverlay("hide");
         cargar_contenido("contenido_principal", "/registro_vacunacion");
@@ -1633,12 +1675,12 @@ function registrar_detalle_vacunacion(id) {
         "No se pudo crear el detalle de vacunación, falla en la matrix",
         "error"
       );
-      
+
     }
   });
 }
 
-function anular_vacunacion_cerdo(id){
+function anular_vacunacion_cerdo(id) {
   Swal.fire({
     title: "Anular la vacunación del cerdo?",
     text: "La vacunación se anulará!",
@@ -1664,7 +1706,7 @@ function vacunacion_cerdo_anular(id) {
     if (response > 0) {
 
       if (response == 1) {
-        cargar_contenido('contenido_principal','/listado_vacunacion');
+        cargar_contenido('contenido_principal', '/listado_vacunacion');
         return Swal.fire(
           "Vacunación anulada",
           "La vacunación se anulo con extio",
@@ -1682,20 +1724,20 @@ function vacunacion_cerdo_anular(id) {
   });
 }
 
-function ver_detalle_vacunas_cerdo(id){
+function ver_detalle_vacunas_cerdo(id) {
   $.ajax({
     url: "/vacunas/ver_detalle_vacunas_cerdo",
-    type: "POST", 
-    data: {id: id}, 
+    type: "POST",
+    data: { id: id },
     success: function (resp) {
 
       $('#tbody_tabla_vacunas_detalle').empty();
 
-      if(resp != 0){
-        var llenat = ""; 
+      if (resp != 0) {
+        var llenat = "";
         var count = 0;
 
-        resp["data"].forEach((row) => { 
+        resp["data"].forEach((row) => {
           count++;
           llenat += `<tr>
                       <td> ${count} </td>
@@ -1703,9 +1745,9 @@ function ver_detalle_vacunas_cerdo(id){
                       <td> ${row['vacuna']} </td>
                       <td> ${row['cantidad']} </td>  
                       <td> ${row['motivo']} </td> 
-                    </tr>`;     
-            $("#tbody_tabla_vacunas_detalle").html(llenat);           
-          }); 
+                    </tr>`;
+          $("#tbody_tabla_vacunas_detalle").html(llenat);
+        });
       }
 
       $("#modal_detalle_vacunasa").modal({ backdrop: "static", keyboard: false });
@@ -1880,7 +1922,7 @@ function registrar_detalle_desparasitacion(id) {
     },
   }).done(function (resp) {
     if (resp > 0) {
-      
+
       if (resp == 1) {
         $(".card-success").LoadingOverlay("hide");
         cargar_contenido("contenido_principal", "/registro_desparasitacion");
@@ -1898,12 +1940,12 @@ function registrar_detalle_desparasitacion(id) {
         "No se pudo crear el detalle de desparasitación, falla en la matrix",
         "error"
       );
-      
+
     }
   });
 }
 
-function anular_desparasitacion_cerdo(id){
+function anular_desparasitacion_cerdo(id) {
   Swal.fire({
     title: "Anular la desparasitación del cerdo?",
     text: "La desparasitación se anulará!",
@@ -1929,7 +1971,7 @@ function desparasitacion_cerdo_anular(id) {
     if (response > 0) {
 
       if (response == 1) {
-        cargar_contenido('contenido_principal','/listado_desparasitacion');
+        cargar_contenido('contenido_principal', '/listado_desparasitacion');
         return Swal.fire(
           "Desparasitación anulada",
           "La desparasitación se anulo con extio",
@@ -1947,20 +1989,20 @@ function desparasitacion_cerdo_anular(id) {
   });
 }
 
-function ver_detalle_desparsitantes_cerdo(id){
+function ver_detalle_desparsitantes_cerdo(id) {
   $.ajax({
     url: "/vacunas/ver_detalle_desparsitantes_cerdo",
-    type: "POST", 
-    data: {id: id}, 
+    type: "POST",
+    data: { id: id },
     success: function (resp) {
 
       $('#tbody_tabla_desparasitante_detalle').empty();
 
-      if(resp != 0){
-        var llenat = ""; 
+      if (resp != 0) {
+        var llenat = "";
         var count = 0;
 
-        resp["data"].forEach((row) => { 
+        resp["data"].forEach((row) => {
           count++;
           llenat += `<tr>
                       <td> ${count} </td>
@@ -1968,9 +2010,9 @@ function ver_detalle_desparsitantes_cerdo(id){
                       <td> ${row['desparasitante']} </td>
                       <td> ${row['cantidad']} </td>  
                       <td> ${row['motivo']} </td> 
-                    </tr>`;     
-            $("#tbody_tabla_desparasitante_detalle").html(llenat);           
-          }); 
+                    </tr>`;
+          $("#tbody_tabla_desparasitante_detalle").html(llenat);
+        });
       }
 
       $("#modal_detalle_desparasitante").modal({ backdrop: "static", keyboard: false });

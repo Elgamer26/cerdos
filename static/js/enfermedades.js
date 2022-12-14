@@ -1435,20 +1435,22 @@ function guardar_enfermedad_cerdo(){
     contentType: false,
     processData: false,
     success: function (resp) {
-
       if (resp > 0) { 
-
         guardar_detalle_enfermedad_cerdo(parseInt(resp));
-
+      }else if(resp == "existe"){
+        $(".card-success").LoadingOverlay("hide");
+        return Swal.fire(
+          "Ya existe un registro",
+          "El cerdo ingresadó ya tiene un tratamiento pendiente",
+          "warning"
+        );
       } else {
-
         $(".card-success").LoadingOverlay("hide");
         return Swal.fire(
           "Error",
           "No se pudo registrar la enfermedad, falla en la matrix",
           "error"
         );
-
       }
     },
 
@@ -1738,7 +1740,7 @@ function registra_tratamientos_cerdoos(){
     confirmButtonText: 'Si, guardar!'
   }).then((result) => {
     if (result.isConfirmed) {
-      guardar_tratamientos_cerdoos();
+      guardar_tratamientos_cerdoos(); 
     }
   })
 }
@@ -1772,6 +1774,19 @@ function guardar_tratamientos_cerdoos(){
     $("#fecha_i_obligg").html(""); 
     $("#fecha_f_obligg").html(""); 
     $("#observacion_oblig").html("");
+  }
+
+  if(fecha_i == fecha_f){
+    $("#fecha_i_obligg").html("XXX"); 
+    $("#fecha_f_obligg").html("XXX"); 
+    return swal.fire(
+      "Fechas iguales",
+      "Las fechas no deben ser iguales",
+      "warning"
+    );
+  }else{
+    $("#fecha_i_obligg").html(""); 
+    $("#fecha_f_obligg").html(""); 
   }
 
   // insumo
@@ -1841,21 +1856,16 @@ function guardar_tratamientos_cerdoos(){
     processData: false,
     success: function (resp) {
       if (resp > 0) { 
-
         guardar_detalle_insumo_enfermedad(parseInt(resp));
-
       } else {
-
         $(".card-success").LoadingOverlay("hide");
         return Swal.fire(
           "Error",
           "No se pudo registrar la enfermedad, falla en la matrix",
           "error"
         );
-
       }
     },
-
     beforeSend: function () {
       $(".card-success").LoadingOverlay("show", {
         text: "Cargando...",
@@ -1897,18 +1907,22 @@ function validar_registro_tratamientos_cerdos(cerdo_id,fecha_i,fecha_f,observaci
 function guardar_detalle_insumo_enfermedad(id){
   var count = 0;
   var arrego_id = new Array();
+  var arreglo_lote = new Array(); 
   var arrego_cantidad = new Array(); 
+
 
   $("#tabla_insumo tbody#tbody_tabla_insumo tr").each(
     function () {
       arrego_id.push($(this).find("td").eq(0).text()); 
-      arrego_cantidad.push($(this).find("td").eq(2).text()); 
+      arreglo_lote.push($(this).find("td").eq(1).text()); 
+      arrego_cantidad.push($(this).find("td").eq(3).text()); 
       count++;
     }
   );
 
   //aqui combierto el arreglo a un string
   var ida = arrego_id.toString(); 
+  var idlote = arreglo_lote.toString(); 
   var cantidad = arrego_cantidad.toString(); 
 
   if (count == 0) {
@@ -1921,6 +1935,7 @@ function guardar_detalle_insumo_enfermedad(id){
     data: { 
       id: id,
       ida: ida,
+      idlote: idlote,
       cantidad: cantidad
     },
   }).done(function (resp) {
@@ -1941,18 +1956,21 @@ function guardar_detalle_insumo_enfermedad(id){
 function guardar_detalle_medicina_enfermedad(id){
   var count = 0;
   var arrego_id = new Array();
+  var arrego_lote = new Array();
   var arrego_cantidad = new Array(); 
 
   $("#tabla_medicamento tbody#tbody_tabla_medicamento tr").each(
     function () {
       arrego_id.push($(this).find("td").eq(0).text()); 
-      arrego_cantidad.push($(this).find("td").eq(2).text()); 
+      arrego_lote.push($(this).find("td").eq(1).text()); 
+      arrego_cantidad.push($(this).find("td").eq(3).text()); 
       count++;
     }
   );
 
   //aqui combierto el arreglo a un string
-  var ida = arrego_id.toString(); 
+  var ida = arrego_id.toString();
+  var lote = arrego_lote.toString(); 
   var cantidad = arrego_cantidad.toString(); 
 
   if (count == 0) {
@@ -1965,6 +1983,7 @@ function guardar_detalle_medicina_enfermedad(id){
     data: { 
       id: id,
       ida: ida,
+      lote: lote,
       cantidad: cantidad
     },
   }).done(function (resp) {

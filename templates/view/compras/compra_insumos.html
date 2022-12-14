@@ -168,7 +168,7 @@
         
                                         <div class="form-group col-lg-4 col-6">
                                             <label for="fecha_c">Fecha</label>
-                                            <input type="date" class="form-control" value="{{data.fecha}}" id="fecha_c" />
+                                            <input type="date" class="form-control calendario" value="{{data.fecha}}" id="fecha_c" />
                                             <span style="color: red" id="fecha_c_obligg"></span>
                                         </div>
 
@@ -192,7 +192,7 @@
                                             <span style="color: red" id="ivaa_obligg"></span>
                                         </div>
 
-                                        <div class="form-group col-lg-3 col-6">
+                                        <div hidden class="form-group col-lg-3 col-6">
                                           <label for="lote">Codigo lote:</label>
                                           <input type="text" maxlength="10" class="form-control" id="lote" value="CIL{{ data.codigo }}"  placeholder="Ingrese lote"/>
                                           <span style="color: red" id="lote_obligg"></span>
@@ -238,12 +238,14 @@
                                                     <th hidden>Id</th> 
                                                     <th>Insumo</th> 
                                                     <th>Precio</th> 
-                                                    <th>Cantidad</th>
+                                                    <th>Cajas</th>
+                                                    <th>Unidad</th>
                                                     <th>Descuento $</th>
                                                     <th>Total</th>
                                                     <th>Fecha elaboración</th>
                                                     <th>Fecha expiración</th>
                                                     <th>Quitar</th>
+                                                    <th hidden></th>
                                                 </tr>
                                             </thead>
                                             <tbody id="tbody_tabla_compra_insumo">                  
@@ -308,7 +310,7 @@
                             <th>Nombre</th>
                             <th>Tipo insumo</th> 
                             <th>Foto</th>
-                            <th>Cantidad</th>
+                            <th hidden>Cantidad</th>
                             <th>Precio</th> 
                           </tr>
                         </thead>
@@ -322,7 +324,7 @@
                                 <td>{{a[2]}}</td>
                                 <td>{{a[4]}}</td>                            
                                 <td><img class='img-circle' src='static/uploads/insumo/{{a[8]}}' width='50px' /></td>
-                                <td> <span style="font-size: 15px;" class="badge badge-warning">{{a[5]}}</span></td>
+                                <td hidden> <span style="font-size: 15px;" class="badge badge-warning">{{a[5]}}</span></td>
                                 <td>{{a[6]}}</td> 
                               </tr>                          
                             {% endfor %}  
@@ -336,7 +338,7 @@
                             <th>Nombre</th>
                             <th>Tipo insumo</th> 
                             <th>Foto</th>
-                            <th>Cantidad</th>
+                            <th hidden>Cantidad</th>
                             <th>Precio</th> 
                           </tr>
                         </tfoot>
@@ -427,7 +429,7 @@
       var iva = $("#iva").val();      
       var id = $(this).parents("tr").find("td")[0].innerHTML;
       var codigo = $(this).parents("tr").find("td")[2].innerHTML;
-      var alimento = $(this).parents("tr").find("td")[2].innerHTML +" - "+ $(this).parents("tr").find("td")[4].innerHTML;
+      var alimento = $(this).parents("tr").find("td")[4].innerHTML;
       var foto = $(this).parents("tr").find("td")[5].innerHTML;
       var precio = $(this).parents("tr").find("td")[7].innerHTML;
 
@@ -453,20 +455,25 @@
         );
       }
 
+      var min = 999;
+      var max = 9999;
+      var numberr = Math.floor(Math.random()*(max-min+1)+min);
+
       var datos_agg = "<tr>";
         datos_agg += "<td hidden for='id'>" + id + "</td>"; 
         datos_agg += "<td>" + alimento + "</td>"; 
         datos_agg += "<td>" + precio + "</td>";   
         
-        datos_agg += "<td><input id='cantida_a' style='width: 100px;' onkeypress='return soloNumeros(event);' type='number' min='1' class='form-control' value='1' placeholder='cantidad' /></td>";
-        datos_agg += "<td><input id='descuento_a' style='width: 100px;' onkeypress='return filterfloat(event, this);' type='text' class='form-control' value='0' placeholder='descuento' onkeypress='return soloNumeros(event);' /></td>";
+        datos_agg += "<td><input id='cantida_a' style='width: 70px;' onkeypress='return soloNumeros(event);' type='number' min='1' class='form-control' value='1' placeholder='cantidad' /></td>";
+        datos_agg += "<td><input id='unidad_a' style='width: 70px;' type='number' onkeypress='return soloNumeros(event);' min='1' class='form-control' value='1' placeholder='Unidad' /></td>";
+        datos_agg += "<td><input id='descuento_a' style='width: 70px;' onkeypress='return filterfloat(event, this);' type='text' class='form-control' value='0' placeholder='descuento' onkeypress='return soloNumeros(event);' /></td>";
         datos_agg += "<td>" + precio + "</td>";   
 
-        datos_agg += "<td><input class='form-control fecha_i" + id + "' type='date' id='fecha_i'></td>";
-        datos_agg += "<td><input class='form-control fecha_f" + id + "' type='date' id='fecha_f'></td>"; 
+        datos_agg += "<td><input style='width: 130px;' class='form-control fecha_i" + id + " calendario_creacion' type='date' id='fecha_i'></td>";
+        datos_agg += "<td><input style='width: 130px;' class='form-control fecha_f" + id + " calendario_expiracion' type='date' id='fecha_f'></td>"; 
         
-        datos_agg +=
-          "<td> <button class='remover btn btn-danger'><i class='fa fa-trash'></i></button></td>";
+        datos_agg += "<td> <button class='remover btn btn-danger'><i class='fa fa-trash'></i></button></td>";
+        datos_agg += "<td hidden>CIL-"+numberr+"</td>"; 
         datos_agg += "</tr>";
       
         //esto me ayuda a enviar los datos a la tabla
@@ -487,6 +494,9 @@
      
         $(".fecha_i" + id + "").val(y + "-" + m + "-" + d);
         $(".fecha_f" + id + "").val(y + "-" + m + "-" + d);
+
+        mostar_creacion(fecha_creacion, y + "-" + m + "-" + d);
+        mostar_expiracion(y + "-" + m + "-" + d, fecha_expitacion);
     });
 
     function validar_alimento_tabla(id) {
@@ -510,7 +520,7 @@
       var descuento = $(this).parents("tr").find('#descuento_a').val();
       var precio = $(this).parents("tr").find("td")[2].innerHTML; 
       var total = parseFloat(precio).toFixed(2) * parseInt(cantidad) - parseInt(descuento);
-      $(this).parents("tr").find("td")[5].innerHTML = parseFloat(total).toFixed(2);  
+      $(this).parents("tr").find("td")[6].innerHTML = parseFloat(total).toFixed(2);  
       sumartotalneto();    
     });
 
@@ -519,7 +529,7 @@
       var descuento = $(this).parents("tr").find('#descuento_a').val();
       var precio = $(this).parents("tr").find("td")[2].innerHTML; 
       var total = parseFloat(precio).toFixed(2) * parseInt(cantidad) - parseInt(descuento);
-      $(this).parents("tr").find("td")[5].innerHTML = parseFloat(total).toFixed(2);  
+      $(this).parents("tr").find("td")[6].innerHTML = parseFloat(total).toFixed(2);  
       sumartotalneto();    
     });
 
@@ -529,7 +539,7 @@
       var descuento = $(this).parents("tr").find('#descuento_a').val();
       var precio = $(this).parents("tr").find("td")[2].innerHTML; 
       var total = parseFloat(precio).toFixed(2) * parseInt(cantidad) - parseInt(descuento) ;
-      $(this).parents("tr").find("td")[5].innerHTML = parseFloat(total).toFixed(2);  
+      $(this).parents("tr").find("td")[6].innerHTML = parseFloat(total).toFixed(2);  
       sumartotalneto();
     });
 
@@ -543,7 +553,7 @@
 
       $("#tabla_compra_insumo tbody#tbody_tabla_compra_insumo tr").each(
           function() {
-              arreglo_total.push($(this).find("td").eq(5).text());
+              arreglo_total.push($(this).find("td").eq(6).text());
               count++;
           }
       );
@@ -572,5 +582,7 @@
           $("#iva").val("12");
       }
     });
+
+    mostar_fecha(fecha_atras, fecha_adelante);
 </script>
   

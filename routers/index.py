@@ -10,6 +10,7 @@ from models.compras import Compras
 from models.enfermedad import Enfermedad 
 from models.vacunas import Vacunas 
 from models.web import Web  
+from models.venta import Venta  
 #-------------------
 
 from utils.Complemento import Complement
@@ -398,14 +399,14 @@ def tipo_tratamientos():
 def registro_enfermos():  
     fecha = datetime.now()
     now = fecha.strftime("%Y-%m-%d")
-    cerdo = Galpon.Select_cerdos() 
+    galpon = Galpon.Listar_galpon_combo()
     veterinario = Enfermedad.Select_veterinario()
     enfermedades = Enfermedad.Select_enfermedades()
     data = {
         'fecha': now,
-        'cerdo': cerdo,
         'vete': veterinario,
-        'enfer': enfermedades
+        'enfer': enfermedades,
+        'galpon': galpon
     }
     return render_template('view/enfer_trata/registro_enfermos.html', data = data)
 
@@ -503,13 +504,14 @@ def cerdos_muertos():
 def calendario_vacunas_despara():      
     fecha = datetime.now()
     now = fecha.strftime("%Y-%m-%d")   
-    cerdo = Galpon.Select_cerdos() 
+    # cerdo = Galpon.Select_cerdos() 
     eventos = Vacunas.Listar_calendario()
+    galpon = Galpon.Listar_galpon_combo() 
 
     data = {
-        'fecha': now, 
-        'cerdo': cerdo,
-        'evento': eventos
+        'fecha': now,  
+        'evento': eventos,
+        'galpon': galpon
     }
     return render_template('view/vacuna_despara/calendario_vacunas_despara.html', data = data)
 
@@ -531,14 +533,17 @@ def informa_compra_medicamentos():
 #vista informa de control de peso del cerdo
 @index.route('/informa_control_peso')
 def informa_control_peso(): 
-    cerdo = Galpon.Select_cerdos() 
-    return render_template('view/informe/informa_control_peso.html', cerdo = cerdo)
+    galpon = Galpon.Listar_galpon_combo() 
+    data = {
+        'galpon': galpon
+    }
+    return render_template('view/informe/informa_control_peso.html', data = data)
 
 #vista informa de control de peso del cerdo
 @index.route('/informa_cerdo')
 def informa_cerdo(): 
     raza = Cerdo.Traer_razas_combo()
-    galpon = Galpon.Listar_galpon_combo()
+    galpon = Galpon.Listar_galpon_combo() 
     data = {
         'raza': raza,
         'galpon': galpon
@@ -675,4 +680,92 @@ def historia_desparasitacion():
     }
     return render_template('view/vacuna_despara/historia_desparasitacion.html', data = data)
 
+#vista de cliente
+@index.route('/listado_cliente')
+def listado_cliente():
+    return render_template('view/ventas/listado_cliente.html')
 
+@index.route('/cliente')
+def cliente():
+    return render_template('view/ventas/cliente.html')
+
+@index.route('/venta_cerdos')
+def venta_cerdos():
+    fecha = datetime.now()
+    now = fecha.strftime("%Y-%m-%d")
+    cliente = Venta.Listar_cliente()
+    data = {
+     'fecha': now,
+     'cliente': cliente
+    }
+    return render_template('view/ventas/venta_cerdos.html', data = data)
+
+#########
+######### nuevos informes
+@index.route('/informa_compra_vacunas')
+def informa_compra_vacunas(): 
+    return render_template('view/informe/informa_compra_vacunas.html')
+
+@index.route('/informe_lote_medicamentos')
+def informe_lote_medicamentos(): 
+    tipo_m = Compras.Combo_tipo_medicamento()  
+    data = {
+        'tipo_m': tipo_m
+    }
+    return render_template('view/informe/informe_lote_medicamentos.html', data = data)
+
+@index.route('/informa_lote_insumos')
+def informa_lote_insumos(): 
+    tipo = Compras.Combo_tipo_insumo()  
+    data = {
+        'tipo': tipo
+    }
+    return render_template('view/informe/informe_lote_insumo.html', data = data)
+
+@index.route('/informa_lote_alimento')
+def informa_lote_alimento(): 
+    tipo = Alimento.Traer_tipo_alimento_select() 
+    data = {
+        'tipo': tipo
+    }
+    return render_template('view/informe/informa_lote_alimento.html', data = data)
+
+@index.route('/informa_lote_vacunas')
+def informa_lote_vacunas(): 
+    tipo = Vacunas.Combo_tipo_vacuna() 
+    data = {
+        'tipo': tipo
+    }
+    return render_template('view/informe/informa_lote_vacunas.html', data = data)
+
+@index.route('/informa_vacunas_desparasitacion')
+def informa_vacunas_desparasitacion(): 
+    galpon = Galpon.Listar_galpon_combo() 
+    data = {
+        'galpon': galpon
+    }
+    return render_template('view/informe/informa_vacunas_desparasitacion.html', data = data)
+
+@index.route('/informe_alimentacion_cerdo')
+def informe_alimentacion_cerdo(): 
+    galpon = Galpon.Listar_galpon_combo() 
+    data = {
+        'galpon': galpon
+    }
+    return render_template('view/informe/informe_alimentacion_cerdo.html', data = data)
+
+@index.route('/informa_enfermedades_cerdo')
+def informa_enfermedades_cerdo(): 
+    galpon = Galpon.Listar_galpon_combo() 
+    data = {
+        'galpon': galpon
+    }
+    return render_template('view/informe/informa_enfermedades_cerdo.html', data = data)
+
+@index.route('/informe_tratamientos')
+def informe_tratamientos(): 
+    galpon = Galpon.Listar_galpon_combo() 
+    data = {
+        'galpon': galpon
+    }
+    return render_template('view/informe/informe_tratamientos.html', data = data)

@@ -484,15 +484,15 @@
                   <ul class="nav nav-treeview">
 
                     <li class="nav-item">
-                      <a onclick="cargar_contenido('contenido_principal','/compra_alimento');" class="nav-link">
+                      <a onclick="cargar_contenido('contenido_principal','/listado_cliente');" class="nav-link">
                         <i class="fa fa-circle nav-icon" style="color: orange;"></i>
-                        <p>Nueva venta</p>
+                        <p>Clientes</p>
                       </a>
                     </li>       
                     <li class="nav-item">
-                      <a onclick="cargar_contenido('contenido_principal','/compra_insumos');" class="nav-link">
+                      <a onclick="cargar_contenido('contenido_principal','/venta_cerdos');" class="nav-link">
                         <i class="fa fa-circle nav-icon" style="color: orange;"></i>
-                        <p>Listado de ventas</p>
+                        <p>Venta de cerdos</p>
                       </a>
                     </li>
                     <li class="nav-item">
@@ -684,12 +684,12 @@
                         <p>En espera</p>
                       </a>
                     </li>
-                    <li class="nav-item">
+                    <!-- <li class="nav-item">
                       <a onclick="cargar_contenido('contenido_principal','/cerdos_tratados');" class="nav-link">
                         <i class="far fa-circle nav-icon"></i>
                         <p>Tratados</p>
                       </a>
-                    </li>
+                    </li>-->
              
                   </ul>
                 </li>
@@ -744,21 +744,27 @@
                   <ul class="nav nav-treeview">
 
                     <li class="nav-item">
-                      <a onclick="cargar_contenido('contenido_principal','/informa_compra_alimento');" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
+                      <a  onclick="cargar_contenido('contenido_principal','/informa_compra_alimento');" class="nav-link">
+                        <i style="color: orange;" class="far fa-circle nav-icon"></i>
                         <p>Alimentos</p>
                       </a>
                     </li>
                     <li class="nav-item">
-                      <a onclick="cargar_contenido('contenido_principal','/informa_compra_insumos');" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
+                      <a  onclick="cargar_contenido('contenido_principal','/informa_compra_insumos');" class="nav-link">
+                        <i style="color: orange;" class="far fa-circle nav-icon"></i>
                         <p>Insumos</p>
                       </a>
                     </li>
                     <li class="nav-item">
-                      <a onclick="cargar_contenido('contenido_principal','/informa_compra_medicamentos');" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
+                      <a  onclick="cargar_contenido('contenido_principal','/informa_compra_medicamentos');" class="nav-link">
+                        <i style="color: orange;" class="far fa-circle nav-icon"></i>
                         <p>Medicamentos o desparasitantes</p>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a  onclick="cargar_contenido('contenido_principal','/informa_compra_vacunas');" class="nav-link">
+                        <i style="color: orange;" class="far fa-circle nav-icon"></i>
+                        <p>Vacunas</p>
                       </a>
                     </li>
              
@@ -780,11 +786,84 @@
                 </li>
 
                 <li class="nav-item">
+                  <a href="#" class="nav-link">
+                    <i class="nav-icon fas fa-circle"></i>
+                    <p>
+                      Informe de lotes
+                      <i class="right fas fa-angle-left"></i>
+                    </p>
+                  </a>
+                  <ul class="nav nav-treeview">
+
+                    <li class="nav-item">
+                      <a onclick="cargar_contenido('contenido_principal','/informe_lote_medicamentos');" class="nav-link">
+                        <i style="color:orange;" class="far fa-circle nav-icon"></i>
+                        <p>Farmacos</p>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a onclick="cargar_contenido('contenido_principal','/informa_lote_insumos');" class="nav-link">
+                        <i style="color:orange;" class="far fa-circle nav-icon"></i>
+                        <p>Insumos</p>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a onclick="cargar_contenido('contenido_principal','/informa_lote_alimento');" class="nav-link">
+                        <i style="color:orange;" class="far fa-circle nav-icon"></i>
+                        <p>Alimentos</p>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a onclick="cargar_contenido('contenido_principal','/informa_lote_vacunas');" class="nav-link">
+                        <i style="color:orange;" class="far fa-circle nav-icon"></i>
+                        <p>Vacunas</p>
+                      </a>
+                    </li>
+             
+                  </ul>
+                </li>
+
+                <li class="nav-item">
+                  <a onclick="cargar_contenido('contenido_principal','/informe_alimentacion_cerdo');" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Informe de alimentación</p>
+                  </a>
+                </li> 
+                
+                <li class="nav-item">
                   <a onclick="cargar_contenido('contenido_principal','/informa_cerdo');" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Informe de cerdos</p>
                   </a>
-                </li>   
+                </li> 
+
+                <li class="nav-item">
+                  <a onclick="cargar_contenido('contenido_principal','/informa_vacunas_desparasitacion');" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Informe de vacunas y desparasitación</p>
+                  </a>
+                </li> 
+
+                <li class="nav-item">
+                  <a onclick="cargar_contenido('contenido_principal','/informa_enfermedades_cerdo');" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Informe de enfermedades</p>
+                  </a>
+                </li> 
+
+                <li class="nav-item">
+                  <a onclick="cargar_contenido('contenido_principal','/informe_tratamientos');" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Informe de tratamientos</p>
+                  </a>
+                </li> 
+
+                <li class="nav-item">
+                  <a onclick="cargar_contenido('contenido_principal','/informa_cerdo');" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Informe de control y seguimiento de la crianza</p>
+                  </a>
+                </li> 
 
               </ul>
             </li>
@@ -920,7 +999,7 @@
                   </div>
               </div>
 
-              <div class="col-lg-6 col-6">
+              <div class="col-lg-7 col-6">
                 <div class="card card-danger">
                     <div class="card-header">
                         <h3 class="card-title"><b>Lotes pronto a expirar</b></h3>
@@ -942,7 +1021,7 @@
                                   <a class="nav-link" id="despara-profile-tab" data-toggle="pill" href="#despara-profile" role="tab" aria-controls="despara-profile" aria-selected="false">Medicina y Desparasitante</a>
                                 </li> 
                                 <li class="nav-item">
-                                  <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">Insumos</a>
+                                  <a class="nav-link" id="insumo-profile-tab" data-toggle="pill" href="#insumo-profile" role="tab" aria-controls="insumo-profile" aria-selected="false">Insumos</a>
                                 </li> 
                               </ul>
 
@@ -994,7 +1073,7 @@
      
                                         <div class="form-group col-lg-12 col-6 text-center">
  
-                                            <table id="tabla_lote_vacunas_expe" class="table table-display table-hover responsive nowrap text-center">
+                                            <table id="tabla_lote_vacunas_expe" class="table table-display table-hover responsive nowrap text-center" style="width: 100%">
                                                 <thead>
                                                     <tr>                              
                                                       <th>Lote</th> 
@@ -1037,7 +1116,7 @@
      
                                         <div class="form-group col-lg-12 col-6 text-center">
  
-                                            <table id="tabla_lote_desaparasitantes_expe" class="table table-display table-hover responsive nowrap text-center">
+                                            <table id="tabla_lote_desaparasitantes_expe" class="table table-display table-hover responsive nowrap text-center" style="width: 100%">
                                                 <thead>
                                                     <tr>                              
                                                       <th>Lote</th> 
@@ -1067,6 +1146,50 @@
  
     
                                 </div>
+                              </div> 
+                                <div class="tab-pane fade" id="insumo-profile" role="tabpanel" aria-labelledby="insumo-profile-tab">
+    
+                                  <div class="card card-info">
+                                    <div class="card-header">
+                                      <h3 class="card-title"> Lote insumo</h3>
+                                    </div>
+                        
+                                    <div class="card-body">
+                                      
+                                      <div class="row">
+     
+                                        <div class="form-group col-lg-12 col-6 text-center">
+ 
+                                            <table id="tabla_lote_insumo_exper" class="table table-display table-hover responsive nowrap text-center" style="width: 100%">
+                                                <thead>
+                                                    <tr>                              
+                                                      <th>Lote</th> 
+                                                      <th>Fecha expiración</th>  
+                                                      <th>Insumo</th>
+                                                    </tr>
+                                                </thead>
+
+                                                <tbody>                  
+                        
+                                                </tbody>
+
+                                                <tfoot>
+                                                  <tr> 
+                                                      <th>Lote</th> 
+                                                      <th>Fecha expiración</th>  
+                                                      <th>Insumo</th>
+                                                  </tr>
+                                                </tfoot>
+                                            </table>
+                                        </div>
+    
+                                      </div> 
+                                    
+                                    </div> 
+    
+ 
+    
+                                </div>
                            
                               </div> 
 
@@ -1080,7 +1203,7 @@
                 </div>
               </div>
 
-             <div class="col-lg-6 col-6">
+             <div class="col-lg-5 col-6">
               <div class="card card-success">
                   <div class="card-header">
                       <h3 class="card-title"><b>Eventos de calendario para los cerdos</b></h3>
@@ -1091,7 +1214,7 @@
 
                           <div class="form-group col-lg-12 col-6">
 
-
+                            <div id="calendar_dasboard"></div>
 
                           </div>
                           
@@ -1332,6 +1455,85 @@
   <!-- /.modal-dialog -->
 </div>
 
+<div class="modal fade" id="modal_canlendario_dasboard">
+  <div class="modal-dialog modal-xl">
+      <div class="modal-content bg-primary">
+          <div class="modal-header">
+              <h4 class="modal-title">Detalle del evento</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+              </button>
+          </div>
+
+          <div class="modal-body" style="background: white; color: black">
+
+              <div class="row text-center">
+
+                  <div class="col-lg-6">
+                      <div class="form-group">
+                          <label for="evento_titulo_dasboard">Titulo</label>
+                          <input readonly autocomplete="off" type="text" maxlength="30" class="form-control" id="evento_titulo_dasboard" placeholder="Ingrese titulo">
+                      </div>
+                  </div>
+
+                  <div class="form-group col-lg-6">
+                    <label for="galpon_cerdo_dasboardt">Galpón:</label>
+                    <input readonly type="text" maxlength="200" id="galpon_cerdo_dasboardt" class="form-control"> 
+                </div>
+
+                  <div class="form-group col-lg-6">
+                      <label for="cerdo_dasboardt">Cerdo:</label>
+                      <input readonly type="text" maxlength="200" id="cerdo_dasboardt" class="form-control">    
+                  </div>
+
+                  <div class="col-lg-6">
+                      <div class="form-group">
+                          <label for="descripcion_dasboard">Descripción</label>
+                          <input readonly autocomplete="off" type="text" maxlength="50" placeholder="Ingrese descripción" class="form-control" id="descripcion_dasboard">
+                      </div>
+                  </div>
+
+                  <div class="col-lg-3">
+                      <label for="tipo_dasboard">Tipo</label>
+                      <select readonly id="tipo_dasboard" style="width: 100%;" class="form-control">
+                          <option value="Vacuna">Vacuna</option>
+                          <option value="Desparasitación">Desparasitación</option> 
+                      </select> 
+                  </div>
+
+                  <div class="col-lg-3">
+                      <div class="form-group">
+                          <label for="fecha_evento_dasboard">Fecha</label> 
+                          <input type="date" class="form-control" readonly id="fecha_evento_dasboard">
+                      </div>
+                  </div>
+
+                  <div class="col-lg-3">
+                      <div class="form-group">
+                          <label for="color_dasboard">Color letra</label>
+                          <input readonly type="color" class="form-control" id="color_dasboard" value="#ff0000"> 
+                      </div>
+                  </div>
+
+                  <div class="col-lg-3">
+                      <div class="form-group">
+                          <label for="color_etiqueta_dasboard">Color etiqueta</label>
+                          <input readonly type="color" class="form-control" id="color_etiqueta_dasboard" value="#ff0000"> 
+                      </div>
+                  </div>
+
+              </div>
+
+          </div>
+          <div class="modal-footer justify-content-between" style="background: #f5f4f3 !important">
+              <button type="button" class="btn btn-danger" data-dismiss="modal"> Cerrar </button>  
+          </div>
+      </div>
+      <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+
 <script>
   //// para controlar las fecha de dias depues y dias antes
   var fecha_atras;
@@ -1347,6 +1549,20 @@
   fecha_atras =  fecha.getFullYear() + "-" + (fecha.getMonth()+1) + "-" + (fecha.getDate()-6);  
   fecha_adelante = fecha2.getFullYear()  + "-" + (fecha2.getMonth()+1) + "-" + fecha2.getDate();
 
+  ///// fechas de creación y expiración de compras
+
+  var fecha_creacion;
+  var fecha_expitacion;
+
+  fechacc = new Date();
+  fechaex = new Date();
+
+  fechacc.setDate(fechacc.getDate() - 500);
+  fechaex.setDate(fechaex.getDate() + 700);
+
+  fecha_creacion =  fechacc.getFullYear() + "-" + (fechacc.getMonth()+1) + "-" + (fechacc.getDate());  
+  fecha_expitacion = fechaex.getFullYear()  + "-" + (fechaex.getMonth()+1) + "-" + fechaex.getDate();
+
   //////////////
   //////////
   var pass_usus_l = false;
@@ -1359,6 +1575,8 @@
   listar_lote_alimento_expirar();
   listar_lote_vacunas_expirar();
   listar_lote_desparasitante_expirar();
+  listar_lote_insumo_expirar();
+  listar_calendario_dasboard();
 
   function cargar_contenido(contenedor, contenido) {
     $("#" + contenedor).load(contenido);
@@ -1662,6 +1880,110 @@
   /// para validar las fechas
   function mostar_fecha(fecha_i, fecha_f) {
     $(".calendario").flatpickr({
+      minDate: fecha_i,
+      maxDate: fecha_f,
+        locale: {
+          firstDayOfWeek: 1,
+          weekdays: {
+            shorthand: ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa"],
+            longhand: [
+              "Domingo",
+              "Lunes",
+              "Martes",
+              "Miércoles",
+              "Jueves",
+              "Viernes",
+              "Sábado",
+            ],
+          },
+          months: {
+            shorthand: [
+              "Ene",
+              "Feb",
+              "Mar",
+              "Abr",
+              "May",
+              "Jun",
+              "Jul",
+              "Ago",
+              "Sep",
+              "Оct",
+              "Nov",
+              "Dic",
+            ],
+            longhand: [
+              "Enero",
+              "Febreo",
+              "Мarzo",
+              "Abril",
+              "Mayo",
+              "Junio",
+              "Julio",
+              "Agosto",
+              "Septiembre",
+              "Octubre",
+              "Noviembre",
+              "Diciembre",
+            ],
+          },
+        },
+        });
+  }
+
+  function mostar_creacion(fecha_i, fecha_f) {
+    $(".calendario_creacion").flatpickr({
+      minDate: fecha_i,
+      maxDate: fecha_f,
+        locale: {
+          firstDayOfWeek: 1,
+          weekdays: {
+            shorthand: ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa"],
+            longhand: [
+              "Domingo",
+              "Lunes",
+              "Martes",
+              "Miércoles",
+              "Jueves",
+              "Viernes",
+              "Sábado",
+            ],
+          },
+          months: {
+            shorthand: [
+              "Ene",
+              "Feb",
+              "Mar",
+              "Abr",
+              "May",
+              "Jun",
+              "Jul",
+              "Ago",
+              "Sep",
+              "Оct",
+              "Nov",
+              "Dic",
+            ],
+            longhand: [
+              "Enero",
+              "Febreo",
+              "Мarzo",
+              "Abril",
+              "Mayo",
+              "Junio",
+              "Julio",
+              "Agosto",
+              "Septiembre",
+              "Octubre",
+              "Noviembre",
+              "Diciembre",
+            ],
+          },
+        },
+        });
+  }
+
+  function mostar_expiracion(fecha_i, fecha_f) {
+    $(".calendario_expiracion").flatpickr({
       minDate: fecha_i,
       maxDate: fecha_f,
         locale: {

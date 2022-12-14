@@ -1,0 +1,193 @@
+<div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1 class="m-0"><i class="fa fa-list"></i> Listado de clientes -
+            <a
+              onclick="cargar_contenido('contenido_principal','/cliente');"
+              class="btn btn-success"
+              ><i class="fa fa-plus"></i> Nuevo cliente</a
+            ></h1> 
+        </div>
+  
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="/Admin">Inicio</a></li>
+            <li class="breadcrumb-item active">Lista clientes</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-lg-12 col-12">
+            <div class="card card-info">
+              <div class="card-header">
+                <h3 class="card-title">Listado de clientes</h3>
+              </div>
+  
+              <div class="card-body">
+                <div class="row">
+                  <div class="form-group col-lg-12 col-12">
+                    <table id="tabla_cliente_" class="table table-display table-hover responsive nowrap text-center"
+                      style="width: 100%">
+                      <thead>
+                        <tr>
+                          <th>#</th>
+                          <th>Acci&oacute;n</th>
+                          <th>Nombres</th>
+                          <th>Apellidos</th> 
+                          <th>Cédula</th>
+                          <th>Correo</th>
+                          <th>Dirección</th> 
+                          <th>Teléfono</th> 
+                          <th>Estado</th>
+                        </tr>
+                      </thead>
+  
+                      <tfoot>
+                        <tr>
+                            <th>#</th>
+                            <th>Acci&oacute;n</th>
+                            <th>Nombres</th>
+                            <th>Apellidos</th> 
+                            <th>Cédula</th>
+                            <th>Correo</th>
+                            <th>Dirección</th> 
+                            <th>Teléfono</th> 
+                            <th>Estado</th>
+                        </tr>
+                      </tfoot>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+  
+        <div class="row"></div>
+      </div>
+    </section>
+  </div>
+  
+  <div class="modal fade" id="modaleditar_cliente">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content bg-primary">
+        <div class="modal-header">
+          <h4 class="modal-title">Editar cliente</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body" style="background: white; color: black">
+          <input type="text" id="id_cliente" hidden />
+  
+          <div class="row">
+            <div class="form-group col-lg-6 col-6">
+              <label for="nombres_cli">Nombres</label>
+              <input type="text" maxlength="100" class="form-control" id="nombres_cli" placeholder="Ingrese nombres"
+                onkeypress="return soloLetras(event)" autocomplete="off" />
+              <span style="color: red" id="nombre_cli_oblig"></span>
+            </div>
+
+            <div class="form-group col-lg-6 col-6">
+              <label for="apellidos_cli">Apellidos</label>
+              <input type="text" maxlength="100" class="form-control" id="apellidos_cli" placeholder="Ingrese apellidos"
+                onkeypress="return soloLetras(event)" autocomplete="off" />
+              <span style="color: red" id="apellidos_cli_obligg"></span>
+            </div>
+
+            <div class="form-group col-lg-6 col-6">
+              <label for="domicilio_cli">Dirección</label>
+              <input type="text" maxlength="60" class="form-control" id="domicilio_cli"
+                placeholder="Ingrese dirección" autocomplete="off" />
+              <span style="color: red" id="domicilio_cli_obligg"></span>
+            </div>
+
+            <div class="form-group col-lg-6 col-6">
+              <label for="telefono_cli">Teléfono</label>
+              <input type="text" maxlength="15" class="form-control" id="telefono_cli" placeholder="Ingrese teléfono"
+                onkeypress="return soloNumeros(event)" autocomplete="off" />
+              <span style="color: red" id="telefono_cli_obligg"></span>
+            </div>
+
+            <div class="form-group col-lg-6 col-6">
+              <label for="cedula_clie">Cédula o ruc</label>
+              <input type="text" onkeypress="return soloNumeros(event)" maxlength="13" class="form-control" id="cedula_clie" placeholder="Ingrese cedula o ruc" autocomplete="off" onpaste="return false" />
+              <span style="color: red" id="cedula_clie_obligg"></span>
+            </div>
+
+            <div class="form-group col-lg-6 col-6">
+              <label for="correo_cli">Correo cliente</label>
+              <input type="text" maxlength="100" class="form-control" id="correo_cli"
+                placeholder="Ingrese correo cliente" autocomplete="off" onpaste="return false" />
+              <span style="color: red" id="correo_cli_obligg"></span>
+            </div>
+
+
+          </div>
+
+        </div>
+        <div class="modal-footer justify-content-between" style="background: #f5f4f3 !important">
+          <button type="button" class="btn btn-danger" data-dismiss="modal">
+            Cerrar
+          </button>
+          <button onclick="editar_cliente();" class="btn btn-success">
+            <i class="fa fa-edit"></i> Editar
+          </button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+ 
+  <script src="static/js/ventas.js"></script>
+  
+  <script> 
+    listado_clientes();
+
+    var G_correo_editar_cli = true;
+  
+    $("#correo_cli").keyup(function() {
+      if (this.value != "") {
+          document.getElementById('correo_cli').addEventListener('input', function() {
+              campo = event.target;
+              //este codigo me da formato email
+              email = /^[-\w.%+]{1,64}@(?:[A-Z0-9-]{1,63}\.){1,125}[A-Z]{2,63}$/i;
+  
+              //esto es para validar si es un email valida
+              if (email.test(campo.value)) {
+                  //estilos para cambiar de color y ocultar el boton
+                  $(this).css("border", "1px solid green");
+                  $("#correo_cli_obligg").html("");
+                  G_correo_editar_cli = true;
+              } else {
+                  $(this).css("border", "1px solid red");
+                  $("#correo_cli_obligg").html("Email incorrecto");
+                  G_correo_editar_cli = false;
+              }
+          });
+      } else {
+          $(this).css("border", "1px solid green");
+          $("#correo_cli_obligg").html("");
+          G_correo_editar_cli = false;
+      }
+    });
+  
+    $("#cedula_clie").validarCedulaEC({
+        onValid: function() {
+            $("#cedula_clie_obligg").html("");
+            alertify.success('Cedúla correcto');
+        },
+        onInvalid: function() {
+            $("#cedula_clie_obligg").html("Cedúla incorrecto")
+            alertify.error('Cedúla incorrecto');
+            $("#cedula_clie").val("");
+            $("#cedula_clie").focus();
+        }
+    });
+  </script>

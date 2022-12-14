@@ -89,8 +89,8 @@ function registro_proveedor() {
           $(".card-success").LoadingOverlay("hide");
           cargar_contenido('contenido_principal', '/proveedor');
           return Swal.fire(
-            "Proveedor registrado con exito",
-            "El proveedor se registro con exito",
+            "Proveedor registrado con éxito",
+            "El proveedor se registro con éxito",
             "success"
           );
         } else if (resp == 2) {
@@ -504,8 +504,8 @@ function editar_proveedor() {
           $("#modal_editar_proveedor").modal("hide");
           tabla_proveedor.ajax.reload();
           return Swal.fire(
-            "Proveedor editado con exito",
-            "El proveedor se edito con exito",
+            "Proveedor editado con éxito",
+            "El proveedor se edito con éxito",
             "success"
           );
         } else if (resp == 2) {
@@ -772,7 +772,7 @@ function guardar_detalle_compra_alimento(id) {
     if (resp > 0) {
       if (resp == 1) {
         Swal.fire({
-          title: "Campra realizada con exito",
+          title: "Campra realizada con éxito",
           text: "Desea imprimir la compra??",
           icon: "warning",
           showCancelButton: true,
@@ -891,7 +891,7 @@ function registra_tipo_insumo() {
         $(".card-dark").LoadingOverlay("hide");
         $("#tipo_insumo").val("");
 
-        $("#mensaje_tipo_i_success").text("El tipo de insumo se creo con exito");
+        $("#mensaje_tipo_i_success").text("El tipo de insumo se creo con éxito");
         $(".alerta_smsm_tipo_i_success").show(3000);
 
         tabla_tipo_insumo.ajax.reload();
@@ -1061,7 +1061,7 @@ function editar_tipo_insumo() {
         $("#tipo_insumo").val("");
         $("#id_tipo_i").val("");
 
-        $("#mensaje_tipo_i_success").text("El tipo de insumo se edito con exito");
+        $("#mensaje_tipo_i_success").text("El tipo de insumo se edito con éxito");
         $(".alerta_smsm_tipo_i_success").show(3000);
 
         tabla_tipo_insumo.ajax.reload();
@@ -1268,8 +1268,8 @@ function guardar_insumo() {
           cargar_contenido("contenido_principal", "/insumo");
 
           return Swal.fire(
-            "Insumo creado con exito",
-            "El insumo se creo con exito",
+            "Insumo creado con éxito",
+            "El insumo se creo con éxito",
             "success"
           );
         } else if (resp == 2) {
@@ -1651,8 +1651,8 @@ function editar_insumo() {
           $("#modal_editar_insumo").modal("hide");
           tabla_insumo.ajax.reload();
           return Swal.fire(
-            "Insumo editado con exito",
-            "El insumo se edito con exito",
+            "Insumo editado con éxito",
+            "El insumo se edito con éxito",
             "success"
           );
 
@@ -1790,7 +1790,7 @@ function editar_foto_insumo() {
           $("#modal_editar_foto_insumo").modal("hide");
           return Swal.fire(
             "Foto cambiada",
-            "La foto del insumo se cambio con exito",
+            "La foto del insumo se cambio con éxito",
             "success"
           );
 
@@ -1949,29 +1949,45 @@ function validar_registro_compra_insumo(proveedor, numero_compra, iva) {
 
 function guardar_detalle_compra_insumo(id) {
   var count = 0;
-  var arrego_alimento = new Array();
+  var arreglo_alimento = new Array();
   var arreglo_precio = new Array();
   var arreglo_cantidad = new Array();
   var arreglo_descuento = new Array();
   var arreglo_subtotal = new Array();
 
+  var arreglo_fi = new Array();
+  var arreglo_ff = new Array();
+  var arreglo_unidad = new Array();
+  var arreglo_codigo = new Array();
+  var arreglo_total_unidad = new Array();
+
   $("#tabla_compra_insumo tbody#tbody_tabla_compra_insumo tr").each(
     function () {
-      arrego_alimento.push($(this).find("td").eq(0).text());
-      arreglo_precio.push($(this).find("td").eq(3).text());
+      arreglo_alimento.push($(this).find("td").eq(0).text());
+      arreglo_precio.push($(this).find("td").eq(2).text());
       arreglo_cantidad.push($(this).find("#cantida_a").val());
+      arreglo_unidad.push($(this).find("#unidad_a").val());
       arreglo_descuento.push($(this).find("#descuento_a").val());
       arreglo_subtotal.push($(this).find("td").eq(6).text());
+      arreglo_fi.push($(this).find("#fecha_i").val());
+      arreglo_ff.push($(this).find("#fecha_f").val());
+      arreglo_codigo.push($(this).find("td").eq(10).text());
+      arreglo_total_unidad.push($(this).find("#cantida_a").val() * $(this).find("#unidad_a").val());
       count++;
     }
   );
 
   //aqui combierto el arreglo a un string
-  var ida = arrego_alimento.toString();
+  var ida = arreglo_alimento.toString();
   var precio = arreglo_precio.toString();
   var cantidad = arreglo_cantidad.toString();
   var descuento = arreglo_descuento.toString();
   var total = arreglo_subtotal.toString();
+  var unidad = arreglo_unidad.toString();
+  var fecha_ini = arreglo_fi.toString();
+  var fecha_fin = arreglo_ff.toString();
+  var codigo = arreglo_codigo.toString();
+  var total_unidad = arreglo_total_unidad.toString();
 
   if (count == 0) {
     return false;
@@ -1987,12 +2003,21 @@ function guardar_detalle_compra_insumo(id) {
       cantidad: cantidad,
       descuento: descuento,
       total: total,
+
+      unidad: unidad,
+      fecha_ini: fecha_ini,
+      fecha_fin: fecha_fin,
+      codigo: codigo,
+      total_unidad: total_unidad,
     },
   }).done(function (resp) {
+
+    console.log(resp);
+
     if (resp > 0) {
       if (resp == 1) {
         Swal.fire({
-          title: "Campra realizada con exito",
+          title: "Campra realizada con éxito",
           text: "Desea imprimir la compra??",
           icon: "warning",
           showCancelButton: true,
@@ -2090,7 +2115,7 @@ function registra_tipo_medicamento() {
         $(".card-dark").LoadingOverlay("hide");
         $("#tipo_medicamento").val("");
 
-        $("#mensaje_tipo_m_success").text("El tipo de medicamento se creo con exito");
+        $("#mensaje_tipo_m_success").text("El tipo de medicamento se creo con éxito");
         $(".alerta_smsm_tipo_m_success").show(3000);
 
         tabla_tipo_medicamento.ajax.reload();
@@ -2348,7 +2373,7 @@ function editar_tipo_medicamento() {
         $("#tipo_medicamento").val("");
         $("#id_tipo_m").val("");
 
-        $("#mensaje_tipo_m_success").text("El tipo de insumo se edito con exito");
+        $("#mensaje_tipo_m_success").text("El tipo de insumo se edito con éxito");
         $(".alerta_smsm_tipo_m_success").show(3000);
 
         tabla_tipo_medicamento.ajax.reload();
@@ -2405,6 +2430,9 @@ function guardar_medicamento() {
   var precio = $("#precio_c").val();
   var detalle = $("#detalle_m").val();
 
+  var presentacion = $("#presentacion").val();
+  var cantidad_unidad = $("#cantidad_unidad").val();
+
   if (
     codigo.length == 0 ||
     codigo.trim() == "" ||
@@ -2417,7 +2445,11 @@ function guardar_medicamento() {
     precio < 0 ||
     precio.trim() == "" ||
     detalle.length == 0 ||
-    detalle.trim() == ""
+    detalle.trim() == "" ||
+    presentacion.length == 0 ||
+    presentacion.trim() == "" ||
+    cantidad_unidad.length == 0 ||
+    cantidad_unidad.trim() == ""
   ) {
     validar_registro_medicamento(
       codigo,
@@ -2425,7 +2457,9 @@ function guardar_medicamento() {
       tipo,
       cantidad,
       precio,
-      detalle
+      detalle,
+      presentacion,
+      cantidad_unidad
     );
 
     return swal.fire(
@@ -2440,6 +2474,8 @@ function guardar_medicamento() {
     $("#cantidad_obligg").html("");
     $("#precio_obligg").html("");
     $("#detalle_obligg").html("");
+    $("#presentacion_obligg").html("");
+    $("#cantidad_unidad_obligg").html("");
   }
 
   var formdata = new FormData();
@@ -2452,6 +2488,8 @@ function guardar_medicamento() {
   formdata.append("precio", precio);
   formdata.append("detalle", detalle);
   formdata.append("foto", foto);
+  formdata.append("presentacion", presentacion);
+  formdata.append("cantidad_unidad", cantidad_unidad);
 
   $.ajax({
     url: "/compras/registrar_medicamento",
@@ -2467,8 +2505,8 @@ function guardar_medicamento() {
           cargar_contenido("contenido_principal", "/medicamentos");
 
           return Swal.fire(
-            "Medicamento creado con exito",
-            "El medicamento se creo con exito",
+            "Medicamento creado con éxito",
+            "El medicamento fue registrado con éxito",
             "success"
           );
         } else if (resp == 2) {
@@ -2503,7 +2541,9 @@ function validar_registro_medicamento(
   tipo,
   cantidad,
   precio,
-  detalle
+  detalle,
+  presentacion,
+  cantidad_unidad
 ) {
   if (codigo.length == 0 || codigo.trim() == "") {
     $("#codigo_oblig").html("Ingrese código");
@@ -2539,6 +2579,18 @@ function validar_registro_medicamento(
     $("#detalle_obligg").html("Ingrese el detalle del medicamento");
   } else {
     $("#detalle_obligg").html("");
+  }
+
+  if (presentacion.length == 0 || presentacion.trim() == "") {
+    $("#presentacion_obligg").html("Ingrese la presentación");
+  } else {
+    $("#presentacion_obligg").html("");
+  }
+
+  if (cantidad_unidad.length == 0 || cantidad_unidad.trim() == "") {
+    $("#cantidad_unidad_obligg").html("Ingrese cantidad unitaria");
+  } else {
+    $("#cantidad_unidad_obligg").html("");
   }
 
 }
@@ -2590,7 +2642,8 @@ function listar_medicamento() {
           );
         },
       },
-      { data: "cantidad" },
+      { data: "unidades" },
+      { data: "presentacion" },
       { data: "precio" },
       { data: "detalle" },
       {
@@ -2769,6 +2822,9 @@ $("#tabla_medicamento").on("click", ".editar", function () {
   $("#cantidad_edit").val(data.cantidad);
   $("#precio_c_edit").val(data.precio);
   $("#detalle_m_edit").val(data.detalle);
+  
+  $("#cantidad_unidad_edit").val(data.unidades);
+  $("#presentacion_edit").val(data.presentacion);
 
   $("#codigo_oblig_edi").html("");
   $("#nombre_obligg_edi").html("");
@@ -2776,6 +2832,9 @@ $("#tabla_medicamento").on("click", ".editar", function () {
   $("#cantidad_obligg_edi").html("");
   $("#precio_obligg_edi").html("");
   $("#detalle_obligg_edi").html("");
+
+  $("#presentacion_edit_obligg").html("");
+  $("#cantidad_unidad_edit_obligg").html("");
 
   $("#modal_editar_medicamento").modal({ backdrop: "static", keyboard: false });
   $("#modal_editar_medicamento").modal("show");
@@ -2789,6 +2848,8 @@ function editar_medicamento() {
   var cantidad = $("#cantidad_edit").val();
   var precio = $("#precio_c_edit").val();
   var detalle = $("#detalle_m_edit").val();
+  var unidades = $("#cantidad_unidad_edit").val();
+  var presentacion = $("#presentacion_edit").val();
 
   if (
     codigo.length == 0 ||
@@ -2802,7 +2863,12 @@ function editar_medicamento() {
     precio < 0 ||
     precio.trim() == "" ||
     detalle.length == 0 ||
-    detalle.trim() == ""
+    detalle.trim() == "" ||
+
+    unidades.length == 0 ||
+    unidades.trim() == "" ||
+    presentacion.length == 0 ||
+    presentacion.trim() == ""
   ) {
     validar_editar_medicamento(
       codigo,
@@ -2810,7 +2876,9 @@ function editar_medicamento() {
       tipo,
       cantidad,
       precio,
-      detalle
+      detalle,
+      unidades,
+      presentacion
     );
 
     return swal.fire(
@@ -2825,6 +2893,8 @@ function editar_medicamento() {
     $("#cantidad_obligg_edi").html("");
     $("#precio_obligg_edi").html("");
     $("#detalle_obligg_edi").html("");
+    $("#presentacion_edit_obligg").html("");
+    $("#cantidad_unidad_edit_obligg").html("");
   }
 
   var formdata = new FormData();
@@ -2835,6 +2905,8 @@ function editar_medicamento() {
   formdata.append("cantidad", cantidad);
   formdata.append("precio", precio);
   formdata.append("detalle", detalle);
+  formdata.append("unidades", unidades);
+  formdata.append("presentacion", presentacion);
 
   $.ajax({
     url: "/compras/editar_medicamento",
@@ -2851,8 +2923,8 @@ function editar_medicamento() {
           $("#modal_editar_medicamento").modal("hide");
           tabla_medicamento.ajax.reload();
           return Swal.fire(
-            "Medicamento editado con exito",
-            "El medicamento se edito con exito",
+            "Medicamento editado con éxito",
+            "El medicamento se edito con éxito",
             "success"
           );
 
@@ -2892,7 +2964,9 @@ function validar_editar_medicamento(
   tipo,
   cantidad,
   precio,
-  detalle
+  detalle,
+  unidades,
+  presentacion
 ) {
   if (codigo.length == 0 || codigo.trim() == "") {
     $("#codigo_oblig_edi").html("Ingrese código");
@@ -2928,6 +3002,18 @@ function validar_editar_medicamento(
     $("#detalle_obligg_edi").html("Ingrese el detalle del medicamento");
   } else {
     $("#detalle_obligg_edi").html("");
+  }
+
+  if (unidades.length == 0 || unidades.trim() == "") {
+    $("#cantidad_unidad_edit_obligg").html("Ingrese cantidad unidades");
+  } else {
+    $("#cantidad_unidad_edit_obligg").html("");
+  }
+
+  if (presentacion.length == 0 || presentacion.trim() == "") {
+    $("#presentacion_edit_obligg").html("Ingrese la presentación");
+  } else {
+    $("#presentacion_edit_obligg").html("");
   }
 }
 
@@ -2990,7 +3076,7 @@ function editar_foto_medicamento() {
           $("#modal_editar_foto_medicamento").modal("hide");
           return Swal.fire(
             "Foto cambiada",
-            "La foto del medicamento se cambio con exito",
+            "La foto del medicamento se cambio con éxito",
             "success"
           );
 
@@ -3212,7 +3298,7 @@ function guardar_detalle_compra_medicamento(id) {
     if (resp > 0) {
       if (resp == 1) {
         Swal.fire({
-          title: "Campra realizada con exito",
+          title: "Campra realizada con éxito",
           text: "Desea imprimir la compra??",
           icon: "warning",
           showCancelButton: true,
@@ -3480,7 +3566,7 @@ function guardar_detalle_compra_vacunas(id) {
     if (resp > 0) {
       if (resp == 1) {
         Swal.fire({
-          title: "Campra realizada con exito",
+          title: "Campra realizada con éxito",
           text: "Desea imprimir la compra??",
           icon: "warning",
           showCancelButton: true,

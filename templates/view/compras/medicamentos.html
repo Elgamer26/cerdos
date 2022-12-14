@@ -69,7 +69,8 @@
                                               <th>Nombre</th>
                                               <th>Tipo insumo</th> 
                                               <th>Foto</th>
-                                              <th>Cantidad</th>
+                                              <th>Cantidad unidad</th>
+                                              <th>Presentación</th>
                                               <th>Precio</th> 
                                               <th>Detalle del insumo</th>
                                               <th>Estado</th> 
@@ -84,7 +85,8 @@
                                                 <th>Nombre</th>
                                                 <th>Tipo insumo</th> 
                                                 <th>Foto</th>
-                                                <th>Cantidad</th>
+                                                <th>Cantidad unidad</th>
+                                                <th>Presentación</th>
                                                 <th>Precio</th> 
                                                 <th>Detalle del insumo</th>
                                                 <th>Estado</th> 
@@ -119,13 +121,13 @@
                                         <span style="color: red" id="codigo_oblig"></span>
                                     </div>
     
-                                    <div class="form-group col-lg-7 col-6">
+                                    <div class="form-group col-lg-9 col-6">
                                         <label for="nombre">Nombre del medicamento</label>
                                         <input type="text" maxlength="70" class="form-control" id="nombre" placeholder="Ingrese medicamento" />
                                         <span style="color: red" id="nombre_obligg"></span>
                                     </div>
     
-                                    <div class="form-group col-lg-6 col-6">
+                                    <div class="form-group col-lg-4 col-6">
                                           <label for="tipo_id">Tipo de medicamento</label>
                                           <select class="form-control tipo_id" style="width: 100%" id="tipo_id">
                                               <option value="0">--- Seleccione el tipo medicamento ---</option>
@@ -137,16 +139,29 @@
                                           <span style="color: red" id="tipo_obligg"></span>
                                     </div>
 
-                                    <div class="form-group col-lg-2 col-6">
+                                    <div hidden class="form-group col-lg-2 col-6">
                                           <label for="cantidad">Cantidad</label>
                                           <input type="text" maxlength="5" class="form-control" value="1" id="cantidad" placeholder="Ingrese cantidad" onkeypress="return soloNumeros(event)" />
                                           <span style="color: red" id="cantidad_obligg"></span>
                                     </div>
 
+                                    
+                                    <div class="form-group col-lg-2 col-6">
+                                      <label for="precio_c">Precio compra</label>
+                                      <input type="text" class="form-control" id="precio_c" placeholder="Ingrese precio" onkeypress="return filterfloat(event, this);" />
+                                      <span style="color: red" id="precio_obligg"></span>
+                                    </div>
+
                                     <div class="form-group col-lg-3 col-6">
-                                        <label for="precio_c">Precio compra</label>
-                                        <input type="text" class="form-control" id="precio_c" placeholder="Ingrese precio" onkeypress="return filterfloat(event, this);" />
-                                        <span style="color: red" id="precio_obligg"></span>
+                                      <label for="cantidad_unidad">Cantidad unidades</label>
+                                      <input type="text" maxlength="5" class="form-control" id="cantidad_unidad" placeholder="Ingrese cantidad unidades" onkeypress="return soloNumeros(event)" />
+                                      <span style="color: red" id="cantidad_unidad_obligg"></span>
+                                    </div>
+
+                                    <div class="form-group col-lg-3 col-6">
+                                      <label for="presentacion">Presentación</label>
+                                      <input type="text" maxlength="100" class="form-control" id="presentacion" placeholder="Ingrese presentación"/>
+                                      <span style="color: red" id="presentacion_obligg"></span>
                                     </div>
                                             
                                     <div class="form-group col-lg-12 col-6">
@@ -276,7 +291,7 @@
 </div>
 
 <div class="modal fade" id="modal_editar_medicamento">
-  <div class="modal-dialog modal-lg">
+  <div class="modal-dialog modal-xl">
       <div class="modal-content bg-primary">
           <div class="modal-header">
               <h4 class="modal-title">Editar medicamento</h4>
@@ -295,14 +310,14 @@
                     <span style="color: red" id="codigo_oblig_edi"></span>
                 </div>
 
-                <div class="form-group col-lg-7 col-6">
+                <div class="form-group col-lg-9 col-6">
                     <label for="nombre_edit">Nombre del medicamento</label>
                     <input type="text" maxlength="70" class="form-control" id="nombre_edit"
                         placeholder="Ingrese nombre" />
                     <span style="color: red" id="nombre_obligg_edi"></span>
                 </div>
 
-                <div class="form-group col-lg-6 col-6">
+                <div class="form-group col-lg-4 col-6">
                       <label for="tipo_id_edit">Tipo de medicamento</label>
                       <select class="form-control tipo_id_edit" style="width: 100%" id="tipo_id_edit">
                           <option value="0">--- Seleccione el tipo medicamento ---</option>
@@ -314,17 +329,29 @@
                       <span style="color: red" id="tipo_obligg_edi"></span>
                 </div>
 
-                <div class="form-group col-lg-2 col-6">
+                <div hidden class="form-group col-lg-2 col-6">
                       <label for="cantidad_edit">Cantidad</label>
                       <input type="text" maxlength="5" class="form-control" value="1" id="cantidad_edit" placeholder="Ingrese cantidad" onkeypress="return soloNumeros(event)" />
                       <span style="color: red" id="cantidad_obligg_edi"></span>
                 </div>
 
-                <div class="form-group col-lg-3 col-6">
+                <div class="form-group col-lg-2 col-6">
                     <label for="precio_c_edit">Precio compra</label>
                     <input type="text" class="form-control" id="precio_c_edit" placeholder="Ingrese precio" onkeypress="return filterfloat(event, this);" />
                     <span style="color: red" id="precio_obligg_edi"></span>
                 </div> 
+
+                <div class="form-group col-lg-2 col-6">
+                  <label for="cantidad_unidad_edit">Cantidad unidades</label>
+                  <input type="text" maxlength="5" class="form-control" id="cantidad_unidad_edit" placeholder="Ingrese cantidad unidades" onkeypress="return soloNumeros(event)" />
+                  <span style="color: red" id="cantidad_unidad_edit_obligg"></span>
+                </div>
+
+                <div class="form-group col-lg-4 col-6">
+                  <label for="presentacion_edit">Presentación</label>
+                  <input type="text" maxlength="100" class="form-control" id="presentacion_edit" placeholder="Ingrese presentación"/>
+                  <span style="color: red" id="presentacion_edit_obligg"></span>
+                </div>
 
                 <div class="form-group col-lg-12 col-6">
                     <label for="detalle_m_edit">Detalle del medicamento</label>

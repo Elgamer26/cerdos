@@ -1250,9 +1250,11 @@
 
         semana = calcularDiferenciaSemanas(new Date(d_fechaf[0], d_fechaf[1], d_fechaf[2]), new Date(y, m, d)); // 52
         if(semana == 0 || semana == "0"){
-            semana = parseInt(1);
-        }
-        $("#semanas_actual").val(semana);
+          semana = parseInt(1);
+      }else{
+        semana = semana + parseInt(1);
+      }
+      $("#semanas_actual").val(semana);
     });
 
     function traer_detalle_galpon_cerdo(){
@@ -1289,23 +1291,11 @@
                                   <a style="cursor: pointer;" class="dropdown-item" onclick="modal_pesaje( ${row[1]}, ${row[6]} );">Pesar</a>
                                   <a style="cursor: pointer;" class="dropdown-item" onclick="modal_vacunar_cerdo( ${row[1]} );">Vacunar</a>
                                   <a style="cursor: pointer;" class="dropdown-item" onclick="modal_desparasitante_cerdo( ${row[1]} );">Desparasitar</a> 
+                                  <a href="/reporte/costo_produccion_cerdo/${row[1]}" style="background: green; color: white; cursor: pointer;" class="dropdown-item" target="_blank">Costo por semana</a> 
                                   <a style="background: red; color: white; cursor: pointer;" class="dropdown-item" onclick="modal_cerdo_muerto_galpo( ${row[1]} );">Muerte del cerdo</a> 
+
                                 </div>
-                              </div> 
-                              - 
-                              <div class="btn-group">
-                                <button type="button" class="btn btn-danger">Listado</button>
-                                <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
-                                  <span class="sr-only">Toggle Dropdown</span>
-                                </button>
-                                <div class="dropdown-menu" role="menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(68px, 38px, 0px); top: 0px; left: 0px; will-change: transform;">
-                                  <a style="cursor: pointer;" class="dropdown-item" onclick="modal_listar_alimentos( ${row[1]} );">Alimento</a>
-                                  <a style="cursor: pointer;" class="dropdown-item" onclick="modal_listar_pesaje( ${row[1]} );">Pesaje</a>
-                                  <a style="cursor: pointer;" class="dropdown-item" onclick="modal_listar_vacunass( ${row[1]} );">Vacunas</a>
-                                  <a style="cursor: pointer;" class="dropdown-item" onclick="modal_listar_desparasitantess( ${row[1]} );">Desparasitaciones</a>  
-                                </div>
-                              </div>
-                            
+                              </div>  
                             </td>                     
                             </tr>`;           
                   $("#tbody_tabla_galpo_cerdo").html(llenat);   
@@ -1349,23 +1339,10 @@
                                 <a style="cursor: pointer;" class="dropdown-item" onclick="modal_pesaje( ${row[1]}, ${row[6]} );">Pesar</a>
                                 <a style="cursor: pointer;" class="dropdown-item" onclick="modal_vacunar_cerdo( ${row[1]} );">Vacunar</a>
                                 <a style="cursor: pointer;" class="dropdown-item" onclick="modal_desparasitante_cerdo( ${row[1]} );">Desparasitar</a> 
+                                <a href="/reporte/costo_produccion_cerdo/${row[1]}" style="background: green; color: white; cursor: pointer;" class="dropdown-item" target="_blank">Costo por semana</a> 
                                 <a style="background: red; color: white; cursor: pointer;" class="dropdown-item" onclick="modal_cerdo_muerto_galpo( ${row[1]} );">Muerte del cerdo</a> 
                               </div>
-                            </div> 
-                            - 
-                            <div class="btn-group">
-                              <button type="button" class="btn btn-danger">Listado</button>
-                              <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
-                                <span class="sr-only">Toggle Dropdown</span>
-                              </button>
-                              <div class="dropdown-menu" role="menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(68px, 38px, 0px); top: 0px; left: 0px; will-change: transform;">
-                                <a style="cursor: pointer;" class="dropdown-item" onclick="modal_listar_alimentos( ${row[1]} );">Alimento</a>
-                                <a style="cursor: pointer;" class="dropdown-item" onclick="modal_listar_pesaje( ${row[1]} );">Pesaje</a>
-                                <a style="cursor: pointer;" class="dropdown-item" onclick="modal_listar_vacunass( ${row[1]} );">Vacunas</a>
-                                <a style="cursor: pointer;" class="dropdown-item" onclick="modal_listar_desparasitantess( ${row[1]} );">Desparasitaciones</a>  
-                              </div>
-                            </div>
-                          
+                            </div>                           
                           </td>                     
                           </tr>`;           
                 $("#tbody_tabla_galpo_cerdo").html(llenat);   
@@ -1376,10 +1353,26 @@
       });
     }
 
+    //<div class="btn-group">
+    //   <button type="button" class="btn btn-danger">Listado</button>
+     //  <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+    //     <span class="sr-only">Toggle Dropdown</span>
+    //   </button>
+    //   <div class="dropdown-menu" role="menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(68px, 38px, 0px); top: 0px; left: 0px; will-change: transform;">
+    //     <a style="cursor: pointer;" class="dropdown-item" onclick="modal_listar_alimentos( ${row[1]} );">Alimento</a>
+    //     <a style="cursor: pointer;" class="dropdown-item" onclick="modal_listar_pesaje( ${row[1]} );">Pesaje</a>
+    //    <a style="cursor: pointer;" class="dropdown-item" onclick="modal_listar_vacunass( ${row[1]} );">Vacunas</a>
+  //       <a style="cursor: pointer;" class="dropdown-item" onclick="modal_listar_desparasitantess( ${row[1]} );">Desparasitaciones</a>  
+   //    </div>
+  //   </div> -->
 
     //////////////////////
     ///////// vacunar todo galpon
     function modal_vacunar_todo_galpon(){
+          $("#cantidad_dosis_t_obligg").html("");
+          $("#vacuna_t_obligg").html("");
+          traer_detalle_galpon_cerdo();
+          $("#inpu_buscar_cerdo").val("");
           $("#semana_vacuna_t").val(semana);
           $("#modal_vacunancion_cerdo_t").modal({ backdrop: "static", keyboard: false });
           $("#modal_vacunancion_cerdo_t").modal("show");
@@ -1487,6 +1480,8 @@
     ////////////////alimenta todo galpon
     function modal_alimenar_todo_galpon(){ 
       $("#semana_alimentacion_t").val(semana);
+      traer_detalle_galpon_cerdo();
+      $("#inpu_buscar_cerdo").val("");
 
       $("#alimento_t_obligg").html("");
       $("#tipo_alimentacion_t_obligg").html("");
@@ -1796,6 +1791,8 @@
 
     /////////// vacunar cerdo
     function modal_vacunar_cerdo(id){
+      $("#cantidad_dosis_obligg").html("");
+      $("#vacuna_obligg").html("");
           $("#id_cerdo_v").val(id);
           $("#semana_vacuna").val(semana);
           $("#modal_vacunancion_cerdo").modal({ backdrop: "static", keyboard: false });
@@ -1856,7 +1853,7 @@
       $(".espiner_disponible_c").LoadingOverlay("show");
 
       $.ajax({
-          url: "/alimento/traer_cantidad_dosis_lote",
+          url: "/alimento/traer_cantidad_dosis_lote_disponibles",
           type: "POST",
           data: {
               id: desc[1]
@@ -1875,6 +1872,8 @@
     ///// desparasitanción de cerdo
     function modal_desparasitante_cerdo(id)
     {
+      $("#cantidad_desparasitante_obligg").html("");
+      $("#desparasitante_obligg").html("");
       $("#id_cerdo_despa").val(id);
       $("#semana_desparasitacion").val(semana);
       $("#modal_medicamento_cerdo").modal({ backdrop: "static", keyboard: false });

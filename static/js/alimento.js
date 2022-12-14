@@ -840,8 +840,7 @@ function listado_alimento_cerdo() {
             "' width='50px' />"
           );
         },
-      },
-      { data: "cantidad" },
+      }, 
       { data: "precio" },
 
       {

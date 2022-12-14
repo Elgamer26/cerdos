@@ -81,18 +81,18 @@
                                     
                                         <div class="row">
 
-                                            <div class="form-group col-lg-5 col-2">
+                                            <div class="form-group col-lg-7 col-2">
                                                 <label for="galpon">Galpones</label>
                                                 <select class="form-control galpon" id="galpon" style="width: 100%;">
                                                     <option value="0">--- Seleccione galpon ---</option>    
                                                     {% for datas in data.galpon %}
-                                                    <option value="{{datas[0]}}">N° galpón: {{datas[1]}} </option>
+                                                    <option value="{{datas[0]}}">Número: {{datas[2]}} - Galpón: {{datas[1]}} - Fin: {{datas[4]}} </option>
                                                     {% endfor %}
                                                 </select> 
                                             </div> 
                                             
                                             <div class="form-group col-lg-12 col-2" style="text-align: center;">
-                                                <label>Cerdos en galpón disponibles</label>
+                                                <label>Cerdos en galpón</label>
                                                 <center>
                                                     <iframe width="100%" height="100%" class="contennidor" id="iframe_galpon"></iframe>
                                                 </center>
@@ -119,7 +119,13 @@
     $(document).ready(function() {
           $(".raza").select2();
           $(".galpon").select2();
+          ver_todo_cerdos();
     });
+
+    function ver_todo_cerdos(){
+        var ifrm = document.getElementById("iframe_cerdo");
+        ifrm.setAttribute("src", "/reporte/informa_cerdo_full");
+    }
 
     $("#raza").on('change', function(){
         var id = $(this).val();
@@ -134,13 +140,8 @@
         }
     
         var ifrm = document.getElementById("iframe_cerdo");
-        ifrm.setAttribute("src", "/reporte/informa_cerdo_raza/"+ id +"/"+ cerdo +"");
+        ifrm.setAttribute("src", "/reporte/informa_cerdo_raza/"+ id +"");
     })
-
-    function ver_todo_cerdos(){
-        var ifrm = document.getElementById("iframe_cerdo");
-        ifrm.setAttribute("src", "/reporte/informa_cerdo_full");
-    }
 
     //////////////////
     $("#galpon").on('change', function(){
@@ -156,7 +157,7 @@
         }
     
         var ifrm = document.getElementById("iframe_galpon");
-        ifrm.setAttribute("src", "/reporte/informa_galpon_numero/"+ id +"/"+ galpon +"");
+        ifrm.setAttribute("src", "/reporte/informa_galpon_cerdo/"+ id +"");
     })
 </script>
   

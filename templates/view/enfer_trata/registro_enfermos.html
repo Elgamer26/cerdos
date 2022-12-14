@@ -26,20 +26,27 @@
               <div class="card-body">
                 <div class="row">
 
-                    <div class="form-group col-lg-9 col-6">
+                  <div class="form-group col-lg-5 col-6 text-center">
+                    <label for="galpon_cerdo">Seleccione galpón:</label>
+                    <select class="form-control galpon_cerdo" style="width: 100%" id="galpon_cerdo">
+                        <option value="0">--- Seleccione galpón ---</option>    
+                        {% for datas in data.galpon %}
+                        <option value="{{datas[0]}}">Número: {{datas[2]}} - Galpón: {{datas[1]}} - Fin: {{datas[4]}} </option>
+                        {% endfor %}
+                    </select> 
+                  </div>    
+
+                    <div class="form-group col-lg-5 col-6 espiner_cerdo">
                         <label for="cerdo_id">Cerdo</label>
                         <select class="form-control cerdo_id text-center" style="width: 100%" id="cerdo_id">
                           <option value="0">--- Seleccione el cerdo ---</option>      
-                          {% for datas in data.cerdo %}
-                          <option value="{{datas[0]}}">Código: {{datas[1]}} - Sexo: {{datas[3]}} - Raza: {{datas[4]}} - peso: {{datas[6]}}Kg</option>
-                          {% endfor %}
                         </select>
                         <span style="color: red" id="cerdo_obligg"></span>
                     </div>
 
-                    <div class="form-group col-lg-3 col-6">
+                    <div class="form-group col-lg-2 col-6">
                         <label for="fecha_r">Fecha</label>
-                        <input type="date" value="{{data.fecha}}" class="form-control" id="fecha_r" />
+                        <input readonly type="date" value="{{data.fecha}}" class="form-control" id="fecha_r" />
                         <span style="color: red" id="fecha_obligg"></span>
                     </div>
 
@@ -143,10 +150,43 @@
   <script src="static/js/enfermedades.js"></script>
   
   <script>
-
+    $(".galpon_cerdo").select2();
     $(".cerdo_id").select2();
     $("#veterinario_id").select2();
     $(".enfermedad_id").select2();
+
+    $("#galpon_cerdo").on("change", function(){
+      var id = $(this).val();
+      
+      if(id == 0){
+        return false;
+      }
+
+      $(".espiner_cerdo").LoadingOverlay("show");
+      $.ajax({
+        url: "/galpon/traer_cerdo_dentro_galpon",
+          type: "POST",
+          data: {
+              id: id
+          },
+      }).done(function(data) { 
+          $("#cerdo_id").empty();
+          var cadena = "<option value='0'>--- Seleccione cerdo ---</option>";
+          if (data.length > 0) {
+            $(".espiner_cerdo").LoadingOverlay("hide");
+              //bucle para extraer los datos del rol
+              for (var i = 0; i < data.length; i++) {
+                  cadena += "<option value='" + data[i][1] + "'> " + data[i][2] + " - " + data[i][4] + " - " + data[i][5] + " - " + data[i][6] + " Kg </option>";
+              }
+              //aqui concadenamos al id del select
+              $("#cerdo_id").html(cadena);
+          } else {
+              $(".espiner_cerdo").LoadingOverlay("hide");
+              cadena += "<option value='0'>No hay cerdo</option>";
+              $("#cerdo_id").html(cadena); 
+          }
+      });
+  });
 
     function ingresar_tabla()
     {
@@ -197,5 +237,4 @@
       var table = tr.parentNode;
       table.removeChild(tr);
     });
-    
   </script>

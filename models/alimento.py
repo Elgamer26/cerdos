@@ -1457,3 +1457,107 @@ class Alimento():
             error = "Ocurrio un problema: " + str(e)
             return error
         return 0
+    
+    #################
+    ############
+    def Listar_medicamento_lote_tratamiento():
+        try:
+            query = mysql.connection.cursor()
+            query.execute("""SELECT
+                        lote_medicamento.codigo,
+                        medicamento.nombre,
+                        lote_medicamento.fecha_f,
+                        lote_medicamento.cantidad,                        
+                        lote_medicamento.id AS id_lote,
+                        medicamento.id AS id_me,
+                        medicamento.tipo_id 
+                    FROM
+                        tipo_medicamento
+                        INNER JOIN medicamento ON tipo_medicamento.id = medicamento.tipo_id
+                        INNER JOIN lote_medicamento ON medicamento.id = lote_medicamento.medicamento_id 
+                    ORDER BY
+                        lote_medicamento.fecha_f ASC""")
+            data = query.fetchall()
+            query.close()
+            if not data:
+                return 0
+            else:
+                new_lista = []
+                for datos in data:
+                    dic = {} 
+                    dic["codigo"] = datos[0]
+                    dic["nombre"] = datos[1]
+                    Convert = datetime.strptime(str(datos[2]), '%Y-%m-%d')
+                    dic["fecha"] = Convert.strftime('%Y-%m-%d')        
+                    dic["cantidad"] = datos[3]
+                    dic["id_l"] = datos[4]
+                    dic["id_m"] = datos[5]  
+                    new_lista.append(dic)
+                return new_lista
+        except Exception as e:
+            query.close()
+            error = "Ocurrio un problema: " + str(e)
+            return error
+        return 0
+
+    def Listar_insumo_lote_tratamiento():
+        try:
+            query = mysql.connection.cursor()
+            query.execute("""SELECT
+                            lote_insumo.codigo,
+                            insumo.nombre,
+                            lote_insumo.fecha_f,
+                            lote_insumo.cantidad,
+                            lote_insumo.id AS id_lote,
+                            insumo.id AS id_in,
+                            tipo_insumo.tipo 
+                        FROM
+                            lote_insumo
+                            INNER JOIN insumo ON lote_insumo.insumo_id = insumo.id
+                            INNER JOIN tipo_insumo ON insumo.tipo_id = tipo_insumo.id 
+                        ORDER BY
+                            lote_insumo.fecha_f ASC""")
+            data = query.fetchall()
+            query.close()
+            if not data:
+                return 0
+            else:
+                new_lista = []
+                for datos in data:
+                    dic = {} 
+                    dic["codigo"] = datos[0]
+                    dic["nombre"] = datos[1]
+                    Convert = datetime.strptime(str(datos[2]), '%Y-%m-%d')
+                    dic["fecha"] = Convert.strftime('%Y-%m-%d')        
+                    dic["cantidad"] = datos[3]
+                    dic["id_l"] = datos[4]
+                    dic["id_in"] = datos[5] 
+                    dic["tipo"] = datos[6]  
+                    new_lista.append(dic)
+                return new_lista
+        except Exception as e:
+            query.close()
+            error = "Ocurrio un problema: " + str(e)
+            return error
+        return 0
+    
+    def Traer_cantidad_dosis_lote_disponibles(id):
+        try:
+            query = mysql.connection.cursor()
+            query.execute("""SELECT
+                        lote_insumo.cantidad 
+                    FROM
+                        lote_insumo 
+                    WHERE
+                        lote_insumo.id='{0}'""".format(id))
+            data = query.fetchone()
+            query.close()
+            if not data:
+                return 0
+            else:
+                return data
+        except Exception as e:
+            query.close()
+            error = "Ocurrio un problema: " + str(e)
+            return error
+        return 0

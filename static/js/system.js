@@ -618,7 +618,18 @@ function editar_detalle_foto() {
   });
 }
 
-var tabla_lote_alimento_exper, tabla_lote_vacunas_exper, listar_lote_desparasitante_expirar;
+var tabla_lote_alimento_exper, tabla_lote_vacunas_exper, listar_lote_desparasitante_expirar, tabla_lote_insumo_exper;
+var fecha_lote_1, fecha_lote_2;
+
+fecha = new Date();
+fecha_2 = new Date();
+
+fecha.setDate(fecha.getDate() + 20);
+fecha_lote_1 = fecha.getFullYear() + "-" + (fecha.getMonth() + 1) + "-" + fecha.getDate();
+
+fecha_2.setDate(fecha_2.getDate() + 30);
+fecha_lote_2 = fecha_2.getFullYear() + "-" + (fecha_2.getMonth() + 1) + "-" + fecha_2.getDate();
+
 ////////////////// listar el lote de alimentos por expirar
 function listar_lote_alimento_expirar() {
   tabla_lote_alimento_exper = $("#tabla_lote_alimento_exper").DataTable({
@@ -646,13 +657,13 @@ function listar_lote_alimento_expirar() {
       {
         data: "fecha_f",
         render: function (data, type, row) {
-          if (data == 1) {
-            return "<span class='badge badge-success'>" + data + "</span>";
-          } else if (data == 0) {
-            return "<span class='badge badge-warning'>" + data + "</span>";
-          } else {
+          if (data <= fecha_lote_1) {
             return "<span class='badge badge-danger'>" + data + "</span>";
           }
+          if (data > fecha_lote_1 && fecha_lote_2 > data) {
+            return "<span class='badge badge-warning'>" + data + " </span>";
+          }
+          return "<span class='badge badge-success'>" + data + " </span>";
         },
       },
       { data: "nombre" },
@@ -717,13 +728,13 @@ function listar_lote_vacunas_expirar() {
       {
         data: "fecha_f",
         render: function (data, type, row) {
-          if (data == 1) {
-            return "<span class='badge badge-success'>" + data + "</span>";
-          } else if (data == 0) {
-            return "<span class='badge badge-warning'>" + data + "</span>";
-          } else {
+          if (data <= fecha_lote_1) {
             return "<span class='badge badge-danger'>" + data + "</span>";
           }
+          if (data > fecha_lote_1 && fecha_lote_2 > data) {
+            return "<span class='badge badge-warning'>" + data + " </span>";
+          }
+          return "<span class='badge badge-success'>" + data + " </span>";
         },
       },
       { data: "nombre" },
@@ -788,13 +799,13 @@ function listar_lote_desparasitante_expirar() {
       {
         data: "fecha_f",
         render: function (data, type, row) {
-          if (data == 1) {
-            return "<span class='badge badge-success'>" + data + "</span>";
-          } else if (data == 0) {
-            return "<span class='badge badge-warning'>" + data + "</span>";
-          } else {
+          if (data <= fecha_lote_1) {
             return "<span class='badge badge-danger'>" + data + "</span>";
           }
+          if (data > fecha_lote_1 && fecha_lote_2 > data) {
+            return "<span class='badge badge-warning'>" + data + " </span>";
+          }
+          return "<span class='badge badge-success'>" + data + " </span>";
         },
       },
       { data: "medicamento" },
@@ -831,4 +842,148 @@ function listar_lote_desparasitante_expirar() {
     order: [[1, 'asc']]
   });
 
+}
+
+function listar_lote_insumo_expirar() {
+  tabla_lote_insumo_exper = $("#tabla_lote_insumo_exper").DataTable({
+    ordering: true,
+    paging: true,
+    aProcessing: true,
+    aServerSide: true,
+    searching: { regex: true },
+    lengthMenu: [
+      [10, 25, 50, 100, -1],
+      [10, 25, 50, 100, "All"],
+    ],
+    pageLength: 10,
+    destroy: true,
+    async: false,
+    processing: true,
+
+    ajax: {
+      url: "/compras/listar_lote_insumos",
+      type: "GET",
+    },
+    //hay que poner la misma cantidad de columnas y tambien en el html
+    columns: [
+      { data: "codigo" },
+      {
+        data: "fecha_f",
+        render: function (data, type, row) {
+          if (data <= fecha_lote_1) {
+            return "<span class='badge badge-danger'>" + data + "</span>";
+          }
+          if (data > fecha_lote_1 && fecha_lote_2 > data) {
+            return "<span class='badge badge-warning'>" + data + " </span>";
+          }
+          return "<span class='badge badge-success'>" + data + " </span>";
+        },
+      },
+      { data: "insumo" },
+    ],
+
+    language: {
+      rows: "%d fila seleccionada",
+      processing: "Tratamiento en curso...",
+      search: "Buscar&nbsp;:",
+      lengthMenu: "Agrupar en _MENU_ items",
+      info: "Mostrando los item (_START_ al _END_) de un total _TOTAL_ items",
+      infoEmpty: "No existe datos.",
+      infoFiltered: "(filtrado de _MAX_ elementos en total)",
+      infoPostFix: "",
+      loadingRecords: "Cargando...",
+      zeroRecords: "No se encontro resultados en tu busqueda",
+      emptyTable: "No hay datos disponibles en la tabla",
+      paginate: {
+        first: "Primero",
+        previous: "Anterior",
+        next: "Siguiente",
+        last: "Ultimo",
+      },
+      select: {
+        rows: "%d fila seleccionada",
+      },
+      aria: {
+        sortAscending: ": active para ordenar la columa en orden ascendente",
+        sortDescending: ": active para ordenar la columna en orden descendente",
+      },
+    },
+    select: true,
+    responsive: "true",
+    order: [[1, 'asc']]
+  });
+
+}
+
+//// listar calendaris
+function listar_calendario_dasboard() {
+  var n = new Date();
+  var y = n.getFullYear();
+  var m = n.getMonth() + 1;
+  var d = n.getDate();
+  if (d < 10) {
+    d = '0' + d;
+  }
+  if (m < 10) {
+    m = '0' + m;
+  }
+  var dia = y + "-" + m + "-" + d;
+
+  $("#calendar_dasboard").fullCalendar({
+    height: 650,
+    header: {
+      language: 'es',
+      left: 'prev,next today',
+      center: 'title',
+      right: 'month,listWeek'
+  },
+    defaultDate: dia,
+    editable: true,
+    eventLimit: true, // allow "more" link when too many events
+    selectHelper: true,
+    selectable: true,
+    //-----------------
+    customButtons: {
+      // este boton yo lo cree
+      Miboton: {
+        text: "Boton 1",
+        click: function () {
+          alert("Acciom del boton");
+        }
+      }
+    },
+
+    //esto es para obtener los valores de dia fecha y cambir de color
+    dayClick: function (date, jsEvent, view) {
+      return Swal.fire(
+        "Fecha seleccionada",
+        "La fecha seleccionada es: " + date.format() + "",
+        "info"
+      );
+    },
+
+    events: "/vacunas/listar_calendario",
+
+    //este funcion mostrara los datos del evento seleccionado del cintillo
+    eventClick: function (calEvent, jsEvent, view) {
+
+      $("#titulo_evento_editar").html("Fecha de evento: " + moment(calEvent.start).format("YYYY-MM-DD"));
+      $("#evento_titulo_dasboard").val(calEvent.title);
+      $("#cerdo_dasboardt").val(calEvent.cerdo);
+      $("#galpon_cerdo_dasboardt").val(calEvent.galpon_cerdo);
+      $("#fecha_evento_dasboard").val(moment(calEvent.start).format("YYYY-MM-DD"));
+      $("#descripcion_dasboard").val(calEvent.descripcion);
+      $("#tipo_dasboard").val(calEvent.tipo);
+
+      $("#color_dasboard").val(calEvent.textColor);
+      $("#color_etiqueta_dasboard").val(calEvent.color);
+
+      $("#modal_canlendario_dasboard").modal({
+        backdrop: "static",
+        keyboard: false,
+      });
+      $("#modal_canlendario_dasboard").modal("show");
+    },
+
+  });
 }

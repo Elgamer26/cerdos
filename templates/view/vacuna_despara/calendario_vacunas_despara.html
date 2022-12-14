@@ -73,79 +73,56 @@
 
                               <div class="card card-warning">
                                 <div class="card-header">
-                                  <h3 id="unir_texto" class="card-title"> Listado de eventos</h3>
+                                  <h3 class="card-title"> Listado de eventos</h3>
                                 </div>
-                    
+
                                 <div class="card-body">
-                                  
-                                  <div class="form-group col-lg-12 col-12">
+                                  <div class="row">
                   
-                                    <table
-                                      id="tabla_eventos"
+                                    <div class="form-group col-lg-12 col-12 ">
+              
+                                      <table
+                                      id="tabla_eventos_calendar"
                                       class="table table-display table-hover responsive nowrap text-center"
                                       style="width: 100%" >
-                                    <thead>
-                                      <tr> 
-                                        <th style="width: 1px;">#</th>
-                                        <th>Acci&oacute;n</th>
-                                        <th>Cerdo</th>
-                                        <th>Titulo</th>
-                                        <th>Descripción</th>
-                                        <th>Fecha</th>
-                                        <th>Tipo</th>  
-                                      </tr>
-                                    </thead>
+                                      <thead>
+                                        <tr>  
+                                          <th>Galpón</th>
+                                          <th>Cerdo</th>
+                                          <th>Titulo</th> 
+                                          <th>Fecha</th>
+                                          <th>Tipo</th>  
+                                        </tr>
+                                      </thead>
 
-                                    <tbody>
+                                      <tbody id="tbody_tabla_calendario">
+              
+                                      </tbody>
+                  
+                                      <tfoot>
+                                        <tr>  
+                                          <th>Galpón</th>
+                                          <th>Cerdo</th>
+                                          <th>Titulo</th> 
+                                          <th>Fecha</th>
+                                          <th>Tipo</th>  
+                                        </tr>
+                                      </tfoot>
+                                    </table>
 
-                                      {% for c in data.evento %}
-            
-                                      <tr>
-                                        <td></td>
-                                       
-                                          <td> 
-                                              <button title="Revivir cerdo" onclick="eliminar-evento({{c['id']}});" class="btn btn-outline-danger"><i class="fa fa-times"></i></button>  
-                                          </td>
-                                  
-                                          <td> {{c['cerdo']}} </td>
-                                          <td> {{c['title']}}  </td>
-                                          <td> {{c['descripcion']}}  </td>
-                                          <td> {{c['start']}}  </td>
-
-                                          {% if c['tipo'] == "Vacuna" %}
-                                          <td> <span style="font-size: 13px;" class="badge badge-success">{{c['tipo']}}</span> </td>
-                                          {% else %}
-                                          <td> <span style="font-size: 13px;" class="badge badge-warning">{{c['tipo']}}</span> </td>
-                                          {% endif %}  
-                                                                                                          
-                                      {% endfor %}
-            
-                                    </tbody>
-                
-                                        <tfoot>
-                                            <tr> 
-                                              <th style="width: 1px;">#</th>
-                                              <th>Acci&oacute;n</th>
-                                              <th>Cerdo</th>
-                                              <th>Titulo</th>
-                                              <th>Descripción</th>
-                                              <th>Fecha</th>
-                                              <th>Tipo</th>  
-                                            </tr>
-                                        </tfoot>
-                                     </table>
-
+                                    </div>
+                  
                                   </div>
-                                
-                                </div> 
-
+                                </div>
+                     
                                 <div class="card-footer">
                                   <button onclick="cargar_contenido('contenido_principal','/calendario_vacunas_despara');"
                                       class="btn btn-danger">
                                        Volver
                                   </button>
                                 </div>
-
+                                
+                              </div> 
                             </div>
 
                           </div> 
@@ -166,35 +143,7 @@
 <script>  
     $(document).ready(function(){
       listar_calendario();
-
-      $("#tabla_eventos").DataTable({
-        language: {
-          rows: "%d fila seleccionada",
-          processing: "Tratamiento en curso...",
-          search: "Buscar&nbsp;:",
-          lengthMenu: "Agrupar en _MENU_ items",
-          info: "Mostrando los item (_START_ al _END_) de un total _TOTAL_ items",
-          infoEmpty: "No existe datos.",
-          infoFiltered: "(filtrado de _MAX_ elementos en total)",
-          infoPostFix: "",
-          loadingRecords: "Cargando...",
-          zeroRecords: "No se encontro resultados en tu busqueda",
-          emptyTable: "No hay datos disponibles en la tabla",
-          paginate: {
-            first: "Primero",
-            previous: "Anterior",
-            next: "Siguiente",
-            last: "Ultimo",
-          },
-          select: {
-            rows: "%d fila seleccionada",
-          },
-          aria: {
-            sortAscending: ": active para ordenar la columa en orden ascendente",
-            sortDescending: ": active para ordenar la columna en orden descendente",
-          },
-        },
-      });
+      Listar_tabla_calendar();
     });
 
     function listar_calendario(){
@@ -211,12 +160,14 @@
       var dia = y + "-" + m + "-" + d;
       
       $("#calendar").fullCalendar({
-          height: 650,
+          height: 600,
           header: {
               language: 'es',
-              left: 'prev,next today',
+              //left: 'prev,next today',
+              left: 'prev,next',
               center: 'title',
-              right: 'month,agendaWeek,agendaDay,listWeek'
+              //right: 'month,agendaWeek,agendaDay,listWeek'
+              right: 'month,listWeek'
           },
           defaultDate: dia,
           editable: true,
@@ -236,6 +187,14 @@
 
           //esto es para obtener los valores de dia fecha y cambir de color
           dayClick: function(date, jsEvent, view) {
+
+              $("#titulo_obligg").html("");
+              $("#cerdo_obligg").html("");
+              $("#descripcion_obligg").html("");
+              $("#tipoo_obligg").html("");
+
+              $("#color_obligg").html("");
+              $("#etiqueta_obligg").html("");
 
               if (dia > date.format()) {
                   return Swal.fire(
@@ -259,13 +218,21 @@
 
           events: "/vacunas/listar_calendario",
 
-            //este funcion mostrara los datos del evento seleccionado del cintillo
+          //este funcion mostrara los datos del evento seleccionado del cintillo
           eventClick: function(calEvent, jsEvent, view) {
 
+              $("#titulo_obligg_edit").html("");
+              $("#cerdo_obligg_edit").html("");
+              $("#descripcion_obligg_edit").html("");
+              $("#tipoo_obligg_edit").html("");
+              $("#color_obligg_edit").html("");
+              $("#etiqueta_obligg_edit").html("");
+
               $("#id_calendario").val(calEvent.id);
-              $("#titulo_evento_editar").html("Editar evento: " + moment(calEvent.start).format("YYYY-MM-DD"));
-              $("#evento_titulo_edit").val((calEvent.title));
-              $("#cerdo_edit").val(calEvent.id_cerdo).trigger("change");
+              $("#titulo_evento_editar").html("Fecha de evento: " + moment(calEvent.start).format("YYYY-MM-DD"));
+              $("#evento_titulo_edit").val(calEvent.title);
+              $("#cerdo_editt").val(calEvent.cerdo);
+              $("#galpon_cerdo_editt").val(calEvent.galpon_cerdo);
               $("#fecha_evento_edit").val(moment(calEvent.start).format("YYYY-MM-DD"));
               $("#descripcion_edit").val(calEvent.descripcion);
               $("#tipo_edit").val(calEvent.tipo);
@@ -284,39 +251,10 @@
     }
 
     $(".cerdo_select").select2();
-
-    $("#tabla_muertes_cerdo").DataTable({
-      language: {
-        rows: "%d fila seleccionada",
-        processing: "Tratamiento en curso...",
-        search: "Buscar&nbsp;:",
-        lengthMenu: "Agrupar en _MENU_ items",
-        info: "Mostrando los item (_START_ al _END_) de un total _TOTAL_ items",
-        infoEmpty: "No existe datos.",
-        infoFiltered: "(filtrado de _MAX_ elementos en total)",
-        infoPostFix: "",
-        loadingRecords: "Cargando...",
-        zeroRecords: "No se encontro resultados en tu busqueda",
-        emptyTable: "No hay datos disponibles en la tabla",
-        paginate: {
-          first: "Primero",
-          previous: "Anterior",
-          next: "Siguiente",
-          last: "Ultimo",
-        },
-        select: {
-          rows: "%d fila seleccionada",
-        },
-        aria: {
-          sortAscending: ": active para ordenar la columa en orden ascendente",
-          sortDescending: ": active para ordenar la columna en orden descendente",
-        },
-      },
-    });
 </script>
 
 <div class="modal fade" id="modal_canlendario_register">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content bg-success">
             <div class="modal-header">
                 <h4 class="modal-title" id="titulo_evento_re"></h4>
@@ -337,18 +275,25 @@
                         </div>
                     </div>
 
-                    <div class="form-group col-lg-6">
+                    <div class="form-group col-lg-6 col-6 text-center">
+                      <label for="galpon_cerdo">Seleccione galpón:</label>
+                      <select class="form-control galpon_cerdo" style="width: 100%" id="galpon_cerdo">
+                          <option value="0">--- Seleccione galpón ---</option>    
+                          {% for datas in data.galpon %}
+                          <option value="{{datas[0]}}">Número: {{datas[2]}} - Galpón: {{datas[1]}} - Fin: {{datas[4]}} </option>
+                          {% endfor %}
+                      </select> 
+                    </div> 
+
+                    <div class="form-group col-lg-6 espiner_cerdo">
                         <label for="cerdo">Cerdo:</label>
                         <select class="form-control cerdo_select" style="width: 100%" id="cerdo">
-                            <option value="0">--- Seleccione cerdo ---</option>    
-                            {% for datas in data.cerdo %}
-                            <option value="{{datas[0]}}">Código: {{datas[1]}} - Raza: {{datas[4]}} - Sexo: {{datas[3]}}</option>
-                            {% endfor %}
+                            <option value="0">--- Seleccione cerdo ---</option> 
                         </select>
                         <span style="color: red" id="cerdo_obligg"></span>
                     </div>
 
-                    <div class="col-lg-9">
+                    <div class="col-lg-6">
                         <div class="form-group">
                             <label for="descripcion">Descripción</label>
                             <input autocomplete="off" type="text" maxlength="50" placeholder="Ingrese descripción" class="form-control" id="descripcion">
@@ -403,7 +348,7 @@
 </div>
 
 <div class="modal fade" id="modal_canlendario_editar">
-  <div class="modal-dialog modal-lg">
+  <div class="modal-dialog modal-xl">
       <div class="modal-content bg-primary">
           <div class="modal-header">
               <h4 class="modal-title" id="titulo_evento_editar"></h4>
@@ -427,17 +372,16 @@
                   </div>
 
                   <div class="form-group col-lg-6">
-                      <label for="cerdo_edit">Cerdo:</label>
-                      <select class="form-control cerdo_select" style="width: 100%" id="cerdo_edit">
-                          <option value="0">--- Seleccione cerdo ---</option>    
-                          {% for datas in data.cerdo %}
-                          <option value="{{datas[0]}}">Código: {{datas[1]}} - Raza: {{datas[4]}} - Sexo: {{datas[3]}}</option>
-                          {% endfor %}
-                      </select>
-                      <span style="color: red" id="cerdo_obligg_edit"></span>
+                    <label for="galpon_cerdo_editt">Galpón:</label>
+                    <input readonly type="text" maxlength="200" id="galpon_cerdo_editt" class="form-control"> 
+                </div>
+
+                  <div class="form-group col-lg-6">
+                      <label for="cerdo_editt">Cerdo:</label>
+                      <input readonly type="text" maxlength="200" id="cerdo_editt" class="form-control">    
                   </div>
 
-                  <div class="col-lg-9">
+                  <div class="col-lg-6">
                       <div class="form-group">
                           <label for="descripcion_edit">Descripción</label>
                           <input autocomplete="off" type="text" maxlength="50" placeholder="Ingrese descripción" class="form-control" id="descripcion_edit">
@@ -481,9 +425,11 @@
               </div>
 
           </div>
+          
           <div class="modal-footer justify-content-between" style="background: #f5f4f3 !important">
               <button type="button" class="btn btn-danger" data-dismiss="modal"> Cerrar </button> 
-              <button type="button" class="btn btn-success" onclick="editar_calendario_cerdo()"> <i class="fa fa-save"></i> Guardar </button>  
+              <button type="button" class="btn btn-danger" onclick="eliminar_evento_calendario()"> <i class="fa fa-trash"></i> Borrar </button>  
+              <button type="button" class="btn btn-success" onclick="editar_calendario_cerdo()"> <i class="fa fa-edit"></i> Editar </button>  
           </div>
       </div>
       <!-- /.modal-content -->
@@ -491,5 +437,73 @@
   <!-- /.modal-dialog -->
 </div>
 
+<script>
+
+  $(".galpon_cerdo").select2();
+
+  $("#galpon_cerdo").on("change", function(){
+    var id = $(this).val();
+    
+    if(id == 0){
+      return false;
+    }
+
+    $(".espiner_cerdo").LoadingOverlay("show");
+    $.ajax({
+      url: "/galpon/traer_cerdo_dentro_galpon",
+        type: "POST",
+        data: {
+            id: id
+        },
+    }).done(function(data) { 
+        $("#cerdo").empty();
+        var cadena = "<option value='0'>--- Seleccione cerdo ---</option>";
+        if (data.length > 0) {
+          $(".espiner_cerdo").LoadingOverlay("hide");
+            //bucle para extraer los datos del rol
+            for (var i = 0; i < data.length; i++) {
+                cadena += "<option value='" + data[i][1] + "'> " + data[i][2] + " - " + data[i][4] + " - " + data[i][5] + " - " + data[i][6] + " Kg </option>";
+            }
+            //aqui concadenamos al id del select
+            $("#cerdo").html(cadena);
+        } else {
+            $(".espiner_cerdo").LoadingOverlay("hide");
+            cadena += "<option value='0'>No hay cerdo</option>";
+            $("#cerdo").html(cadena); 
+        }
+    });
+  });
+
+  function Listar_tabla_calendar(){
+    $.ajax({
+      url: "/vacunas/listar_calendario_tabla",
+      type: "GET", 
+      success: function (resp) {
+          $("#tbody_tabla_calendario").empty();
+          if (resp != 0) {
+              var llenat = "";
+              var tipo = "";
+              resp["data"].forEach((row) => {
+                if(row['tipo'] == "Vacuna"){
+                  tipo = `<span style="font-size: 13px;" class="badge badge-success">${row["tipo"]}</span>`;
+                }else{
+                  tipo = `<span style="font-size: 13px;" class="badge badge-warning">${row["tipo"]}</span>`;
+                }
+                llenat += `<tr> 
+                        <td> ${row['galpon_cerdo']} </td>
+                        <td> ${row['cerdo']}    </td>
+                        <td> ${row['title']}  </td>
+                        <td> ${row['start']}  </td>
+                        <td> ${tipo}  </td>     
+                        </tr>`;
+                $("#tbody_tabla_calendario").html(llenat);
+              });
+          }
+      },
+
+    });
+  }
+
+</script>
  
  

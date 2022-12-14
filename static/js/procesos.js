@@ -1500,6 +1500,10 @@ function modal_listar_desparasitantess(id) {
 
 ///// desparasitanción de todos los cerdos
 function modal_desparasitar_todo_galpon() {
+    $("#cantidad_desparasitante_t_obligg").html("");
+    $("#desparasitante_t_obligg").html("");
+    $("#inpu_buscar_cerdo").val("");
+    traer_detalle_galpon_cerdo();
     $("#semana_desparasitacion_t").val(semana);
     $("#modal_medicamento_cerdo_t").modal({ backdrop: "static", keyboard: false });
     $("#modal_medicamento_cerdo_t").modal("show");

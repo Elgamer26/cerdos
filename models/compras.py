@@ -157,8 +157,8 @@ class Compras():
             query.connection.commit()
             query.execute('INSERT INTO lote_alimento (alimento_id,cantidad,fecha_i,fecha_f,codigo) VALUES ("{0}","{1}","{2}","{3}","{4}")'.format(ida,peso,fecha_i,fecha_f,codigo))
             query.connection.commit()
-            query.execute('UPDATE alimento SET cantidad = cantidad + "{0}" WHERE id = "{1}" '.format(cantidad,ida))
-            query.connection.commit()
+            # query.execute('UPDATE alimento SET cantidad = cantidad + "{0}" WHERE id = "{1}" '.format(cantidad,ida))
+            # query.connection.commit()
             query.close()
             return 1  # se inserto correcto
         except Exception as e:
@@ -476,18 +476,18 @@ class Compras():
         return 0
     
     # modelo para registra el detalle de compra del insumo
-    def Registrar_detalle_compra_insumo(_id, ida, precio, cantidad, descuento, total):
+    def Registrar_detalle_compra_insumo(_id, ida, precio, cantidad, descuento, total, unidad, fecha_ini, fecha_fin, codigo, total_unidad):
         try:
             query = mysql.connection.cursor()         
-            query.execute('INSERT INTO detalle_compra_insumo (compra_insumo_id,insumo_id,precio,cantidad,descuento,total) VALUES ("{0}","{1}","{2}","{3}","{4}","{5}")'.format(_id,ida,precio,cantidad,descuento,total))
+            query.execute('INSERT INTO detalle_compra_insumo (compra_insumo_id,insumo_id,precio,cantidad,descuento,total,unidad) VALUES ("{0}","{1}","{2}","{3}","{4}","{5}","{6}")'.format(_id,ida,precio,cantidad,descuento,total,unidad))
             query.connection.commit()
-
-            query.execute('UPDATE insumo SET cantidad = cantidad + "{0}" WHERE id = "{1}" '.format(cantidad,ida))
+            
+            query.execute('INSERT INTO lote_insumo (insumo_id,cantidad,fecha_i,fecha_f,codigo) VALUES ("{0}","{1}","{2}","{3}","{4}")'.format(ida,total_unidad,fecha_ini,fecha_fin,codigo))
             query.connection.commit()
-
+            # query.execute('UPDATE insumo SET cantidad = cantidad + "{0}" WHERE id = "{1}" '.format(cantidad,ida))
+            # query.connection.commit()
             query.close()
             return 1  # se inserto correcto
-
         except Exception as e:
             query.close()
             error = "Ocurrio un problema: " + str(e)
@@ -645,13 +645,13 @@ class Compras():
         return 0
     
     # modelo para registrar el medicamento
-    def Crear_medicamento(_codigo, _nombre, _tipo, _cantidad, _precio, _detalle, archivo):
+    def Crear_medicamento(_codigo, _nombre, _tipo, _cantidad, _precio, _detalle, archivo, _presentacion, _cantidad_unidad):
         try:
             query = mysql.connection.cursor()
             query.execute('SELECT * FROM medicamento WHERE codigo = "{0}"'. format(_codigo))
             data = query.fetchone()
             if not data:
-                query.execute('INSERT INTO medicamento (codigo,nombre,tipo_id,cantidad,precio,detalle,foto) VALUES ("{0}","{1}","{2}","{3}","{4}","{5}","{6}")'.format(_codigo,_nombre,_tipo,_cantidad,_precio,_detalle,archivo))
+                query.execute('INSERT INTO medicamento (codigo,nombre,tipo_id,cantidad,precio,detalle,foto,presentacion,unidades) VALUES ("{0}","{1}","{2}","{3}","{4}","{5}","{6}","{7}","{8}")'.format(_codigo,_nombre,_tipo,_cantidad,_precio,_detalle,archivo,_presentacion,_cantidad_unidad))
                 query.connection.commit()
                 query.close()
                 return 1  # se inserto correcto
@@ -678,7 +678,9 @@ class Compras():
                             medicamento.precio,
                             medicamento.detalle,
                             medicamento.foto,
-                            medicamento.estado 
+                            medicamento.estado,                            
+                            medicamento.presentacion,
+                            medicamento.unidades 
                         FROM
                             medicamento
                             INNER JOIN tipo_medicamento ON medicamento.tipo_id = tipo_medicamento.id ORDER BY medicamento.id DESC""")
@@ -696,7 +698,9 @@ class Compras():
                 dic["precio"] = datos[6]
                 dic["detalle"] = datos[7]
                 dic["foto"] = datos[8] 
-                dic["estado"] = datos[9]       
+                dic["estado"] = datos[9]   
+                dic["presentacion"] = datos[10]   
+                dic["unidades"] = datos[11]       
                 new_lista.append(dic)
             return {"data": new_lista}
         except Exception as e:
@@ -761,6 +765,62 @@ class Compras():
             return error
         return 0
     
+    def Listar_lote_insumos():
+        try:
+            query = mysql.connection.cursor()
+            query.execute("""SELECT
+                        lote_insumo.id,
+                        insumo.nombre,
+                        lote_insumo.cantidad,
+                        lote_insumo.fecha_i,
+                        lote_insumo.fecha_f,
+                        lote_insumo.codigo,
+                        DATE( lote_insumo.fecha ) AS fecha_crear,
+                        TIME( lote_insumo.fecha ) AS hora,
+                        CONCAT_WS( ' ', insumo.nombre, tipo_insumo.tipo ) AS insumo
+                    FROM
+                        tipo_insumo
+                        INNER JOIN insumo ON tipo_insumo.id = insumo.tipo_id
+                        INNER JOIN lote_insumo ON insumo.id = lote_insumo.insumo_id 
+                    ORDER BY
+                        lote_insumo.id DESC""")
+            data = query.fetchall()
+            query.close()
+            new_lista = []
+            for datos in data:
+                dic = {} 
+                dic["id"] = datos[0]
+                dic["insumo"] = datos[1] 
+                dic["cantidad"] = datos[2]           
+                Convert = datetime.strptime(str(datos[3]), '%Y-%m-%d')
+                dic["fecha_i"] = Convert.strftime('%Y-%m-%d') 
+                Convert = datetime.strptime(str(datos[4]), '%Y-%m-%d')
+                dic["fecha_f"] = Convert.strftime('%Y-%m-%d') 
+                dic["codigo"] = datos[5]  
+                Convert = datetime.strptime(str(datos[6]), '%Y-%m-%d')
+                dic["fecha"] = Convert.strftime('%Y-%m-%d')              
+                Convert = datetime.strptime(str(datos[7]), '%H:%M:%S')
+                dic["hora"] = Convert.strftime('%H:%M:%S')            
+                new_lista.append(dic)
+            return {"data": new_lista}
+        except Exception as e:
+            query.close()
+            error = "Ocurrio un problema: " + str(e)
+            return error
+        return 0
+    
+    def Eliminar_lote_insumos(_id):
+        try:
+            query = mysql.connection.cursor()
+            query.execute('DELETE FROM lote_insumo WHERE id="{0}"'.format(_id))
+            query.connection.commit()
+            query.close()
+            return 1  # se inserto correcto
+        except Exception as e:
+            query.close()
+            error = "Ocurrio un problema: " + str(e)
+            return error
+        return 0
     # modelo para cambiar el estado del medicamento
     def Estado_medicamento(_id,_dato):
         try:
@@ -776,13 +836,13 @@ class Compras():
         return 0
     
     # modelo para editar el medicamento
-    def Editar_medicamento(_codigo, _nombre, _tipo, _cantidad, _precio, _detalle, id):
+    def Editar_medicamento(_codigo, _nombre, _tipo, _cantidad, _precio, _detalle, id, _presentacion, _cantidad_unidad):
         try:
             query = mysql.connection.cursor()
             query.execute('SELECT * FROM medicamento WHERE codigo="{0}" AND id!="{1}"'. format(_codigo,id))
             data = query.fetchone()
             if not data:
-                query.execute('UPDATE medicamento SET codigo="{0}",nombre="{1}",tipo_id="{2}",cantidad="{3}",precio="{4}",detalle="{5}"WHERE id = "{6}"'.format(_codigo,_nombre,_tipo,_cantidad,_precio,_detalle,id))
+                query.execute('UPDATE medicamento SET codigo="{0}",nombre="{1}",tipo_id="{2}",cantidad="{3}",precio="{4}",detalle="{5}",presentacion="{6}",unidades="{7}" WHERE id="{8}"'.format(_codigo,_nombre,_tipo,_cantidad,_precio,_detalle,_presentacion,_cantidad_unidad,id))
                 query.connection.commit()
                 query.close()
                 return 1  # se inserto correcto
@@ -809,10 +869,13 @@ class Compras():
                             medicamento.precio,
                             medicamento.detalle,
                             medicamento.foto,
-                            medicamento.estado 
+                            medicamento.estado,
+                            medicamento.presentacion,
+                            medicamento.unidades 
                             FROM
                             medicamento
-                            INNER JOIN tipo_medicamento ON medicamento.tipo_id = tipo_medicamento.id WHERE medicamento.estado = 1""")
+                            INNER JOIN tipo_medicamento ON medicamento.tipo_id = tipo_medicamento.id WHERE medicamento.estado = 1 
+                            ORDER BY medicamento.id ASC""")
             data = query.fetchall()
             query.close() 
             return data
@@ -974,8 +1037,8 @@ class Compras():
             query.execute('INSERT INTO lote_vacuna (vacuna_id,cantidad,fecha_i,fecha_f,codigo) VALUES ("{0}","{1}","{2}","{3}","{4}")'.format(ida,dosis,fecha_i,fecha_f,codigo))
             query.connection.commit()
 
-            query.execute('UPDATE vacuna SET cantidad = cantidad + "{0}" WHERE id = "{1}" '.format(cantidad,ida))
-            query.connection.commit()
+            # query.execute('UPDATE vacuna SET cantidad = cantidad + "{0}" WHERE id = "{1}" '.format(cantidad,ida))
+            # query.connection.commit()
 
             query.close()
             return 1  # se inserto correcto

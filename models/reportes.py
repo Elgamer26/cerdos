@@ -431,6 +431,33 @@ class Reportes():
             return error
         return 0
 
+    ######################### INFORME COMPA VACUNAS POR FECHAS
+
+    # modelo para listado las compras de vacunas por fecha
+    def Informe_compras_vacunas(f_i, f_f):
+        try:
+            query = mysql.connection.cursor()
+            query.execute("""SELECT
+                        compra_vacuna.fecha,
+                        compra_vacuna.numero_compra,
+                        compra_vacuna.iva,
+                        compra_vacuna.subtotal,
+                        compra_vacuna.impuesto,
+                        compra_vacuna.total 
+                    FROM
+                        compra_vacuna 
+                    WHERE
+                        compra_vacuna.estado = 1 
+                        AND DATE( compra_vacuna.fecha ) BETWEEN '{0}' AND '{1}' """.format(f_i,f_f))
+            data = query.fetchall()
+            query.close() 
+            return data
+        except Exception as e:
+            query.close()
+            error = "Ocurrio un problema: " + str(e)
+            return error
+        return 0
+
     ######################### INFORME CONTROL DE PESO DEL CERDO POR FECHAS
 
     # modelo para listar el cerdo
@@ -458,24 +485,25 @@ class Reportes():
         return 0
 
     # modelo para listado los pesos del cerdo por fechas
-    def Informe_control_peso(f_i, f_f, id):
+    def Informe_control_peso(id):
         try:
             query = mysql.connection.cursor()
             query.execute("""SELECT
-                        peso_cerdo.fecha,
+                        peso_cerdo.cerdo_id,
+                        DATE( peso_cerdo.fecha ) AS fecha,
+                        TIME( peso_cerdo.fecha ) AS hora,
                         peso_cerdo.metodo,
-                        peso_cerdo.estado,
-                        peso_cerdo.peso_a,
-                        peso_cerdo.peso_b,
-                        peso_cerdo.p_v,
-                        cerdo.id_cerdo 
+                        peso_cerdo.nuevo_pesaje,
+                        peso_cerdo.etapa_fase,
+                        peso_cerdo.perimetro_t,
+                        peso_cerdo.largo_c,
+                        peso_cerdo.semana 
                     FROM
-                        peso_cerdo
-                        INNER JOIN cerdo ON peso_cerdo.cerdo_id = cerdo.id_cerdo
-                        INNER JOIN raza ON cerdo.raza = raza.id_raza
-                            WHERE peso_cerdo.fecha BETWEEN '{0}' AND '{1}' AND cerdo.id_cerdo = '{2}' 
-                        ORDER BY
-                        peso_cerdo.fecha DESC, peso_cerdo.peso_id DESC""".format(f_i,f_f,id))
+                        peso_cerdo 
+                    WHERE
+                        peso_cerdo.cerdo_id = '{0}' 
+                    ORDER BY
+                        peso_cerdo.fecha ASC""".format(id))
             data = query.fetchall()
             query.close() 
             return data
@@ -541,62 +569,7 @@ class Reportes():
             error = "Ocurrio un problema: " + str(e)
             return error
         return 0
-
-    ######################### INFORME DE CERDOS POR GALPON
-
-    #modelo para traer el galpon del cerdo
-    def Listar_galpon_cerdo(id):
-        try:
-            query = mysql.connection.cursor()
-            query.execute("""SELECT
-                        galpon.id_galpon,
-                        galpon.numero,
-                        galpon.capacidad,
-                        galpon.id_tipo,
-                        tipo_galpon.tipo_galpon 
-                    FROM
-                        galpon
-                        INNER JOIN tipo_galpon ON galpon.id_tipo = tipo_galpon.id_tipo 
-                    WHERE
-                        galpon.id_galpon = '{0}'""". format(id))
-            data = query.fetchone()
-            query.close()
-            return data
-        except Exception as e:
-            query.close()
-            error = "Ocurrio un problema: " + str(e)
-            return error
-        return 0
-      
-
-    # modelo para listar los cerdo por galpon
-    def Cerdos_por_galpon(id):
-        try:
-            query = mysql.connection.cursor()
-            query.execute("""SELECT
-                        cerdo.codigo,
-                        cerdo.nombre,
-                        cerdo.sexo,
-                        raza.raza,
-                        cerdo.peso,
-                        galpon.numero 
-                        FROM
-                            raza
-                            INNER JOIN cerdo ON raza.id_raza = cerdo.raza
-                            INNER JOIN galpon_cerdo ON cerdo.id_cerdo = galpon_cerdo.id_cerdo
-                            INNER JOIN galpon ON galpon_cerdo.id_galpon = galpon.id_galpon 
-                        WHERE
-                        cerdo.estado = 1 
-                        AND galpon.id_galpon = '{0}' """.format(id))
-            data = query.fetchall()
-            query.close() 
-            return data
-        except Exception as e:
-            query.close()
-            error = "Ocurrio un problema: " + str(e)
-            return error
-        return 0
-
+  
     ######################### COMPRAS VACUNAS
 
     #modelo para listar la compra de la vacuns
@@ -756,3 +729,539 @@ class Reportes():
             return error
         return 0
  
+     ######################### INFORME DE CERDOS COSTO DE PRODUCCION
+
+    def Listar_cerdo_reporte(id):
+        try:
+            query = mysql.connection.cursor()
+            query.execute("""SELECT
+                            cerdo.codigo,
+                            cerdo.nombre,
+                            cerdo.sexo,
+                            raza.raza,
+                            cerdo.peso,
+                            cerdo.etapa,
+                            cerdo.costo,
+                            cerdo.id_cerdo 
+                        FROM
+                            raza
+                            INNER JOIN cerdo ON raza.id_raza = cerdo.raza 
+                        WHERE
+                            cerdo.id_cerdo='{0}'""".format(id))
+            data = query.fetchone()
+            query.close() 
+            return data
+        except Exception as e:
+            query.close()
+            error = "Ocurrio un problema: " + str(e)
+            return error
+        return 0
+    
+    def Semanas_alimento(id):
+        try:
+            query = mysql.connection.cursor()
+            query.execute("""SELECT
+                            CONCAT_WS(' ', 'Costo de alimentación semana', alimentacion.semana) as semana, 
+                            ROUND(SUM(( alimento.precio / alimento.peso ) * alimentacion.cantidad), 2) AS total
+                        FROM
+                            alimentacion
+                            INNER JOIN
+                            alimento
+                            ON 
+                                alimentacion.alimento_id = alimento.id
+                        WHERE
+                            alimentacion.id_cerdo='{0}'
+                        GROUP BY
+                            alimentacion.semana 	
+                        ORDER BY alimentacion.semana asc""".format(id))
+            data = query.fetchall()
+            query.close() 
+            return data
+        except Exception as e:
+            query.close()
+            error = "Ocurrio un problema: " + str(e)
+            return error
+        return 0
+    
+    def Semanas_vacunas(id):
+        try:
+            query = mysql.connection.cursor()
+            query.execute("""SELECT
+                        CONCAT_WS(' ', 'Costo de vacuna semana', vacunacion.semana) as semana,  
+                        ROUND(SUM(( vacuna.precio / vacuna.cantidad_dosis ) * vacunacion.dosis), 2) AS total
+                    FROM
+                        vacunacion
+                        INNER JOIN
+                        vacuna
+                        ON 
+                            vacunacion.vacuna_id = vacuna.id WHERE vacunacion.cerdo_id='{0}'
+                            GROUP BY
+                        vacunacion.semana 	
+                    ORDER BY vacunacion.semana asc""".format(id))
+            data = query.fetchall()
+            query.close() 
+            return data
+        except Exception as e:
+            query.close()
+            error = "Ocurrio un problema: " + str(e)
+            return error
+        return 0
+    
+    def Semanas_desparasitar(id):
+        try:
+            query = mysql.connection.cursor()
+            query.execute("""SELECT
+                    CONCAT_WS(' ', 'Costo de desparasitación semana', desparasitacion.semana) AS semana, 
+                    ROUND(SUM(( medicamento.precio / medicamento.unidades ) * desparasitacion.cantidad), 2) AS total
+                FROM
+                    desparasitacion
+                    INNER JOIN
+                    medicamento
+                    ON 
+                        desparasitacion.medicamento_id = medicamento.id
+                WHERE
+                    desparasitacion.cerdo_id='{0}'
+                GROUP BY
+                    desparasitacion.semana
+                ORDER BY
+                    desparasitacion.semana ASC""".format(id))
+            data = query.fetchall()
+            query.close() 
+            return data
+        except Exception as e:
+            query.close()
+            error = "Ocurrio un problema: " + str(e)
+            return error
+        return 0
+    
+    def Lote_medicamento_todo():
+        try:
+            query = mysql.connection.cursor()
+            query.execute("""SELECT
+                            lote_medicamento.codigo,
+                            medicamento.nombre,
+                            tipo_medicamento.tipo,
+                            lote_medicamento.cantidad,
+                            lote_medicamento.fecha_i,
+                            lote_medicamento.fecha_f,
+                            medicamento.presentacion 
+                        FROM
+                            lote_medicamento
+                            INNER JOIN medicamento ON lote_medicamento.medicamento_id = medicamento.id
+                            INNER JOIN tipo_medicamento ON medicamento.tipo_id = tipo_medicamento.id 
+                        ORDER BY
+                            lote_medicamento.fecha_f ASC""")
+            data = query.fetchall()
+            query.close() 
+            return data
+        except Exception as e:
+            query.close()
+            error = "Ocurrio un problema: " + str(e)
+            return error
+        return 0
+    
+    def Lote_medicamento_tipo(id):
+        try:
+            query = mysql.connection.cursor()
+            query.execute("""SELECT
+                            lote_medicamento.codigo,
+                            medicamento.nombre,
+                            tipo_medicamento.tipo,
+                            lote_medicamento.cantidad,
+                            lote_medicamento.fecha_i,
+                            lote_medicamento.fecha_f,
+                            medicamento.presentacion 
+                        FROM
+                            lote_medicamento
+                            INNER JOIN medicamento ON lote_medicamento.medicamento_id = medicamento.id
+                            INNER JOIN tipo_medicamento ON medicamento.tipo_id = tipo_medicamento.id 
+                            WHERE tipo_medicamento.id="{0}"
+                        ORDER BY
+                            lote_medicamento.fecha_f ASC""".format(id))
+            data = query.fetchall()
+            query.close() 
+            return data
+        except Exception as e:
+            query.close()
+            error = "Ocurrio un problema: " + str(e)
+            return error
+        return 0
+
+    def Lote_insumos_todo():
+        try:
+            query = mysql.connection.cursor()
+            query.execute("""SELECT
+                            lote_insumo.codigo,
+                            insumo.codigo,
+                            tipo_insumo.tipo,
+                            lote_insumo.cantidad,
+                            lote_insumo.fecha_i,
+                            lote_insumo.fecha_f 
+                        FROM
+                            lote_insumo
+                            INNER JOIN insumo ON lote_insumo.insumo_id = insumo.id
+                            INNER JOIN tipo_insumo ON insumo.tipo_id = tipo_insumo.id 
+                        ORDER BY
+                            lote_insumo.fecha_f ASC""")
+            data = query.fetchall()
+            query.close() 
+            return data
+        except Exception as e:
+            query.close()
+            error = "Ocurrio un problema: " + str(e)
+            return error
+        return 0
+    
+    def Lote_insumo_tipo(id):
+        try:
+            query = mysql.connection.cursor()
+            query.execute("""SELECT
+                        lote_insumo.codigo,
+                        insumo.codigo,
+                        tipo_insumo.tipo,
+                        lote_insumo.cantidad,
+                        lote_insumo.fecha_i,
+                        lote_insumo.fecha_f 
+                    FROM
+                        lote_insumo
+                        INNER JOIN insumo ON lote_insumo.insumo_id = insumo.id
+                        INNER JOIN tipo_insumo ON insumo.tipo_id = tipo_insumo.id 
+                        WHERE 	tipo_insumo.id = '{0}'
+                    ORDER BY
+                        lote_insumo.fecha_f ASC""".format(id))
+            data = query.fetchall()
+            query.close() 
+            return data
+        except Exception as e:
+            query.close()
+            error = "Ocurrio un problema: " + str(e)
+            return error
+        return 0
+    
+    def Lote_alimento_todo():
+        try:
+            query = mysql.connection.cursor()
+            query.execute("""SELECT
+                            lote_alimento.codigo,
+                            alimento.nombre,
+                            tipo_alimento.tipo_alimento,
+                            lote_alimento.cantidad,
+                            lote_alimento.fecha_i,
+                            lote_alimento.fecha_f 
+                        FROM
+                            lote_alimento
+                            INNER JOIN alimento ON lote_alimento.alimento_id = alimento.id
+                            INNER JOIN tipo_alimento ON alimento.tipo_id = tipo_alimento.id 
+                        ORDER BY
+                            lote_alimento.fecha_f ASC""")
+            data = query.fetchall()
+            query.close() 
+            return data
+        except Exception as e:
+            query.close()
+            error = "Ocurrio un problema: " + str(e)
+            return error
+        return 0
+    
+    def Lote_alimento_tipo(id):
+        try:
+            query = mysql.connection.cursor()
+            query.execute("""SELECT
+                            lote_alimento.codigo,
+                            alimento.nombre,
+                            tipo_alimento.tipo_alimento,
+                            lote_alimento.cantidad,
+                            lote_alimento.fecha_i,
+                            lote_alimento.fecha_f 
+                        FROM
+                            lote_alimento
+                            INNER JOIN alimento ON lote_alimento.alimento_id = alimento.id
+                            INNER JOIN tipo_alimento ON alimento.tipo_id = tipo_alimento.id 
+                            WHERE tipo_alimento.id = '{0}'
+                        ORDER BY
+                            lote_alimento.fecha_f ASC""".format(id))
+            data = query.fetchall()
+            query.close() 
+            return data
+        except Exception as e:
+            query.close()
+            error = "Ocurrio un problema: " + str(e)
+            return error
+        return 0
+    
+    def Lote_vacuna_todo():
+        try:
+            query = mysql.connection.cursor()
+            query.execute("""SELECT
+                        lote_vacuna.codigo,
+                        vacuna.nombre,
+                        tipo_vacuna.tipo_vacuna,
+                        lote_vacuna.cantidad,
+                        lote_vacuna.fecha_i,
+                        lote_vacuna.fecha_f 
+                    FROM
+                        lote_vacuna
+                        INNER JOIN vacuna ON lote_vacuna.vacuna_id = vacuna.id
+                        INNER JOIN tipo_vacuna ON tipo_vacuna.id = vacuna.tipo_id 
+                    ORDER BY
+                        lote_vacuna.fecha_f ASC""")
+            data = query.fetchall()
+            query.close() 
+            return data
+        except Exception as e:
+            query.close()
+            error = "Ocurrio un problema: " + str(e)
+            return error
+        return 0
+    
+    def Lote_vacuna_tipo(id):
+        try:
+            query = mysql.connection.cursor()
+            query.execute("""SELECT
+                        lote_vacuna.codigo,
+                        vacuna.nombre,
+                        tipo_vacuna.tipo_vacuna,
+                        lote_vacuna.cantidad,
+                        lote_vacuna.fecha_i,
+                        lote_vacuna.fecha_f 
+                    FROM
+                        lote_vacuna
+                        INNER JOIN vacuna ON lote_vacuna.vacuna_id = vacuna.id
+                        INNER JOIN tipo_vacuna ON tipo_vacuna.id = vacuna.tipo_id 
+                        WHERE tipo_vacuna.id = '{0}'
+                    ORDER BY
+                        lote_vacuna.fecha_f ASC""".format(id))
+            data = query.fetchall()
+            query.close() 
+            return data
+        except Exception as e:
+            query.close()
+            error = "Ocurrio un problema: " + str(e)
+            return error
+        return 0
+    
+    def Cerdos_disponibes():
+        try:
+            query = mysql.connection.cursor()
+            query.execute("""SELECT
+                            cerdo.codigo, 
+                            cerdo.sexo, 
+                            raza.raza, 
+                            cerdo.peso, 
+                            cerdo.etapa, 
+                            cerdo.costo, 
+                            cerdo.tipo_ingreso, 
+                            raza.id_raza
+                        FROM
+                            cerdo
+                            INNER JOIN
+                            raza
+                            ON 
+                                cerdo.raza = raza.id_raza""")
+            data = query.fetchall()
+            query.close() 
+            return data
+        except Exception as e:
+            query.close()
+            error = "Ocurrio un problema: " + str(e)
+            return error
+        return 0 
+    
+    def Cerdos_disponibes_raza(id):
+        try:
+            query = mysql.connection.cursor()
+            query.execute("""SELECT
+                            cerdo.codigo, 
+                            cerdo.sexo, 
+                            raza.raza, 
+                            cerdo.peso, 
+                            cerdo.etapa, 
+                            cerdo.costo, 
+                            cerdo.tipo_ingreso, 
+                            raza.id_raza
+                        FROM
+                            cerdo
+                            INNER JOIN
+                            raza
+                            ON 
+                                cerdo.raza = raza.id_raza WHERE raza.id_raza='{0}'""".format(id))
+            data = query.fetchall()
+            query.close() 
+            return data
+        except Exception as e:
+            query.close()
+            error = "Ocurrio un problema: " + str(e)
+            return error
+        return 0 
+
+    ######################### INFORME DE CERDOS POR GALPON
+
+    def Listar_galpon_cerdo(id):
+        try:
+            query = mysql.connection.cursor()
+            query.execute("""SELECT
+                            cerdo.codigo,
+                            cerdo.sexo,
+                            raza.raza,
+                            cerdo.peso,
+                            cerdo.etapa,
+                            cerdo.costo,
+                            cerdo.tipo_ingreso,
+                            raza.id_raza,
+                            detallegalpon_cerdo.id_galpon 
+                        FROM
+                            cerdo
+                            INNER JOIN raza ON cerdo.raza = raza.id_raza
+                            INNER JOIN detallegalpon_cerdo ON cerdo.id_cerdo = detallegalpon_cerdo.id_cerdo 
+                        WHERE
+                            detallegalpon_cerdo.id_galpon = '{0}'""". format(id))
+            data = query.fetchall()
+            query.close()
+            return data
+        except Exception as e:
+            query.close()
+            error = "Ocurrio un problema: " + str(e)
+            return error
+        return 0
+      
+    def Galpon_cerdos(id):
+        try:
+            query = mysql.connection.cursor()
+            query.execute("""SELECT
+                            galpon_cerdo_new.id,
+                            galpon.numero,
+                            tipo_galpon.tipo_galpon,
+                            galpon_cerdo_new.fecha_i,
+                            galpon_cerdo_new.fecha_f,
+                            galpon_cerdo_new.semana,
+                            galpon_cerdo_new.estado 
+                        FROM
+                            galpon_cerdo_new
+                            INNER JOIN galpon ON galpon_cerdo_new.id_galpon = galpon.id_galpon
+                            INNER JOIN tipo_galpon ON galpon.id_tipo = tipo_galpon.id_tipo 
+                        WHERE galpon_cerdo_new.id = '{0}'""".format(id))
+            data = query.fetchone()
+            query.close() 
+            return data
+        except Exception as e:
+            query.close()
+            error = "Ocurrio un problema: " + str(e)
+            return error
+        return 0
+
+    ##################### INFORME DE VACUNACION DEL LOS CERDOS 
+    
+    def Informe_vacunas_cerdos_semana(id):
+        try:
+            query = mysql.connection.cursor()
+            query.execute("""SELECT
+                            DATE( vacunacion.fecha ),
+                            TIME( vacunacion.fecha ),
+                            vacuna.nombre,
+                            tipo_vacuna.tipo_vacuna,
+                            vacunacion.dosis,
+                            vacunacion.semana 
+                        FROM
+                            vacunacion
+                            INNER JOIN vacuna ON vacunacion.vacuna_id = vacuna.id
+                            INNER JOIN tipo_vacuna ON vacuna.tipo_id = tipo_vacuna.id 
+                        WHERE
+                            vacunacion.cerdo_id = '{0}' 
+                        ORDER BY
+                            vacunacion.fecha DESC""".format(id))
+            data = query.fetchall()
+            query.close() 
+            return data
+        except Exception as e:
+            query.close()
+            error = "Ocurrio un problema: " + str(e)
+            return error
+        return 0
+
+    ##################### INFORME DE DESPARASITANTES DEL LOS CERDOS 
+    
+    def Informe_desparasitantes_cerdos_semana(id):       
+        try:
+            query = mysql.connection.cursor()
+            query.execute("""SELECT
+                            DATE( desparasitacion.fecha ) AS fecha,
+                            TIME( desparasitacion.fecha ) AS tiempo,
+                            medicamento.nombre,
+                            tipo_medicamento.tipo,
+                            desparasitacion.cantidad,
+                            desparasitacion.semana 
+                        FROM
+                            desparasitacion
+                            INNER JOIN medicamento ON desparasitacion.medicamento_id = medicamento.id
+                            INNER JOIN tipo_medicamento ON medicamento.tipo_id = tipo_medicamento.id 
+                        WHERE
+                            desparasitacion.cerdo_id = "{0}" 
+                        ORDER BY
+                            desparasitacion.fecha DESC""".format(id))
+            data = query.fetchall()
+            query.close() 
+            return data
+        except Exception as e:
+            query.close()
+            error = "Ocurrio un problema: " + str(e)
+            return error
+        return 0
+
+    ##################### INFORME DE ALIMENTACION DEL LOS CERDOS 
+    
+    def Informe_alimntacion_cerdo(id):   
+        try:
+            query = mysql.connection.cursor()
+            query.execute("""SELECT
+                            alimentacion.fecha,
+                            TIME(alimentacion.fecha) AS hora,
+                            alimentacion.semana,
+                            alimento.nombre,
+                            tipo_alimento.tipo_alimento,
+                            tipo_alimentcion.tipo,
+                            alimentacion.cantidad
+                        FROM
+                            alimentacion
+                            INNER JOIN alimento ON alimentacion.alimento_id = alimento.id
+                            INNER JOIN tipo_alimento ON alimento.tipo_id = tipo_alimento.id
+                            INNER JOIN tipo_alimentcion ON alimentacion.tipo_id = tipo_alimentcion.id 
+                        WHERE
+                            alimentacion.id_cerdo = '{0}' 
+                        ORDER BY
+                            alimentacion.fecha ASC""".format(id))
+            data = query.fetchall()
+            query.close() 
+            return data
+        except Exception as e:
+            query.close()
+            error = "Ocurrio un problema: " + str(e)
+            return error
+        return 0    
+
+    ##################### INFORME DE ENFERMEDADES DEL LOS CERDOS 
+    
+    def Informe_enfermedades_cerdo(id):   
+        try:
+            query = mysql.connection.cursor()
+            query.execute("""SELECT
+                        enfermedad_cerdo.cerdo_id,
+                        enfermedad_cerdo.fecha,
+                        detalle_enfermedad_cerdo.enfermedad_id,
+                        enfermedad.nombre,
+                        enfermedad_cerdo.estado AS espera 
+                    FROM
+                        enfermedad_cerdo
+                        INNER JOIN detalle_enfermedad_cerdo ON enfermedad_cerdo.id = detalle_enfermedad_cerdo.cerdo_enfermedad_id
+                        INNER JOIN enfermedad ON enfermedad.id = detalle_enfermedad_cerdo.enfermedad_id 
+                    WHERE
+                        enfermedad_cerdo.cerdo_id = '{0}' 
+                    ORDER BY
+                        enfermedad_cerdo.fecha ASC""".format(id))
+            data = query.fetchall()
+            query.close() 
+            return data
+        except Exception as e:
+            query.close()
+            error = "Ocurrio un problema: " + str(e)
+            return error
+        return 0    

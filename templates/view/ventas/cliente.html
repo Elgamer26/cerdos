@@ -1,0 +1,135 @@
+<div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1 class="m-0"><i class="fa fa-user-plus"></i> Crear cliente</h1>
+        </div>
+  
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="/Admin">Inicio</a></li>
+            <li class="breadcrumb-item active">Crear cliente</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-lg-12 col-12">
+            <div class="card card-success">
+              <div class="card-header">
+                <h3 class="card-title">Nuevo cliente</h3>
+              </div>
+  
+              <div class="card-body">
+                <div class="row">
+                  <div class="form-group col-lg-6 col-6">
+                    <label for="nombres_cli">Nombres</label>
+                    <input type="text" maxlength="100" class="form-control" id="nombres_cli" placeholder="Ingrese nombres"
+                      onkeypress="return soloLetras(event)" autocomplete="off" />
+                    <span style="color: red" id="nombre_cli_oblig"></span>
+                  </div>
+  
+                  <div class="form-group col-lg-6 col-6">
+                    <label for="apellidos_cli">Apellidos</label>
+                    <input type="text" maxlength="100" class="form-control" id="apellidos_cli" placeholder="Ingrese apellidos"
+                      onkeypress="return soloLetras(event)" autocomplete="off" />
+                    <span style="color: red" id="apellidos_cli_obligg"></span>
+                  </div>
+  
+                  <div class="form-group col-lg-6 col-6">
+                    <label for="domicilio_cli">Dirección</label>
+                    <input type="text" maxlength="60" class="form-control" id="domicilio_cli"
+                      placeholder="Ingrese dirección" autocomplete="off" />
+                    <span style="color: red" id="domicilio_cli_obligg"></span>
+                  </div>
+  
+                  <div class="form-group col-lg-6 col-6">
+                    <label for="telefono_cli">Teléfono</label>
+                    <input type="text" maxlength="15" class="form-control" id="telefono_cli" placeholder="Ingrese teléfono"
+                      onkeypress="return soloNumeros(event)" autocomplete="off" />
+                    <span style="color: red" id="telefono_cli_obligg"></span>
+                  </div>
+    
+                  <div class="form-group col-lg-6 col-6">
+                    <label for="cedula_clie">Cédula o ruc</label>
+                    <input type="text" onkeypress="return soloNumeros(event)" maxlength="13" class="form-control" id="cedula_clie" placeholder="Ingrese cedula o ruc" autocomplete="off" onpaste="return false" />
+                    <span style="color: red" id="cedula_clie_obligg"></span>
+                  </div>
+  
+                  <div class="form-group col-lg-6 col-6">
+                    <label for="correo_cli">Correo cliente</label>
+                    <input type="text" maxlength="100" class="form-control" id="correo_cli"
+                      placeholder="Ingrese correo cliente" autocomplete="off" onpaste="return false" />
+                    <span style="color: red" id="correo_cli_obligg"></span>
+                  </div>
+ 
+ 
+                </div>
+              </div>
+              <!-- /.card-body -->
+  
+              <div class="card-footer">
+                <button onclick="registra_cliente();" class="btn btn-success">
+                  <i class="fa fa-save"></i> Guadar
+                </button>
+                -
+                <button onclick="cargar_contenido('contenido_principal','/listado_cliente');" class="btn btn-danger">
+                  <i class="fa fa-svae"></i> Volver
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+  
+        <div class="row"></div>
+      </div>
+    </section>
+  </div>
+  
+  <script src="static/js/ventas.js"></script>
+  
+  <script> 
+    var G_correo_create_cli = true;
+  
+    $("#correo_cli").keyup(function() {
+      if (this.value != "") {
+          document.getElementById('correo_cli').addEventListener('input', function() {
+              campo = event.target;
+              //este codigo me da formato email
+              email = /^[-\w.%+]{1,64}@(?:[A-Z0-9-]{1,63}\.){1,125}[A-Z]{2,63}$/i;
+  
+              //esto es para validar si es un email valida
+              if (email.test(campo.value)) {
+                  //estilos para cambiar de color y ocultar el boton
+                  $(this).css("border", "1px solid green");
+                  $("#correo_cli_obligg").html("");
+                  G_correo_create_cli = true;
+              } else {
+                  $(this).css("border", "1px solid red");
+                  $("#correo_cli_obligg").html("Email incorrecto");
+                  G_correo_create_cli = false;
+              }
+          });
+      } else {
+          $(this).css("border", "1px solid green");
+          $("#correo_cli_obligg").html("");
+          G_correo_create_cli = false;
+      }
+    });
+  
+    $("#cedula_clie").validarCedulaEC({
+        onValid: function() {
+            $("#cedula_clie_obligg").html("");
+            alertify.success('Cedúla correcto');
+        },
+        onInvalid: function() {
+            $("#cedula_clie_obligg").html("Cedúla incorrecto")
+            alertify.error('Cedúla incorrecto');
+            $("#cedula_clie").val("");
+            $("#cedula_clie").focus();
+        }
+    });
+  </script>

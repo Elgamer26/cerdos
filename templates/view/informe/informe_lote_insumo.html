@@ -1,0 +1,90 @@
+<style>
+    .contennidor {
+        background: gray;
+        min-height: 100vh;
+    }
+  </style>
+  
+  <div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1 class="m-0">
+            <i class="fa fa-file"></i> Informe lote de insumos
+          </h1>
+        </div>
+  
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="/Admin">Inicio</a></li>
+            <li class="breadcrumb-item active">Informe lote de insumos</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  
+    <section class="content">
+      <div class="container-fluid">
+         <div class="row">
+            <div class="col-lg-12 col-12">
+                <div class="card card-info">
+                    <div class="card-header">
+                      <h3 id="unir_texto" class="card-title"> Informe lote de insumos</h3>
+                    </div>
+        
+                    <div class="card-body">
+                        <div class="row">
+  
+                                <div class="form-group col-lg-6 col-6 text-center">
+                                  <label for="tipo_insumo">Tipo de insumo:</label>
+                                  <select class="form-control tipo_insumo" style="width: 100%" id="tipo_insumo">
+                                      <option value="0">--- Tipo de insumo ---</option>    
+                                      {% for datas in data.tipo %}
+                                      <option value="{{datas[0]}}"> {{datas[1]}} </option>
+                                      {% endfor %}
+                                  </select> 
+                                </div>    
+  
+                                <div class="form-group col-lg-1 col-6 text-center">
+                                    <label for="cerdo_galpon">Todo lote:</label>
+                                    <button type="button" onclick="traer_todo_lotes();" class="btn btn-success"><i class="fa fa-eye"></i></button> 
+                                </div>                                 
+                                
+                                <div class="form-group col-lg-12 col-2" style="text-align: center;">
+                                    <label>Lote insumos </label>
+                                    <center>
+                                        <iframe width="100%" height="100%" class="contennidor" id="iframe_lote_insumos"></iframe>
+                                    </center>
+                                </div>
+  
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+  </div>
+  
+<script> 
+  
+  $(".tipo_insumo").select2();
+  traer_todo_lotes();
+
+  function traer_todo_lotes(){
+    var ifrm = document.getElementById("iframe_lote_insumos");
+    ifrm.setAttribute("src", "/reporte/informe_lote_insumo_full");
+  }
+
+  
+  $("#tipo_insumo").on("change", function(){
+    var id = $(this).val();
+    
+    if(id == 0){
+      return false;
+    }
+    var ifrm = document.getElementById("iframe_lote_insumos");
+    ifrm.setAttribute("src", "/reporte/informe_lote_insumo_tipo/"+id+"");
+  
+  });
+</script>
+ 

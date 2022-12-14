@@ -16,23 +16,36 @@ def calendario_registrar():
   
         titulo = request.form['titulo']
         cerdo = request.form['cerdo']
+        galpon = request.form['galpon']
         descripcion = request.form['descripcion']
         tipo = request.form['tipo']
         fecha_evento = request.form['fecha_evento']
         color = request.form['color'] 
         color_etiqueta = request.form['color_etiqueta']  
         
-        dato = Vacunas.Calendario_registrar(titulo, cerdo, descripcion, tipo, fecha_evento, color, color_etiqueta)
+        dato = Vacunas.Calendario_registrar(titulo, cerdo, descripcion, tipo, fecha_evento, color, color_etiqueta, galpon)
         return str(dato)
 
 # controlador para listar los eventos del calendario
 @vacunas.route('/listar_calendario', methods=['GET'])
 def listar_calendario():
     if request.method == 'GET':
-        
         dato = Vacunas.Listar_calendario()
         return jsonify(dato)
+    
+@vacunas.route('/listar_calendario_tabla', methods=['GET'])
+def listar_calendario_tabla():
+    if request.method == 'GET':
+        dato = Vacunas.Listar_calendario_tabla()
+        return jsonify(dato)
 
+@vacunas.route('/eliminar_evento_calendario', methods=['POST'])
+def eliminar_evento_calendario():
+    if request.method == 'POST':   
+        _id = request.form['id']     
+        dato = Vacunas.Eliminar_evento_calendario(_id)
+        return str(dato)
+    
 # controlador para editar el calendario
 @vacunas.route('/calendario_editar', methods=['POST'])
 def calendario_editar():
@@ -40,14 +53,13 @@ def calendario_editar():
         
         id = request.form['id']
         titulo = request.form['titulo']
-        cerdo = request.form['cerdo']
         descripcion = request.form['descripcion']
         tipo = request.form['tipo']
         fecha_evento = request.form['fecha_evento']
         color = request.form['color'] 
         color_etiqueta = request.form['color_etiqueta']  
         
-        dato = Vacunas.Calendario_editar(id, titulo, cerdo, descripcion, tipo, fecha_evento, color, color_etiqueta)
+        dato = Vacunas.Calendario_editar(id, titulo, descripcion, tipo, fecha_evento, color, color_etiqueta)
         return str(dato)
 
 # controlador para acciones de crear y editar el tipo de vacuna

@@ -364,6 +364,7 @@
 </div>
 
 <script>  
+
     $("#tabla_compra_alimento").DataTable({
       language: {
         rows: "%d fila seleccionada",
@@ -472,8 +473,8 @@
         datos_agg += "<td><input id='cantida_a' style='width: 70px;' onkeypress='return soloNumeros(event);' type='number' min='1' class='form-control' value='1' placeholder='cantidad' /></td>";
         datos_agg += "<td><input id='descuento_a' style='width: 70px;' onkeypress='return filterfloat(event, this);' type='text' class='form-control' value='0' placeholder='descuento' onkeypress='return soloNumeros(event);' /></td>";
         datos_agg += "<td>" + precio + "</td>";   
-        datos_agg += "<td><input style='width: 130px;' class='form-control fecha_i" + id + "' type='date' id='fecha_i'></td>";
-        datos_agg += "<td><input style='width: 130px;' class='form-control fecha_f" + id + "' type='date' id='fecha_f'></td>"; 
+        datos_agg += "<td><input style='width: 130px;' class='form-control fecha_i" + id + " calendario_creacion' type='date' id='fecha_i'></td>";
+        datos_agg += "<td><input style='width: 130px;' class='form-control fecha_f" + id + " calendario_expiracion' type='date' id='fecha_f'></td>"; 
         datos_agg += "<td>CAL-"+numberr+"</td>"; 
         datos_agg += "<td> <button class='remover btn btn-danger'><i class='fa fa-trash'></i></button></td>";
         datos_agg += "<td hidden>" + peso + "</td>"; 
@@ -497,6 +498,9 @@
      
         $(".fecha_i" + id + "").val(y + "-" + m + "-" + d);
         $(".fecha_f" + id + "").val(y + "-" + m + "-" + d);
+
+        mostar_creacion(fecha_creacion, y + "-" + m + "-" + d);
+        mostar_expiracion(y + "-" + m + "-" + d, fecha_expitacion);
     });
 
     function validar_alimento_tabla(id) {

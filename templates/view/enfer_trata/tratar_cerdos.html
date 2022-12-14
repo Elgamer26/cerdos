@@ -107,17 +107,14 @@
                                 <div class="row">
 
                                     <div class="form-group col-lg-7 col-6">
-                                        <label for="insumo_id">Insumo</label>
+                                        <label for="insumo_id">Lote insumo</label>
                                         <select class="form-control insumo_id text-center" style="width: 100%" id="insumo_id">
                                           <option value="0">--- Seleccione el insumo ---</option>      
-                                          {% for datas in data.insumo %}
-                                          <option value="{{datas[0]}}">Codigo: {{datas[1]}} - Nombre: {{datas[2]}} - Tipo: {{datas[4]}}</option>
-                                          {% endfor %}
                                         </select>
                                         <span style="color: red" id="insumo_obligg"></span>
                                     </div>
                 
-                                    <div class="form-group col-lg-2 col-6">
+                                    <div class="form-group col-lg-2 col-6 espiner_disponible_i">
                                         <label for="disponible_insumo">Disponible</label>
                                         <input type="text" readonly class="form-control" id="disponible_insumo" /> 
                                         <span style="color: red" id="disponible_insumo_obligg"></span>
@@ -125,7 +122,7 @@
                 
                                     <div class="form-group col-lg-2 col-6">
                                         <label for="cantidad_insumo">Cantidad</label>
-                                        <input type="number" value="1" class="form-control" id="cantidad_insumo" />
+                                        <input type="number" value="1" class="form-control" id="cantidad_insumo" onkeypress="return soloNumeros(event)"/>
                                         <span style="color: red" id="cantidad_insumo_obligg"></span>
                                     </div>
 
@@ -140,6 +137,7 @@
                                             <thead>
                                             <tr> 
                                                 <th hidden>#</th> 
+                                                <th hidden>#</th> 
                                                 <th>Insumo</th> 
                                                 <th>Cantidad</th>
                                                 <th>Quitar</th> 
@@ -152,10 +150,11 @@
                         
                                             <tfoot>
                                             <tr> 
-                                                <th hidden>#</th> 
-                                                <th>Insumo</th> 
-                                                <th>Cantidad</th>
-                                                <th>Quitar</th>  
+                                              <th hidden>#</th> 
+                                              <th hidden>#</th> 
+                                              <th>Insumo</th> 
+                                              <th>Cantidad</th>
+                                              <th>Quitar</th>  
                                             </tr>
                                             </tfoot>
                                             
@@ -171,17 +170,15 @@
                               <div class="row">
 
                                 <div class="form-group col-lg-7 col-6">
-                                    <label for="medicamento_id">Medicamento</label>
+                                    <label for="medicamento_id">Lote medicamento</label>
                                     <select class="form-control medicamento_id text-center" style="width: 100%" id="medicamento_id">
                                       <option value="0">--- Seleccione el medicamento ---</option>      
-                                      {% for datas in data.medicamento %}
-                                      <option value="{{datas[0]}}">Codigo: {{datas[1]}} - Nombre: {{datas[2]}} - Tipo: {{datas[3]}}</option>
-                                      {% endfor %}
+       
                                     </select>
                                     <span style="color: red" id="medicamento_obligg"></span>
                                 </div>
             
-                                <div class="form-group col-lg-2 col-6">
+                                <div class="form-group col-lg-2 col-6 espiner_disponible_d">
                                     <label for="disponible_medicamento">Disponible</label>
                                     <input type="text" readonly class="form-control" id="disponible_medicamento" /> 
                                     <span style="color: red" id="disponible_medicamento_obligg"></span>
@@ -189,7 +186,7 @@
             
                                 <div class="form-group col-lg-2 col-6">
                                     <label for="cantidad_medicamento">Cantidad</label>
-                                    <input type="number" value="1" class="form-control" id="cantidad_medicamento" />
+                                    <input type="number" value="1" class="form-control" id="cantidad_medicamento" onkeypress="return soloNumeros(event)"/>
                                     <span style="color: red" id="cantidad_medicamento_obligg"></span>
                                 </div>
 
@@ -204,6 +201,7 @@
                                         <thead>
                                         <tr> 
                                             <th hidden>#</th> 
+                                            <th hidden>#</th> 
                                             <th>Medicamento</th> 
                                             <th>Cantidad</th>
                                             <th>Quitar</th> 
@@ -216,6 +214,7 @@
                     
                                         <tfoot>
                                         <tr> 
+                                            <th hidden>#</th> 
                                             <th hidden>#</th> 
                                             <th>medicamento</th> 
                                             <th>Cantidad</th>
@@ -335,6 +334,8 @@
     $(".insumo_id").select2();
     $(".tratamiento_id").select2();
     $(".medicamento_id").select2();
+    listar_medicamento_lote_tratamiento();
+    listar_insumo_lote_tratamiento();
 
     $("#cerdo_id").on("change", function(){
         var id = $(this).val();
@@ -407,6 +408,31 @@
         });
     }
 
+    ///////////////
+    ////// insumos
+    function listar_insumo_lote_tratamiento() {  
+      $.ajax({
+          url: "/alimento/listar_insumo_lote_tratamiento",
+          type: "GET", 
+      }).done(function(data) { 
+          $("#insumo_id").empty();
+          var cadena = "<option value='0'>--- Seleccione insumo ---</option>";
+          if (data != 0) {
+              //bucle para extraer los datos del rol
+              for (var i = 0; i < data.length; i++) {
+                cadena += "<option value='" + data[i]['id_in'] + " - " + data[i]['id_l'] + "'> " + data[i]['codigo'] + " - " + data[i]['nombre'] + " - " + data[i]['tipo'] + "  </option>";
+              }
+              //aqui concadenamos al id del select
+              $("#insumo_id").html(cadena);
+          } else { 
+              cadena += "<option value='0'>No hay insumo en lote</option>";
+              $("#insumo_id").html(cadena);
+              $("#disponible_insumo").val("")
+          }
+
+      });
+    }
+
     $("#insumo_id").on("change", function(){
         var id = $(this).val();
 
@@ -415,13 +441,17 @@
             return false;       
         }
 
+        var desc = id.split(" - ");
+        $(".espiner_disponible_i").LoadingOverlay("show");
+
         $.ajax({
-            url: "/enfermedad/traer_cantidad_insumo",
+          url: "/alimento/traer_cantidad_dosis_lote_disponibles",
             type: "POST",
             data: {
-                id: id
+                id: desc[1]
             },
         }).done(function(data) { 
+          $(".espiner_disponible_i").LoadingOverlay("hide");
             if(data != 0) {
                 $("#disponible_insumo").val(data[0]);        
             }else{
@@ -448,6 +478,8 @@
       }else{
         $("#insumo_obligg").html("");
       }
+
+      var desc = id.split(" - ");
 
       if(cantidad < 0 || cantidad.trim() == ""){
         $("#cantidad_insumo_obligg").html("Ingrese la cantidad"); 
@@ -484,7 +516,8 @@
       }
 
       var datos_agg = "<tr>";
-        datos_agg += "<td hidden for='id'>" + id + "</td>";
+        datos_agg += "<td hidden for='id'>" + desc[0] + "</td>";
+        datos_agg += "<td hidden>" + desc[1] + "</td>";
         datos_agg += "<td>" + txt + "</td>";
         datos_agg += "<td>" + cantidad + "</td>";
         datos_agg += "<td> <button class='remover btn btn-danger'><i class='fa fa-trash'></i></button></td>";
@@ -492,6 +525,7 @@
       
       //esto me ayuda a enviar los datos a la tabla
       $("#tbody_tabla_insumo").append(datos_agg); 
+      $("#cantidad_insumo").val("");   
     }
 
     function validar_insumo_id(id) {
@@ -559,30 +593,55 @@
       table.removeChild(tr);
     });
 
-    //////
+    ///////////////
+    ////// medicamento
+    function listar_medicamento_lote_tratamiento() {  
+      $.ajax({
+          url: "/alimento/listar_medicamento_lote_tratamiento",
+          type: "GET", 
+      }).done(function(data) { 
+          $("#medicamento_id").empty();
+          var cadena = "<option value='0'>--- Seleccione desparasitante ---</option>";
+          if (data != 0) {
+              //bucle para extraer los datos del rol
+              for (var i = 0; i < data.length; i++) {
+                cadena += "<option value='" + data[i]['id_m'] + " - " + data[i]['id_l'] + "'> " + data[i]['codigo'] + " - " + data[i]['nombre'] + "  </option>";
+              }
+              //aqui concadenamos al id del select
+              $("#medicamento_id").html(cadena);
+          } else { 
+              cadena += "<option value='0'>No hay medicamento en lote</option>";
+              $("#medicamento_id").html(cadena);
+              $("#disponible_medicamento").val("")
+          }
+
+      });
+    }
+
     $("#medicamento_id").on("change", function(){
       var id = $(this).val();
 
-      if(id == 0){  
-          $("#disponible_medicamento").val("");      
-          return false;       
+      if(id == 0){
+        return  $("#disponible_medicamento").val("");
       }
-
+      var desc = id.split(" - ");
+      $(".espiner_disponible_d").LoadingOverlay("show");
       $.ajax({
-          url: "/enfermedad/traer_cantidad_medicamento",
+          url: "/alimento/traer_cantidad_desparasitante_lote",
           type: "POST",
           data: {
-              id: id
+              id: desc[1]
           },
       }).done(function(data) { 
-          if(data != 0) {
-              $("#disponible_medicamento").val(data[0]);        
-          }else{
-              $("#disponible_medicamento").val("");        
-          }
+        $(".espiner_disponible_d").LoadingOverlay("hide");
+        if(data != 0){
+          $("#disponible_medicamento").val(data[0])
+        }else{
+          $("#disponible_medicamento").val("")
+        }
       });
     });
-    
+
     function agg_tabla_medicamentos()
     {
       var id = $("#medicamento_id").val();  
@@ -635,8 +694,11 @@
         );
       }
 
+      var desc = id.split(" - ");
+
       var datos_agg = "<tr>";
-        datos_agg += "<td hidden for='id'>" + id + "</td>";
+        datos_agg += "<td hidden for='id'>" + desc[0] + "</td>";
+        datos_agg += "<td hidden>" + desc[1] + "</td>";
         datos_agg += "<td>" + txt + "</td>";
         datos_agg += "<td>" + cantidad + "</td>";
         datos_agg += "<td> <button class='remover_medi btn btn-danger'><i class='fa fa-trash'></i></button></td>";
@@ -644,6 +706,7 @@
       
       //esto me ayuda a enviar los datos a la tabla
       $("#tbody_tabla_medicamento").append(datos_agg); 
+      $("#cantidad_medicamento").val("");
     }
 
     function validar_medicamento_id(id) {

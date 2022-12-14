@@ -261,15 +261,26 @@ def registrar_detalle_compra_insumo():
         _cantidad = request.form['cantidad'] 
         _descuento = request.form['descuento'] 
         _total = request.form['total'] 
+        
+        _unidad = request.form['unidad']
+        _fecha_ini = request.form['fecha_ini']
+        _fecha_fin = request.form['fecha_fin'] 
+        _codigo = request.form['codigo'] 
+        _total_unidad = request.form['total_unidad'] 
 
         ida = _ida.split(",")
         precio = _precio.split(",")
         cantidad = _cantidad.split(",") 
         descuento = _descuento.split(",")
         total = _total.split(",") 
+        unidad = _unidad.split(",")
+        fecha_ini = _fecha_ini.split(",") 
+        fecha_fin = _fecha_fin.split(",")
+        codigo = _codigo.split(",") 
+        total_unidad = _total_unidad.split(",") 
 
-        for valor in zip(ida, precio, cantidad, descuento, total):
-            dato = Compras.Registrar_detalle_compra_insumo(_id, valor[0], valor[1], valor[2], valor[3], valor[4])  
+        for valor in zip(ida, precio, cantidad, descuento, total, unidad, fecha_ini, fecha_fin, codigo, total_unidad):
+            dato = Compras.Registrar_detalle_compra_insumo(_id, valor[0], valor[1], valor[2], valor[3], valor[4], valor[5], valor[6], valor[7], valor[8], valor[9])  
         return jsonify(dato)
 
 # controlador para anular la compra de insumo
@@ -320,13 +331,15 @@ def registrar_medicamento():
         _cantidad = request.form['cantidad']
         _precio = request.form['precio'] 
         _detalle = request.form['detalle']
+        _presentacion= request.form['presentacion'] 
+        _cantidad_unidad = request.form['cantidad_unidad']
         _foto = request.files.get("foto", False)
 
         if _foto:
             # cerdo con foto
             hora_ac = time.strftime('%Y%m%d%H%M%S_', time.localtime())
             archivo = hora_ac + _foto.filename             
-            dato = Compras.Crear_medicamento(_codigo, _nombre, _tipo, _cantidad, _precio, _detalle, archivo)
+            dato = Compras.Crear_medicamento(_codigo, _nombre, _tipo, _cantidad, _precio, _detalle, archivo, _presentacion, _cantidad_unidad)
             if dato == 1:
                 _foto.save(PATH_MEDICA + archivo)
                 return str(dato)
@@ -335,7 +348,7 @@ def registrar_medicamento():
         else:
             # cerdo sin foto
             archivo = "medicamento.jpg"
-            dato = Compras.Crear_medicamento(_codigo, _nombre, _tipo, _cantidad, _precio, _detalle, archivo)
+            dato = Compras.Crear_medicamento(_codigo, _nombre, _tipo, _cantidad, _precio, _detalle, archivo, _presentacion, _cantidad_unidad)
             return str(dato)
 
 # controlador para listar el insumo
@@ -350,6 +363,13 @@ def listar_lote_medicmaneto():
     if request.method == 'GET':
         dato = Compras.Listar_lote_medicmaneto()
         return jsonify(dato)
+    
+@compras.route('/listar_lote_insumos', methods=['GET'])
+def listar_lote_insumos():
+    if request.method == 'GET':
+        dato = Compras.Listar_lote_insumos()
+        return jsonify(dato)
+    
 
 @compras.route('/eliminar_lote_medicamento', methods=['POST'])
 def eliminar_lote_medicamento():
@@ -357,6 +377,14 @@ def eliminar_lote_medicamento():
         _id = request.form['id']     
         dato = Compras.Eliminar_lote_medicamento(_id)
         return jsonify(dato)
+    
+@compras.route('/eliminar_lote_insumos', methods=['POST'])
+def eliminar_lote_insumos():
+    if request.method == 'POST':   
+        _id = request.form['id']     
+        dato = Compras.Eliminar_lote_insumos(_id)
+        return jsonify(dato)
+    
 
 # controlador para cambiar el estado del medicamento
 @compras.route('/estado_medicamento', methods=['POST'])
@@ -378,8 +406,10 @@ def editar_medicamento():
         _cantidad = request.form['cantidad']
         _precio = request.form['precio'] 
         _detalle = request.form['detalle'] 
+        _presentacion= request.form['presentacion'] 
+        _cantidad_unidad = request.form['unidades']
 
-        dato = Compras.Editar_medicamento(_codigo, _nombre, _tipo, _cantidad, _precio, _detalle, id)
+        dato = Compras.Editar_medicamento(_codigo, _nombre, _tipo, _cantidad, _precio, _detalle, id, _presentacion, _cantidad_unidad)
         return str(dato)
 
 # controlador para registrar la compra del medicamento

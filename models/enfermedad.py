@@ -266,11 +266,18 @@ class Enfermedad():
     def Guardar_enfermedad_cerdo(_cerdo_id,_fecha,_sintomas,_diagnostico,_veterinario):
         try:
             query = mysql.connection.cursor() 
-            query.execute('INSERT INTO enfermedad_cerdo (cerdo_id, fecha,sintomas,diagnostico,veterinario_id) VALUES ("{0}","{1}","{2}","{3}","{4}")'.format(_cerdo_id,_fecha,_sintomas,_diagnostico,_veterinario))
-            query.connection.commit()
-            id = query.lastrowid
-            query.close()
-            return id  # se inserto correcto 
+            
+            query.execute('SELECT * FROM enfermedad_cerdo WHERE cerdo_id="{0}" AND estado=1'. format(_cerdo_id))
+            data = query.fetchone()
+            if not data:
+                query.execute('INSERT INTO enfermedad_cerdo (cerdo_id, fecha,sintomas,diagnostico,veterinario_id) VALUES ("{0}","{1}","{2}","{3}","{4}")'.format(_cerdo_id,_fecha,_sintomas,_diagnostico,_veterinario))
+                query.connection.commit()
+                id = query.lastrowid
+                query.close()
+                return id  # se inserto correcto 
+            else:
+                query.close()
+                return str('existe')
         except Exception as e:
             query.close()
             error = "Ocurrio un problema: " + str(e)
@@ -544,14 +551,21 @@ class Enfermedad():
         return 0
     
     # modelo para registrar el detalle de insumo de enfermedad
-    def Guardar_detalle_insumo_enfermedad(_id, ida, cantidad):
+    def Guardar_detalle_insumo_enfermedad(_id, ida, cantidad, idlote):
         try:
             query = mysql.connection.cursor() 
             query.execute('INSERT INTO detalle_enfermedad_insumo (tratamiento_id, insumo_id, cantidad) VALUES ("{0}","{1}","{2}")'.format(_id,ida,cantidad))
             query.connection.commit() 
 
-            query.execute('UPDATE insumo SET cantidad = cantidad - "{0}" WHERE id = "{1}"'.format(cantidad,ida))
+            query.execute('UPDATE lote_insumo SET cantidad = cantidad - "{0}" WHERE id="{1}"'.format(cantidad,idlote))
             query.connection.commit() 
+            
+            query.execute("SELECT cantidad FROM lote_insumo WHERE id='{0}'".format(idlote))
+            valor = query.fetchone()
+            
+            if(valor[0] <= int(0)):
+                query.execute("DELETE FROM lote_insumo WHERE id='{0}'".format(idlote))
+                query.connection.commit()
 
             query.close()
             return 1  # se inserto correcto 
@@ -562,14 +576,21 @@ class Enfermedad():
         return 0
     
     # modelo para registrar el detalle de medicina de enfermedad
-    def Guardar_detalle_medicina_enfermedad(_id, ida, cantidad):
+    def Guardar_detalle_medicina_enfermedad(_id, ida, cantidad, lote):
         try:
             query = mysql.connection.cursor() 
             query.execute('INSERT INTO detalle_enfermedad_medicina (trata_id, medicina_id, cantidad) VALUES ("{0}","{1}","{2}")'.format(_id,ida,cantidad))
             query.connection.commit() 
 
-            query.execute('UPDATE medicamento SET cantidad = cantidad - "{0}" WHERE id = "{1}"'.format(cantidad,ida))
+            query.execute('UPDATE lote_medicamento SET cantidad = cantidad - "{0}" WHERE id = "{1}"'.format(cantidad,lote))
             query.connection.commit() 
+            
+            query.execute("SELECT cantidad FROM lote_medicamento WHERE id='{0}'".format(lote))
+            valor = query.fetchone()
+            
+            if(valor[0] <= int(0)):
+                query.execute("DELETE FROM lote_medicamento WHERE id='{0}'".format(lote))
+                query.connection.commit()
 
             query.close()
             return 1  # se inserto correcto 

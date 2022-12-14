@@ -556,4 +556,23 @@ def listar_desparasitantess_cerdo_seguimiento():
         _id = request.form['id'] 
         dato = Alimento.Listar_desparasitantess_cerdo_seguimiento(_id)  
         return jsonify(dato)
+
+@alimento.route('/listar_medicamento_lote_tratamiento', methods=['GET'])
+def listar_medicamento_lote_tratamiento():
+    if request.method == 'GET':
+        dato = Alimento.Listar_medicamento_lote_tratamiento()
+        return jsonify(dato)
+
+@alimento.route('/listar_insumo_lote_tratamiento', methods=['GET'])
+def listar_insumo_lote_tratamiento():
+    if request.method == 'GET':
+        dato = Alimento.Listar_insumo_lote_tratamiento()
+        return jsonify(dato)
+
+@alimento.route('/traer_cantidad_dosis_lote_disponibles', methods=['POST'])
+def traer_cantidad_dosis_lote_disponibles():
+    if request.method == 'POST':        
+        id = request.form['id'] 
+        dato = Alimento.Traer_cantidad_dosis_lote_disponibles(id)
+        return jsonify(dato)
    

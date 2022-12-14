@@ -223,14 +223,15 @@ def guardar_detalle_insumo_enfermedad():
     if request.method == 'POST':
         _id = request.form['id']
         _ida = request.form['ida'] 
+        _idlote = request.form['idlote'] 
         _cantidad = request.form['cantidad'] 
 
         ida = _ida.split(",") 
         cantidad = _cantidad.split(",") 
+        idlote = _idlote.split(",") 
 
-        for valor in zip(ida,cantidad):
-            dato = Enfermedad.Guardar_detalle_insumo_enfermedad(_id, valor[0], valor[1])
-       
+        for valor in zip(ida,cantidad,idlote):
+            dato = Enfermedad.Guardar_detalle_insumo_enfermedad(_id, valor[0], valor[1], valor[2])
         return jsonify(dato)
 
 # controlador para registrar el detalle de medicina de enfermedad
@@ -238,14 +239,16 @@ def guardar_detalle_insumo_enfermedad():
 def guardar_detalle_medicina_enfermedad():
     if request.method == 'POST':
         _id = request.form['id']
-        _ida = request.form['ida'] 
+        _ida = request.form['ida']
+        _lote = request.form['lote'] 
         _cantidad = request.form['cantidad'] 
 
         ida = _ida.split(",") 
+        lote = _lote.split(",") 
         cantidad = _cantidad.split(",") 
 
-        for valor in zip(ida,cantidad):
-            dato = Enfermedad.Guardar_detalle_medicina_enfermedad(_id, valor[0], valor[1])
+        for valor in zip(ida,cantidad,lote):
+            dato = Enfermedad.Guardar_detalle_medicina_enfermedad(_id, valor[0], valor[1], valor[2])
        
         return jsonify(dato)
 
