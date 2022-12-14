@@ -173,7 +173,6 @@ def editar_cerdo_galpon():
         return jsonify(dato)
 
 
-
 ######################
 ####################### correcciones
 @galpon.route('/traer_cerdo_dentro_galpon', methods=['POST'])
@@ -190,5 +189,35 @@ def traer_cerdo_dentro_galpon_buscar():
         valor = request.form['valor']
         dato = Galpon.Traer_cerdo_dentro_galpon_buscar(id, valor)         
         return jsonify(dato)
+
+##############################
+## cantidad de cerdos en galpon
+@galpon.route('/traer_cantidad_cerdos_glpon', methods=['POST'])
+def traer_cantidad_cerdos_glpon():
+    if request.method == 'POST':
+        _id = request.form['id']
+        dato = Galpon.Traer_cantidad_cerdos_glpon(_id)
+        return jsonify(dato)
     
+############ mover cerdos a nuevo galpon
+@galpon.route('/guardar_cerdos_movimiento', methods=['POST'])
+def guardar_cerdos_movimiento():
+    if request.method == 'POST':
+        id_anterior = request.form['id_anterior']
+        id_cergo_galpon = request.form['id_cergo_galpon']
+        galpon_nuevo = request.form['galpon_nuevo']
+        dato = Galpon.Guardar_cerdos_movimiento(id_anterior, id_cergo_galpon, galpon_nuevo)
+        return jsonify(dato)
     
+############ LISTAR LOS GALPONES CON TODOS SUS CERDOS
+@galpon.route('/listar_cerdos_en_galpon', methods=['GET'])
+def listar_cerdos_en_galpon():
+    if request.method == 'GET': 
+        dato = Galpon.Listar_cerdos_en_galpon()
+        return jsonify(dato)
+    
+@galpon.route('/listar_galpones', methods=['GET'])
+def listar_galpones():
+    if request.method == 'GET': 
+        dato = Galpon.Listar_galpon_combooo()
+        return jsonify(dato)

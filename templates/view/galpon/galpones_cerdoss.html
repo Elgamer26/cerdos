@@ -3,7 +3,7 @@
         <div class="row mb-2">
             <div class="col-sm-6">
                 <h1 class="m-0">
-                    <i class="fa fa-list"></i> Cerdos en gálpones -
+                    <i class="fa fa-list"></i> Cerdos en galpones -
                     <a onclick="cargar_contenido('contenido_principal','/nuevo_cerdo_galpon');" class="btn btn-success"><i class="fa fa-plus"></i> Nueva registro</a>
                 </h1>
             </div>
@@ -11,7 +11,7 @@
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="/Admin">Inicio</a></li>
-                    <li class="breadcrumb-item active">Listado de cerdos en gálpon</li>
+                    <li class="breadcrumb-item active">Listado de cerdos en galpón</li>
                 </ol>
             </div>
         </div>
@@ -24,61 +24,13 @@
                 <div class="col-lg-12 col-12">
                     <div class="card card-info">
                         <div class="card-header">
-                            <h3 class="card-title">Listado de cerdos en gálpon</h3>
+                            <h3 class="card-title">Listado de galónes en uso</h3>
                         </div>
                         <div class="card-body">
-                            <div class="row"> 
+                            <div class="row" id="unir_galpones_cerdo"> 
  
 
-                              {% for cerdo  in data %}
-                              
-                              <div class="col-12 col-sm-6 col-md-4 d-flex align-items-stretch flex-column">
-                                  <div class="card bg-light d-flex flex-fill">
-                                    <div class="card-header text-muted border-bottom-0">
-                                      Galpón de cerdos
-                                    </div>
-                                    <div class="card-body pt-0">
-                                      <div class="row">
-                                        <div class="col-7">
-                                          <h2 class="lead"><b>Número galpón:</b></h2>
-                                          <p class="text-muted text-sm"><b>  {{cerdo[1]}} </b> </p>
-                                          <ul class="ml-4 mb-0 fa-ul text-muted"> 
-
-                                            <li class="small"><span class="fa-li"><i class="fas fa-lg fa-bookmark"></i></span> Tipo: <b>{{cerdo[2]}}</b></li>
-                                            <li class="small"><span class="fa-li"><i class="fas fa-lg fa-building"></i></span> Capacidad: <b>{{cerdo[3]}}</b></li>
-                                           <!-- <li class="small"><span class="fa-li"><i class="fas fa-lg fa-paw"></i></span> Cerdos en galpón:  <b>{{cerdo[6]}}</b></li> -->
-
-                                            <li class="small"><span class="fa-li"><i class="fas fa-lg fa-calendar"></i></span> Fecha inicio: <b>{{cerdo[4]}}</b></li>
-                                            <li class="small"><span class="fa-li"><i class="fas fa-lg fa-calendar"></i></span> Fecha fin:  <b>{{cerdo[5]}}</b></li>
-                                            <li class="small"><span class="fa-li"><i class="fas fa-lg fa-calendar"></i></span> Semanas:  <b>{{cerdo[6]}}</b></li>
-
-                                            <li class="small"><span class="fa-li"><i class="fas fa-lg fa-eye"></i></span> Observación:  <b>{{cerdo[8]}}</b></li>
-
-                                          </ul>
-                                        </div>
-                                        <div class="col-5 text-center">
-                                          <img src="static/uploads/cerdo/cerdo.jpg" alt="user-avatar" class="img-circle img-fluid">
-                                        </div>
-                                      </div>
-                                    </div>
-                                    <div class="card-footer">
-
-                                      <div class="text-right">
-
-                                        <a onclick="cargar_contenido('contenido_principal','/ver_cerdos_galpo_new/{{cerdo[0]}}');" class="btn btn-sm bg-warning">
-                                          <b> <i class="fas fa-eye"></i> Ver cerdos </b>
-                                        </a>
-
-                                        <a target="_blank" href="/reporte/reporte_galpo_cerdo/{{cerdo[0]}}" class="btn btn-sm btn-primary">
-                                          <b> <i class="fas fa-file"></i> Reporte </b>
-                                        </a>
-                                      </div>
-
-                                    </div>
-                                  </div>
-                              </div>
-                              
-                              {% endfor %}
+ 
                                  
                              
                                      
@@ -94,8 +46,216 @@
     </section>
 </div>
 
+<div class="modal fade" id="modal_pasar_cerdo_galpon">
+  <div class="modal-dialog modal-lg">
+      <div class="modal-content bg-success espiner_mover_galpones">
+          <div class="modal-header">
+              <h4 class="modal-title">Mover cerdos a nuevo galpón</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+              </button>
+          </div>
+          <div class="modal-body" style="background: white; color: black">
+              <div class="card-body">    
+                <div class="row">
+
+                  <input type="hidden" id="galpon_anterior" /> 
+                  <input type="hidden" id="id_cergo_galpon" /> 
+
+                  <div class="form-group col-lg-8 col-6">
+                    <label for="galpon_actual">Galpón actual:</label>
+                    <input type="text" readonly class="form-control" id="galpon_actual" /> 
+                  </div>
+
+                  <div class="form-group col-lg-4 col-6">
+                    <label for="galpo_actual_capacidad">Capacidad:</label>
+                    <input type="text" readonly class="form-control" id="galpo_actual_capacidad" /> 
+                  </div>
+
+                  <div class="form-group col-lg-8 col-6 text-center">
+                    <label for="galpon_nuevo">Galpón nuvo:</label>
+                    <select class="form-control galpon_nuevo" style="width: 100%" id="galpon_nuevo">
+                        <option value="0">--- Seleccione galpón ---</option>    
+                    </select>
+                    <span style="color: red" id="galpon_nuevo_obligg"></span>
+                  </div> 
+
+                  <div class="Capacidad_C form-group col-lg-4 col-6">
+                    <label for="capacidad">Capacidad nuevo galpón:</label>
+                    <input type="text" disabled maxlength="3" class="form-control" id="capacidad" placeholder="Capacidad" />
+                    <span style="color: red" id="capacidad_obligg"></span>
+                  </div> 
+                </div>
+              </div>
+          </div>
+          <div class="modal-footer justify-content-between" style="background: #f5f4f3 !important">
+              <button type="button" class="btn btn-danger" data-dismiss="modal">
+                  Cerrar
+              </button>
+            </button>    <button onclick="mover_cerdo_galpon();" class="btn btn-success">
+              <i class="fa fa-save"></i> Mover
+          </button>
+          </div>
+      </div>
+      <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+
 <script src="static/js/galpon.js"></script>
 
 <script>
+    listar_galpon_cerdos();
     listar_galpones();
+    $("#galpon_nuevo").select2(); 
+
+    function listar_galpones(){
+
+      $.ajax({
+        url: "/galpon/listar_galpones",
+          type: "GET", 
+      }).done(function(data) { 
+
+          $("#galpon_nuevo").empty();
+          var cadena = "<option value='0'>--- Seleccione galpón ---</option>";
+          if (data.length > 0) { 
+              //bucle para extraer los datos del rol
+              for (var i = 0; i < data.length; i++) {
+                  if(data[i][6] == 1){
+                    if(data[i][7] == 1){
+                      cadena += "<option value='" + data[i][0] + "'>N°: " + data[i][1] + " - Tipo: " + data[i][3] + "</option>";
+                    }
+                  }
+              }
+              //aqui concadenamos al id del select
+              $("#galpon_nuevo").html(cadena);
+          } else { 
+              cadena += "<option value='0'>No hay galpón</option>";
+              $("#galpon_nuevo").html(cadena); 
+          }
+      });
+
+    }
+
+    function modal_pasar_cerdos(number, type, capacidad, id_galpon, id_cergo_galpon) {
+
+      $.ajax({
+        url: "/galpon/traer_cantidad_cerdos_glpon",
+        type: "POST", 
+        data: {id: id_galpon}, 
+        success: function (resp) {
+          $("#galpo_actual_capacidad").val(resp); 
+        }
+      });
+
+      $("#id_cergo_galpon").val(id_cergo_galpon);
+      $("#galpon_anterior").val(id_galpon);
+      $("#galpon_actual").val(number + " - " + type); 
+
+      $("#capacidad_obligg").html("");
+      $("#galpon_nuevo_obligg").html("");
+
+      $("#modal_pasar_cerdo_galpon").modal({ backdrop: "static", keyboard: false });
+      $("#modal_pasar_cerdo_galpon").modal("show");
+  
+    }
+
+    $("#galpon_nuevo").on("change", function(){
+      var id = $(this).val();
+      if(id == 0 || id == "0"){
+        $("#capacidad").val("0");
+        return false;
+      }
+      $.ajax({
+        url: "/galpon/traer_capacidad_galponn",
+        type: "POST", 
+        data: {id: id}, 
+        success: function (resp) {
+          $("#capacidad").val(resp);
+          $(".Capacidad_C").LoadingOverlay("hide");
+        },
+        beforeSend: function () {
+          $(".Capacidad_C").LoadingOverlay("show");
+        },
+      });
+    });
+
+
+    function listar_galpon_cerdos(){
+
+      $.ajax({
+        url: "/galpon/listar_cerdos_en_galpon",
+        type: "GET",  
+        success: function (resp) {
+         
+          $("#unir_galpones_cerdo").empty();
+          if (resp.length > 0) {
+              var llenat = "";
+              resp.forEach((row) => {
+
+                var fecha_i = new Date(row[4]);
+                var Fecha_inicio = fecha_i.getFullYear()  + "-" + (fecha_i.getMonth()+1) + "-" + fecha_i.getDate();
+
+                var fecha_f = new Date(row[5]);
+                var Fecha_fin = fecha_f.getFullYear()  + "-" + (fecha_f.getMonth()+1) + "-" + fecha_f.getDate();
+                
+                  llenat += `<div class="col-12 col-sm-6 col-md-4 d-flex align-items-stretch flex-column">
+                    <div class="card bg-light d-flex flex-fill">
+                      
+                      <div class="card-header text-muted border-bottom-0">
+                        Galpón de cerdos
+                      </div>
+                      <div class="card-body pt-0">
+                        <div class="row">
+                          <div class="col-7">
+                            <h2 class="lead"><b>Número galpón:</b></h2>
+                            <p class="text-muted text-sm"><b>  ${row[1]} </b> </p>
+                            <ul class="ml-4 mb-0 fa-ul text-muted"> 
+
+                              <li class="small"><span class="fa-li"><i class="fas fa-lg fa-bookmark"></i></span> Tipo: <b>${row[2]}</b></li>
+                              <li class="small"><span class="fa-li"><i class="fas fa-lg fa-building"></i></span> Capacidad: <b>${row[3]}</b></li>
+                            <!-- <li class="small"><span class="fa-li"><i class="fas fa-lg fa-paw"></i></span> Cerdos en galpón:  <b>${row[6]}</b></li> -->
+
+                              <li class="small"><span class="fa-li"><i class="fas fa-lg fa-calendar"></i></span> Fecha inicio: <b>${Fecha_inicio}</b></li>
+                              <li class="small"><span class="fa-li"><i class="fas fa-lg fa-calendar"></i></span> Fecha fin:  <b>${Fecha_fin}</b></li>
+                              <li class="small"><span class="fa-li"><i class="fas fa-lg fa-calendar"></i></span> Semanas:  <b>${row[6]}</b></li>
+
+                              <li class="small"><span class="fa-li"><i class="fas fa-lg fa-eye"></i></span> Observación:  <b>${row[8]}</b></li>
+
+                            </ul>
+                          </div>
+                          <div class="col-5 text-center">
+                            <img src="static/uploads/cerdo/cerdo.jpg" alt="user-avatar" class="img-circle img-fluid">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="card-footer">                                     
+
+                          <a onclick="cargar_contenido('contenido_principal','/ver_cerdos_galpo_new/${row[0]}');" class="btn btn-sm bg-warning">
+                            <b> <i class="fas fa-eye"></i> Ver cerdos </b>
+                          </a>
+                          - 
+                          <a target="_blank" href="/reporte/informa_galpon_cerdo/${row[0]}" class="btn btn-sm btn-primary">
+                            <b> <i class="fas fa-file"></i> Reporte </b>
+                          </a>
+                          -
+                          <a onclick="modal_pasar_cerdos(${row[1]}, '${row[2]}', ${row[3]}, ${row[9]}, ${row[0]});" class="btn btn-sm btn-info">
+                            <b> <i class="fas fa-home"></i> Mover </b>
+                          </a>
+                      </div>
+
+                    </div>
+                  </div>`;
+    
+              });
+              $("#unir_galpones_cerdo").html(llenat);
+          } 
+          
+        },
+ 
+      });
+
+    }
+  
+  
 </script>

@@ -172,12 +172,13 @@ def list_galpon_cerdo():
 @index.route('/galpones_cerdoss')
 def galpones_cerdoss(): 
     data = Galpon.Listar_cerdos_en_galpon()
-    return render_template('view/galpon/galpones_cerdoss.html', data = data)
+    galpon = Galpon.Listar_galpon()
+    return render_template('view/galpon/galpones_cerdoss.html', data = data, galpon = galpon)
 
 #crear galpon cerdo new
 @index.route('/nuevo_cerdo_galpon')
 def nuevo_cerdo_galpon(): 
-    data = Galpon.Listar_galpon_combo()
+    data = Galpon.Listar_galpon()
     return render_template('view/galpon/nuevo_cerdo_galpon.html', data = data)
 
 #ver los cerdos del galpon new
@@ -769,3 +770,7 @@ def informe_tratamientos():
         'galpon': galpon
     }
     return render_template('view/informe/informe_tratamientos.html', data = data)
+
+@index.route('/informe_cerdos_muertos')
+def informe_cerdos_muertos(): 
+    return render_template('view/informe/informe_cerdos_muertos.html')

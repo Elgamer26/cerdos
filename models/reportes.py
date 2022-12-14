@@ -1057,7 +1057,7 @@ class Reportes():
                             INNER JOIN
                             raza
                             ON 
-                                cerdo.raza = raza.id_raza""")
+                                cerdo.raza = raza.id_raza WHERE cerdo.estado = 1""")
             data = query.fetchall()
             query.close() 
             return data
@@ -1084,7 +1084,7 @@ class Reportes():
                             INNER JOIN
                             raza
                             ON 
-                                cerdo.raza = raza.id_raza WHERE raza.id_raza='{0}'""".format(id))
+                                cerdo.raza = raza.id_raza WHERE raza.id_raza='{0}' AND cerdo.estado = 1""".format(id))
             data = query.fetchall()
             query.close() 
             return data
@@ -1114,7 +1114,7 @@ class Reportes():
                             INNER JOIN raza ON cerdo.raza = raza.id_raza
                             INNER JOIN detallegalpon_cerdo ON cerdo.id_cerdo = detallegalpon_cerdo.id_cerdo 
                         WHERE
-                            detallegalpon_cerdo.id_galpon = '{0}'""". format(id))
+                            detallegalpon_cerdo.id_galpon = '{0}' AND cerdo.estado = 1""". format(id))
             data = query.fetchall()
             query.close()
             return data
@@ -1264,4 +1264,85 @@ class Reportes():
             query.close()
             error = "Ocurrio un problema: " + str(e)
             return error
-        return 0    
+        return 0   
+
+    ##################### INFORME DE TRATAMIENTOS DEL LOS CERDOS 
+    
+    def Informe_tratamientos_cerdo(id):   
+        try:
+            query = mysql.connection.cursor()
+            query.execute("""SELECT
+                        enfermedad_cerdo.cerdo_id,
+                        tipo_tratamiento.nombre,
+                        tratamiento_cerdos.fecha_i,
+                        tratamiento_cerdos.fecha_f,
+                        tratamiento_cerdos.peso,
+                        tratamiento_cerdos.fecha 
+                    FROM
+                        tipo_tratamiento
+                        INNER JOIN detalle_enfermedad_tratmiento ON tipo_tratamiento.id = detalle_enfermedad_tratmiento.tipo_id
+                        INNER JOIN tratamiento_cerdos ON tratamiento_cerdos.id = detalle_enfermedad_tratmiento.tratamiento_id
+                        INNER JOIN enfermedad_cerdo ON tratamiento_cerdos.enfer_cerdo_id = enfermedad_cerdo.id
+                        WHERE enfermedad_cerdo.cerdo_id = '{0}'
+                        ORDER BY tratamiento_cerdos.fecha DESC""".format(id))
+            data = query.fetchall()
+            query.close() 
+            return data
+        except Exception as e:
+            query.close()
+            error = "Ocurrio un problema: " + str(e)
+            return error
+        return 0 
+    
+    ##################### INFORME DE MUERTES DE CERDOS 
+    
+    def Informe_cerdo_muertos():   
+        try:
+            query = mysql.connection.cursor()
+            query.execute("""SELECT
+                        CONCAT_WS( ' ', muertes.fecha, muertes.hora ) AS FEHA_HORA,
+                        muertes.semana,
+                         CONCAT_WS( ' ',cerdo.codigo,
+                        cerdo.sexo,
+                        raza.raza ) AS CERDO, 
+                        cerdo.peso	
+                    FROM
+                        muertes
+                        INNER JOIN cerdo ON muertes.id_cerdo = cerdo.id_cerdo
+                        INNER JOIN raza ON cerdo.raza = raza.id_raza 
+                    ORDER BY
+                        muertes.f_registro DESC""")
+            data = query.fetchall()
+            query.close() 
+            return data
+        except Exception as e:
+            query.close()
+            error = "Ocurrio un problema: " + str(e)
+            return error
+        return 0  
+    
+    def Informe_cerdo_muertos_fecha(f_i, f_f): 
+        try:
+            query = mysql.connection.cursor()
+            query.execute("""SELECT
+                        CONCAT_WS( ' ', muertes.fecha, muertes.hora ) AS FEHA_HORA,
+                        muertes.semana,
+                         CONCAT_WS( ' ',cerdo.codigo,
+                        cerdo.sexo,
+                        raza.raza ) AS CERDO, 
+                        cerdo.peso	
+                    FROM
+                        muertes
+                        INNER JOIN cerdo ON muertes.id_cerdo = cerdo.id_cerdo
+                        INNER JOIN raza ON cerdo.raza = raza.id_raza 
+                        WHERE muertes.fecha BETWEEN '{0}' AND '{1}'
+                    ORDER BY
+                        muertes.f_registro DESC""".format(f_i, f_f))
+            data = query.fetchall()
+            query.close() 
+            return data
+        except Exception as e:
+            query.close()
+            error = "Ocurrio un problema: " + str(e)
+            return error
+        return 0   

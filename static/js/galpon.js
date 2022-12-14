@@ -1201,7 +1201,7 @@ function registra_datos_new() {
   }
 
   if (semanas == "0" || semanas.trim() == "" || semanas.length == 0) {
-    $("#semana_obligg").html("No hay semanas"); 
+    $("#semana_obligg").html("No hay semanas");
 
     return swal.fire(
       "No hay semanas",
@@ -1209,7 +1209,37 @@ function registra_datos_new() {
       "warning"
     );
   } else {
-    $("#semana_obligg").html(""); 
+    $("#semana_obligg").html("");
+  }
+
+  if (fecha_i == fecha_f) {
+    $("#fecha_i_obligg").html("XXX");
+    $("#fecha_f_obligg").html("XXX");
+    return swal.fire(
+      "Fechas iguales",
+      "Las fechas no pueden ser iguales",
+      "warning"
+    );
+  } else {
+    $("#fecha_i_obligg").html("");
+    $("#fecha_f_obligg").html("");
+  }
+
+  if (fecha_i > fecha_f) {
+    $("#fecha_i_obligg").html("XXX");
+    $("#fecha_f_obligg").html("XXX");
+    return Swal.fire(
+      "Mensaje de advertencia",
+      "La fecha inicio '" +
+      fecha_i +
+      "' es mayor a la fecha final '" +
+      fecha_f +
+      "'",
+      "warning"
+    );
+  } else {
+    $("#fecha_i_obligg").html("");
+    $("#fecha_f_obligg").html("");
   }
 
   var count = 0;
@@ -1229,7 +1259,7 @@ function registra_datos_new() {
     url: "/galpon/registrar_cerdo_galpon_new",
     type: "POST",
     data: { id_galpon: id_galpon, fecha_i: fecha_i, fecha_f: fecha_f, semanas: semanas },
-    success: function (resp) {     
+    success: function (resp) {
       if (resp > 0) {
         detalle_galpon_cerdo(parseInt(resp));
       } else {
@@ -1287,6 +1317,89 @@ function detalle_galpon_cerdo(id) {
     },
     beforeSend: function () {
       $(".card").LoadingOverlay("show", {
+        text: "Cargando...",
+      });
+    },
+  });
+}
+
+//////////////////MOMVER CERDO A OTRO GALPON
+function mover_cerdo_galpon() {
+  Swal.fire({
+    title: "Mover cerdos?",
+    text: "Los cerdos se moverán a otra galpón!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Si, mover!",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      guardar_cerdos_movimiento();
+    }
+  });
+}
+
+function guardar_cerdos_movimiento() {
+  var id_anterior = $("#galpon_anterior").val();
+  var id_cergo_galpon = $("#id_cergo_galpon").val();
+
+  var galpo_actual_capacidad = $("#galpo_actual_capacidad").val();
+
+  var galpon_nuevo = $("#galpon_nuevo").val();
+  var capacidad = $("#capacidad").val();
+
+  if (galpon_nuevo == "0" || galpon_nuevo.length == 0 || galpon_nuevo.length == 0) {
+    $("#galpon_nuevo_obligg").html("Seleccione el galpón");
+    return swal.fire(
+      "Seleccione el galpón",
+      "Debe seleccionar el galpón para mover los cerdo",
+      "warning"
+    );
+  } else {
+    $("#galpon_nuevo_obligg").html("");
+  }
+
+  if (parseInt(galpo_actual_capacidad) > parseInt(capacidad)) {
+    $("#capacidad_obligg").html("Sin capacidad en galpón");
+    return swal.fire(
+      "No hay capacidad",
+      "El nuevo galpón no tiene tanta capacidad para los cerdos",
+      "warning"
+    );
+  } else {
+    $("#capacidad_obligg").html("");
+  }
+
+  $.ajax({
+    url: "/galpon/guardar_cerdos_movimiento",
+    type: "POST",
+    data: { id_anterior: id_anterior, id_cergo_galpon: id_cergo_galpon, galpon_nuevo: galpon_nuevo },
+    success: function (resp) {
+
+      if (resp == 1) {
+        listar_galpon_cerdos();
+        listar_galpones();
+        $("#modal_pasar_cerdo_galpon").modal("hide");
+        $(".espiner_mover_galpones").LoadingOverlay("hide");
+        return Swal.fire(
+          "Traspaso de cerdos",
+          "Los cerdos se movieron con éxito!",
+          "success"
+        );
+        
+      } else {
+        $(".espiner_mover_galpones").LoadingOverlay("hide");
+        return Swal.fire(
+          "Error",
+          "Error al registra los datos en el sistema!",
+          "error"
+        );
+      }
+
+    },
+    beforeSend: function () {
+      $(".espiner_mover_galpones").LoadingOverlay("show", {
         text: "Cargando...",
       });
     },

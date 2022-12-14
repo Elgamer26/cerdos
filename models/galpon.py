@@ -63,7 +63,8 @@ class Galpon():
                             galpon_cerdo_new.fecha_f,
                             galpon_cerdo_new.semana,
                             COUNT( detallegalpon_cerdo.id ) AS cantidad,
-                            galpon.observacion 
+                            galpon.observacion,
+                            galpon_cerdo_new.id_galpon 
                         FROM
                             galpon_cerdo_new
                             INNER JOIN detallegalpon_cerdo ON galpon_cerdo_new.id = detallegalpon_cerdo.id_galpon
@@ -257,7 +258,8 @@ class Galpon():
                         tipo_galpon.tipo_galpon,
                         galpon.capacidad,
                         galpon.observacion,
-                        galpon.estado 
+                        galpon.estado,
+                        galpon.disponible
                         FROM
                         tipo_galpon
                         INNER JOIN galpon ON tipo_galpon.id_tipo = galpon.id_tipo ORDER BY id_galpon DESC""")
@@ -273,6 +275,7 @@ class Galpon():
                 dic["capacidad"] = datos[4]
                 dic["observacion"] = datos[5]
                 dic["estado"] = datos[6]
+                dic["disponible"] = datos[7]
                 new_lista.append(dic)
             return {"data": new_lista}
         except Exception as e:
@@ -436,11 +439,12 @@ class Galpon():
             query = mysql.connection.cursor() 
             query.execute('INSERT INTO galpon_cerdo_new (id_galpon, fecha_i, fecha_f, semana) VALUES ("{0}","{1}","{2}","{3}")'.format(id_galpon, fecha_i, fecha_f, semanas))
             query.connection.commit()    
+        
+            id = query.lastrowid 
             
-            id = query.lastrowid
-            query.close()  
-            # query.execute('UPDATE cerdo SET galpon = "si" WHERE id_cerdo = "{0}"'.format(id_c))
-            # query.connection.commit()      
+            query.execute('UPDATE galpon SET disponible = 0 WHERE id_galpon = "{0}"'.format(id_galpon))
+            query.connection.commit()      
+            
             query.close()
             return id
         except Exception as e:
@@ -661,3 +665,72 @@ class Galpon():
             error = "Ocurrio un problema: " + str(e)
             return error
         return 0
+    
+    def Traer_cantidad_cerdos_glpon(id):
+        try:
+            query = mysql.connection.cursor()
+            query.execute("""SELECT
+                        COUNT( detallegalpon_cerdo.id_cerdo ) AS cerdos
+                        FROM
+                        detallegalpon_cerdo
+                        INNER JOIN galpon_cerdo_new ON detallegalpon_cerdo.id_galpon = galpon_cerdo_new.id
+                        INNER JOIN cerdo ON detallegalpon_cerdo.id_cerdo = cerdo.id_cerdo 
+                        WHERE
+                        galpon_cerdo_new.id_galpon = '{0}' AND 	cerdo.estado = 1
+                        GROUP BY
+                        galpon_cerdo_new.id_galpon""". format(id))
+            data = query.fetchone()
+            query.close()
+            return data
+        except Exception as e:
+            query.close()
+            error = "Ocurrio un problema: " + str(e)
+            return error
+        return 0
+
+    ##################### MOVER CERDOS A OTRO GALPON
+
+    def Guardar_cerdos_movimiento(id_anterior, id_cergo_galpon, galpon_nuevo):
+        try:
+            query = mysql.connection.cursor() 
+            query.execute("UPDATE galpon_cerdo_new SET id_galpon='{0}' WHERE id='{1}'".format(galpon_nuevo, id_cergo_galpon))
+            query.connection.commit() 
+            
+            query.execute("UPDATE galpon SET disponible=0 WHERE id_galpon='{0}'".format(galpon_nuevo))
+            query.connection.commit()      
+
+            query.execute("UPDATE galpon SET disponible=1 WHERE id_galpon='{0}'".format(id_anterior))
+            query.connection.commit()    
+
+            query.close()
+            return 1
+        except Exception as e:
+            query.close()
+            error = "Ocurrio un problema: " + str(e)
+            return error
+        return 0
+
+    def Listar_galpon_combooo():
+        try:
+            query = mysql.connection.cursor()
+            query.execute("""SELECT
+                        galpon.id_galpon,
+                        galpon.numero,
+                        galpon.id_tipo,
+                        tipo_galpon.tipo_galpon,
+                        galpon.capacidad,
+                        galpon.observacion,
+                        galpon.estado,
+                        galpon.disponible
+                        FROM
+                        tipo_galpon
+                        INNER JOIN galpon ON tipo_galpon.id_tipo = galpon.id_tipo ORDER BY id_galpon DESC""")
+            data = query.fetchall()
+            query.close()  
+            return data
+        except Exception as e:
+            query.close()
+            error = "Ocurrio un problema: " + str(e)
+            return error
+        return 0
+    

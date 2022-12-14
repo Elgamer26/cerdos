@@ -4188,7 +4188,7 @@ def informa_tratamiento_cerdo(id):
             self.cell(w=0, h=10, txt='Pagina ' + str(self.page_no()) + '/{nb}', border=0, align='C', fill=0)
     
     cerdo = Reportes.Listar_cerdo_reporte(id) 
-    data = Reportes.Informe_enfermedades_cerdo(id) 
+    data = Reportes.Informe_tratamientos_cerdo(id) 
 
     pdf = PDF(orientation='L', unit='mm', format='A4')
     pdf.alias_nb_pages()
@@ -4245,31 +4245,235 @@ def informa_tratamiento_cerdo(id):
     bcol_set(pdf, 'blue')
 
     pdf.cell(w=15, h=10, txt='#', border=0, align='C', fill=1) 
-    pdf.cell(w=90, h=10, txt='Fecha', border=0, align='C', fill=1)  
-    pdf.cell(w=90, h=10, txt='Enfermedad', border=0, align='C', fill=1)  
-    pdf.multi_cell(w=0, h=10, txt='Estado', border=0, align='C', fill=1) 
+    pdf.cell(w=80, h=10, txt='Tratamiento', border=0, align='C', fill=1)  
+    pdf.cell(w=60, h=10, txt='Peso kg', border=0, align='C', fill=1)  
+    pdf.cell(w=90, h=10, txt='Fecha inicio', border=0, align='C', fill=1)  
+    pdf.multi_cell(w=0, h=10, txt='Fecha fin', border=0, align='C', fill=1) 
 
     tfont_size(pdf, 12)
     dcol_set(pdf, 'blue')
     tcol_set(pdf, 'gray')
  
     c = 0    
-    enfermedad = ''
     for datos in data:
         c += 1
         if(c % 2 == 0):
             bcol_set(pdf, 'gray2')
         else:
             bcol_set(pdf, 'white')
-        
-        if(datos[0] == 1):
-            enfermedad = 'Atendido'
-        else:
-            enfermedad = 'En espera'
 
         pdf.cell(w=15, h=10, txt=str(c), border='TBL', align='C', fill=1)   
-        pdf.cell(w=90, h=10, txt=str(datos[1]), border='TB', align='C', fill=1)    
-        pdf.cell(w=90, h=10, txt=str(datos[3]), border='TB', align='C', fill=1)           
-        pdf.multi_cell(w=0, h=10, txt=str(enfermedad), border='TBR', align='C', fill=1)
+        pdf.cell(w=80, h=10, txt=str(datos[1]), border='TB', align='C', fill=1)  
+        pdf.cell(w=60, h=10, txt=str(datos[4]), border='TB', align='C', fill=1)    
+        pdf.cell(w=90, h=10, txt=str(datos[2]), border='TB', align='C', fill=1)           
+        pdf.multi_cell(w=0, h=10, txt=str(datos[3]), border='TBR', align='C', fill=1)
+
+    return Response(pdf.output(dest='S').encode('latin-1'), mimetype='application/pdf', headers={'Content-Disposition': 'inline;filename=Galpones_cerdos.pdf'})
+
+####################### informa de muertes de cerdos
+    
+@reporte.route('/informa_cerdo_muertos')
+def informa_cerdo_muertos():
+    fecha = time.strftime('%Y-%m-%d', time.localtime())
+    empresa = Empresa()
+    
+    class PDF(FPDF):
+
+        def header(self):
+
+            self.image(PATH_FILE+str(empresa[4]),  x=10, y=10, w=30, h=30)
+            self.set_font('Arial', '', 15)
+
+            tcol_set(self, 'blue')
+            tfont_size(self, 35)
+            tfont(self, 'B')
+            self.cell(w=0, h=20, txt='     Informe de cerdos muertos', border=0, ln=1, align='C', fill=0)
+
+            tfont_size(self, 10)
+            tcol_set(self, 'black')
+            tfont(self, 'I')
+            self.cell(w=0, h=10, txt="Fecha de creación: " + fecha, border=0, ln=2, align='C', fill=0) 
+
+            tfont_size(pdf, 10)
+            bcol_set(pdf, 'white')
+
+            pdf.cell(w=100, h=5, txt='Empresa: ' + str(empresa[0]) , border=0,  fill=1)
+            pdf.cell(w=100, h=5, txt='Telefono: ' + str(empresa[1]) , border=0,  fill=1) 
+            pdf.multi_cell(w=0, h=5, txt='Dirección: ' + str(empresa[3]) , border=0, fill=1)
+            
+            self.ln(5)
+
+        # Page footer
+        def footer(self):
+            # Position at 1.5 cm from bottom
+            self.set_y(-20)
+
+            # Arial italic 8
+            self.set_font('Arial', 'I', 12)
+
+            # Page number
+            self.cell(w=0, h=10, txt='Pagina ' + str(self.page_no()) + '/{nb}', border=0, align='C', fill=0)
+    
+    data = Reportes.Informe_cerdo_muertos() 
+
+    pdf = PDF(orientation='L', unit='mm', format='A4')
+    pdf.alias_nb_pages()
+    pdf.add_page()
+
+    # TEXTO
+    pdf.set_font('Arial', '', 15)
+
+    # 1er encabezado ----
+
+    bcol_set(pdf, 'green')
+    tfont_size(pdf, 15)
+    tfont(pdf, 'B')
+    # pdf.multi_cell(w=0, h=10, txt="Fecha inicio: " + f_i + " - Fecha fin: " + f_f, border=0, align='C', fill=1)
+    tfont(pdf, '')
+
+    h_sep = 10
+    pdf.ln(2)
+    tfont_size(pdf, 12)
+ 
+    pdf.ln(2)
+
+    # tabla ----
+    
+    tcol_set(pdf, 'black')
+    bcol_set(pdf, 'green')
+    tfont_size(pdf, 15)
+    tfont(pdf, 'B')
+    pdf.cell(w=0, h=10, txt='Cerdos muertos', border=0, ln=1, align='C', fill=1)
+    tfont(pdf, '')
+
+    tfont_size(pdf, 13)
+    bcol_set(pdf, 'blue')
+
+    pdf.cell(w=15, h=10, txt='#', border=0, align='C', fill=1) 
+    pdf.cell(w=70, h=10, txt='Fecha - hora', border=0, align='C', fill=1)  
+    pdf.cell(w=45, h=10, txt='Semana', border=0, align='C', fill=1)  
+    pdf.cell(w=90, h=10, txt='Cerdo', border=0, align='C', fill=1)  
+    pdf.multi_cell(w=0, h=10, txt='Peso Kg', border=0, align='C', fill=1) 
+
+    tfont_size(pdf, 12)
+    dcol_set(pdf, 'blue')
+    tcol_set(pdf, 'gray')
+ 
+    c = 0    
+    for datos in data:
+        c += 1
+        if(c % 2 == 0):
+            bcol_set(pdf, 'gray2')
+        else:
+            bcol_set(pdf, 'white')
+
+        pdf.cell(w=15, h=10, txt=str(c), border='TBL', align='C', fill=1)   
+        pdf.cell(w=70, h=10, txt=str(datos[0]), border='TB', align='C', fill=1)  
+        pdf.cell(w=45, h=10, txt=str(datos[1]), border='TB', align='C', fill=1)    
+        pdf.cell(w=90, h=10, txt=str(datos[2]), border='TB', align='C', fill=1)           
+        pdf.multi_cell(w=0, h=10, txt=str(datos[3]) + " Kg", border='TBR', align='C', fill=1)
+
+    return Response(pdf.output(dest='S').encode('latin-1'), mimetype='application/pdf', headers={'Content-Disposition': 'inline;filename=Galpones_cerdos.pdf'})
+
+@reporte.route('/informa_cerdo_muertos_fecha/<string:f_i>/<string:f_f>')
+def informa_cerdo_muertos_fecha(f_i,f_f):
+    fecha = time.strftime('%Y-%m-%d', time.localtime())
+    empresa = Empresa()
+    
+    class PDF(FPDF):
+
+        def header(self):
+
+            self.image(PATH_FILE+str(empresa[4]),  x=10, y=10, w=30, h=30)
+            self.set_font('Arial', '', 15)
+
+            tcol_set(self, 'blue')
+            tfont_size(self, 35)
+            tfont(self, 'B')
+            self.cell(w=0, h=20, txt='     Informe de cerdos muertos', border=0, ln=1, align='C', fill=0)
+
+            tfont_size(self, 10)
+            tcol_set(self, 'black')
+            tfont(self, 'I')
+            self.cell(w=0, h=10, txt="Fecha de creación: " + fecha, border=0, ln=2, align='C', fill=0) 
+
+            tfont_size(pdf, 10)
+            bcol_set(pdf, 'white')
+
+            pdf.cell(w=100, h=5, txt='Empresa: ' + str(empresa[0]) , border=0,  fill=1)
+            pdf.cell(w=100, h=5, txt='Telefono: ' + str(empresa[1]) , border=0,  fill=1) 
+            pdf.multi_cell(w=0, h=5, txt='Dirección: ' + str(empresa[3]) , border=0, fill=1)
+            
+            self.ln(5)
+
+        # Page footer
+        def footer(self):
+            # Position at 1.5 cm from bottom
+            self.set_y(-20)
+
+            # Arial italic 8
+            self.set_font('Arial', 'I', 12)
+
+            # Page number
+            self.cell(w=0, h=10, txt='Pagina ' + str(self.page_no()) + '/{nb}', border=0, align='C', fill=0)
+    
+    data = Reportes.Informe_cerdo_muertos_fecha(f_i, f_f) 
+
+    pdf = PDF(orientation='L', unit='mm', format='A4')
+    pdf.alias_nb_pages()
+    pdf.add_page()
+
+    # TEXTO
+    pdf.set_font('Arial', '', 15)
+
+    # 1er encabezado ----
+
+    bcol_set(pdf, 'green')
+    tfont_size(pdf, 15)
+    tfont(pdf, 'B')
+    pdf.multi_cell(w=0, h=10, txt="Fecha inicio: " + f_i + " - Fecha fin: " + f_f, border=0, align='C', fill=1)
+    tfont(pdf, '')
+
+    h_sep = 10
+    pdf.ln(2)
+    tfont_size(pdf, 12)
+ 
+    pdf.ln(2)
+
+    # tabla ----
+    
+    tcol_set(pdf, 'black')
+    bcol_set(pdf, 'green')
+    tfont_size(pdf, 15)
+    tfont(pdf, 'B')
+    pdf.cell(w=0, h=10, txt='Cerdos muertos', border=0, ln=1, align='C', fill=1)
+    tfont(pdf, '')
+
+    tfont_size(pdf, 13)
+    bcol_set(pdf, 'blue')
+
+    pdf.cell(w=15, h=10, txt='#', border=0, align='C', fill=1) 
+    pdf.cell(w=70, h=10, txt='Fecha - hora', border=0, align='C', fill=1)  
+    pdf.cell(w=45, h=10, txt='Semana', border=0, align='C', fill=1)  
+    pdf.cell(w=90, h=10, txt='Cerdo', border=0, align='C', fill=1)  
+    pdf.multi_cell(w=0, h=10, txt='Peso Kg', border=0, align='C', fill=1) 
+
+    tfont_size(pdf, 12)
+    dcol_set(pdf, 'blue')
+    tcol_set(pdf, 'gray')
+ 
+    c = 0    
+    for datos in data:
+        c += 1
+        if(c % 2 == 0):
+            bcol_set(pdf, 'gray2')
+        else:
+            bcol_set(pdf, 'white')
+
+        pdf.cell(w=15, h=10, txt=str(c), border='TBL', align='C', fill=1)   
+        pdf.cell(w=70, h=10, txt=str(datos[0]), border='TB', align='C', fill=1)  
+        pdf.cell(w=45, h=10, txt=str(datos[1]), border='TB', align='C', fill=1)    
+        pdf.cell(w=90, h=10, txt=str(datos[2]), border='TB', align='C', fill=1)           
+        pdf.multi_cell(w=0, h=10, txt=str(datos[3]) + " Kg", border='TBR', align='C', fill=1)
 
     return Response(pdf.output(dest='S').encode('latin-1'), mimetype='application/pdf', headers={'Content-Disposition': 'inline;filename=Galpones_cerdos.pdf'})
