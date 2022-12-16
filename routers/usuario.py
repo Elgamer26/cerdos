@@ -60,20 +60,14 @@ def crear_permisos_rol():
         usuario = request.form['usuario']
         config = request.form['config']
         cerdo = request.form['cerdo']
-        galpon = request.form['galpon']
-        cergal = request.form['cergal']
-        compraventa = request.form['compraventa']
-        alicerdo = request.form['alicerdo']
-        insumo = request.form['insumo']
-        medicamento = request.form['medicamento']
+        galpon = request.form['galpon']        
+        compra_venta = request.form['compra_venta']
         alimentacion = request.form['alimentacion']
-        alimcerdo = request.form['alimcerdo']
-        pesaje = request.form['pesaje']
-        enfertrata = request.form['enfertrata']
-        cerdosenfer = request.form['cerdosenfer']
-        tratamiento = request.form['tratamiento'] 
+        vacuna_despara = request.form['vacuna_despara']
+        enfermedad_tratamiento = request.form['enfermedad_tratamiento']
+        informes = request.form['informes']  
     
-        dato = Usuario.Crear_permisos_rol(id, usuario, config, cerdo, galpon, cergal, compraventa, alicerdo, insumo, medicamento, alimentacion, alimcerdo, pesaje, enfertrata, cerdosenfer, tratamiento)
+        dato = Usuario.Crear_permisos_rol(id, usuario, config, cerdo, galpon, compra_venta, alimentacion, vacuna_despara, enfermedad_tratamiento, informes)
         return str(dato)
 
 # controlador para listar el rol
@@ -108,6 +102,14 @@ def obtener_permisos():
         id = request.form['id']
         dato = Usuario.Obtener_permisos(id)
         return jsonify(dato)
+    
+# controlador para obtener los permisso del rol
+@usuario.route('/obterner_permiso_usuario_logeado', methods=['GET'])
+def obterner_permiso_usuario_logeado():
+    if request.method == 'GET':
+        id = session['id_rol']
+        dato = Usuario.Obtener_permisos(id)
+        return jsonify(dato)
 
 # controlador para editar los permisos del rol
 @usuario.route('/editar_permisos_rol', methods=['POST'])
@@ -119,19 +121,13 @@ def editar_permisos_rol():
         config = request.form['config']
         cerdo = request.form['cerdo']
         galpon = request.form['galpon']
-        cergal = request.form['cergal']
-        compraventa = request.form['compraventa']
-        alicerdo = request.form['alicerdo']
-        insumo = request.form['insumo']
-        medicamento = request.form['medicamento']
+        compra_venta = request.form['compra_venta']
         alimentacion = request.form['alimentacion']
-        alimcerdo = request.form['alimcerdo']
-        pesaje = request.form['pesaje']
-        enfertrata = request.form['enfertrata']
-        cerdosenfer = request.form['cerdosenfer']
-        tratamiento = request.form['tratamiento'] 
+        vacuna_despara = request.form['vacuna_despara']
+        enfermedad_tratamiento = request.form['enfermedad_tratamiento']
+        informes = request.form['informes']  
     
-        dato = Usuario.Editar_permisos_rol(id_rol, id_permiso, usuario, config, cerdo, galpon, cergal, compraventa, alicerdo, insumo, medicamento, alimentacion, alimcerdo, pesaje, enfertrata, cerdosenfer, tratamiento)
+        dato = Usuario.Editar_permisos_rol(id_rol, id_permiso, usuario, config, cerdo, galpon, compra_venta, alimentacion, vacuna_despara, enfermedad_tratamiento, informes)
         return str(dato)
 
 # controlador para validara los datos existetes de un usuario

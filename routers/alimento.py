@@ -494,12 +494,14 @@ def guardar_vacunasaa_cerdoo_todo():
         id_lote = request.form['id_lote']
         cantidad = request.form['cantidad']  
         semana = request.form['semana']
-        _idc = request.form['id_c']   
+        _idc = request.form['id_c']  
+        id_galpon_cerdo = request.form['id_galpon_cerdo']   
+        fecha_vacuna_t = request.form['fecha_vacuna_t']   
 
         id_cerdo = _idc.split(",") 
 
         for valor in zip(id_cerdo):
-            dato = Alimento.Guardar_vacunasaa_cerdoo(id_vacuna, id_lote, cantidad, semana, valor[0])  
+            dato = Alimento.Guardar_vacunasaa_cerdoo_todo(id_vacuna, id_lote, cantidad, semana, valor[0], id_galpon_cerdo, fecha_vacuna_t)  
         return jsonify(dato)
 
 @alimento.route('/guardar_muerte_cerdo', methods=['POST'])
@@ -536,11 +538,14 @@ def guardar_desparasitantee_cerdoo_todo():
         _cantidad = request.form['cantidad']
         _semana = request.form['semana'] 
         _id_c = request.form['id_c'] 
+
+        id_galpon_cerdo = request.form['id_galpon_cerdo'] 
+        fecha_desparasitacion_t = request.form['fecha_desparasitacion_t'] 
         
         id_cerdo = _id_c.split(",") 
         
         for valor in zip(id_cerdo):
-            dato = Alimento.Guardar_desparasitantee_cerdoo(_id_d, _id_l, _cantidad, _semana, valor[0]) 
+            dato = Alimento.Guardar_desparasitantee_cerdoo_todo(_id_d, _id_l, _cantidad, _semana, valor[0], id_galpon_cerdo, fecha_desparasitacion_t) 
         return jsonify(dato)
 
 @alimento.route('/listar_desparasitantess_cerdo', methods=['POST'])

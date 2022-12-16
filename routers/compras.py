@@ -155,13 +155,14 @@ def registrar_insumo():
         _cantidad = request.form['cantidad']
         _precio = request.form['precio'] 
         _detalle = request.form['detalle']
+        _presentacion = request.form['presentacion']
         _foto = request.files.get("foto", False)
 
         if _foto:
             # cerdo con foto
             hora_ac = time.strftime('%Y%m%d%H%M%S_', time.localtime())
             archivo = hora_ac + _foto.filename             
-            dato = Compras.Crear_insumo(_codigo, _nombre, _tipo, _cantidad, _precio, _detalle, archivo)
+            dato = Compras.Crear_insumo(_codigo, _nombre, _tipo, _cantidad, _precio, _detalle, archivo, _presentacion)
             if dato == 1:
                 _foto.save(PATH_FILE + archivo)
                 return str(dato)
@@ -170,7 +171,7 @@ def registrar_insumo():
         else:
             # cerdo sin foto
             archivo = "insumo.jpg"
-            dato = Compras.Crear_insumo(_codigo, _nombre, _tipo, _cantidad, _precio, _detalle, archivo)
+            dato = Compras.Crear_insumo(_codigo, _nombre, _tipo, _cantidad, _precio, _detalle, archivo, _presentacion)
             return str(dato)
 
 # controlador para listar el insumo
@@ -199,9 +200,10 @@ def editar_insumo():
         _tipo = request.form['tipo'] 
         _cantidad = request.form['cantidad']
         _precio = request.form['precio'] 
+        presentacion = request.form['presentacion'] 
         _detalle = request.form['detalle'] 
 
-        dato = Compras.Editar_insumo(_codigo, _nombre, _tipo, _cantidad, _precio, _detalle, id)
+        dato = Compras.Editar_insumo(_codigo, _nombre, _tipo, _cantidad, _precio, _detalle, id, presentacion)
         return str(dato)
 
 # controlador para cambiar la foto del insumo

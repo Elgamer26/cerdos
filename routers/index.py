@@ -11,6 +11,7 @@ from models.enfermedad import Enfermedad
 from models.vacunas import Vacunas 
 from models.web import Web  
 from models.venta import Venta  
+from models.reportes import Reportes  
 #-------------------
 
 from utils.Complemento import Complement
@@ -32,6 +33,15 @@ def Index():
         'cerdo': cerdo
     } 
     return render_template('Web/index.html', dato = dato, data = data)
+
+@index.route('/nosotros')
+def nosotros(): 
+    return render_template('Web/about.html')
+
+@index.route('/contacto')
+def contacto(): 
+    dato = Reportes.Traer_empresa()
+    return render_template('Web/contact.html', dato = dato)
 
 # esto es el login que muestra cuando inicia el sistema
 @index.route('/Login')
@@ -695,14 +705,22 @@ def venta_cerdos():
     fecha = datetime.now()
     now = fecha.strftime("%Y-%m-%d")
     cliente = Venta.Listar_cliente()
+    cerdos = Venta.Listar_cerdos_vender()
+    lista = Venta.Listar_ventas_cerdos()
     data = {
      'fecha': now,
-     'cliente': cliente
+     'cliente': cliente,
+     'cerdos': cerdos,
+     'lista': lista
     }
     return render_template('view/ventas/venta_cerdos.html', data = data)
 
 #########
 ######### nuevos informes
+@index.route('/informe_venta_cerdos')
+def informe_venta_cerdos(): 
+    return render_template('view/informe/informe_venta_cerdos.html')
+
 @index.route('/informa_compra_vacunas')
 def informa_compra_vacunas(): 
     return render_template('view/informe/informa_compra_vacunas.html')
@@ -774,3 +792,11 @@ def informe_tratamientos():
 @index.route('/informe_cerdos_muertos')
 def informe_cerdos_muertos(): 
     return render_template('view/informe/informe_cerdos_muertos.html')
+
+@index.route('/inform_costo_produccion')
+def inform_costo_produccion(): 
+    cerdos = Venta.Listar_cerdos_vender()
+    data = { 
+     'cerdos': cerdos
+    }
+    return render_template('view/informe/inform_costo_produccion.html', data = data)

@@ -3,13 +3,13 @@ from datetime import datetime
 
 class Vacunas():
     # modelo para registra el calendario
-    def Calendario_registrar(titulo, cerdo, descripcion, tipo, fecha_evento, color, color_etiqueta, galpon):
+    def Calendario_registrar(titulo, descripcion, tipo, fecha_evento, color, color_etiqueta, galpon):
         try:
             query = mysql.connection.cursor()
-            query.execute('SELECT * FROM calendario WHERE id_cerdo="{0}" AND start="{1}" AND tipo="{2}" AND estado=1 AND galpon_id="{3}"'. format(cerdo,fecha_evento,tipo,galpon))
+            query.execute('SELECT * FROM calendario WHERE start="{0}" AND tipo="{1}" AND estado=1 AND galpon_id="{2}"'. format(fecha_evento,tipo,galpon))
             data = query.fetchone()
             if not data:
-                query.execute('INSERT INTO calendario (id_cerdo,title,descripcion,start,color,textColor,tipo,galpon_id) VALUES ("{0}","{1}","{2}","{3}","{4}","{5}","{6}","{7}")'.format(cerdo,titulo,descripcion,fecha_evento,color_etiqueta,color,tipo,galpon))
+                query.execute('INSERT INTO calendario (title,descripcion,start,color,textColor,tipo,galpon_id) VALUES ("{0}","{1}","{2}","{3}","{4}","{5}","{6}")'.format(titulo,descripcion,fecha_evento,color_etiqueta,color,tipo,galpon))
                 query.connection.commit()
                 query.close()
                 return 1  # se inserto correcto
@@ -28,41 +28,37 @@ class Vacunas():
             query = mysql.connection.cursor()
             query.execute("""SELECT
                             calendario.id,
-                            calendario.id_cerdo,
                             calendario.title,
                             calendario.descripcion,
                             calendario.`start`,
                             calendario.color,
                             calendario.textColor,
                             calendario.tipo,
-                            calendario.estado,
-                            CONCAT_WS( ' ', 'Codigo: ', cerdo.codigo, '- Raza: ', raza.raza, '- Sexo: ', cerdo.sexo ) AS cerdo,
+                            calendario.estado, 
                             CONCAT_WS( ' ', 'Número: ', galpon.numero, '- Galpón: ', tipo_galpon.tipo_galpon, '- Fecha fin: ', galpon_cerdo_new.fecha_f ) AS galpon_cerdo 
                         FROM
                             calendario
-                            INNER JOIN cerdo ON calendario.id_cerdo = cerdo.id_cerdo
-                            INNER JOIN raza ON cerdo.raza = raza.id_raza
                             INNER JOIN galpon_cerdo_new ON calendario.galpon_id = galpon_cerdo_new.id
                             INNER JOIN galpon ON galpon_cerdo_new.id_galpon = galpon.id_galpon
                             INNER JOIN tipo_galpon ON galpon.id_tipo = tipo_galpon.id_tipo 
                         WHERE
-                            calendario.estado = 1 ORDER BY 	calendario.`start` ASC""")
+                            calendario.estado = 1 
+                        ORDER BY
+                            calendario.`start` ASC""")
             data = query.fetchall()
             query.close() 
             new_lista = []
             for datos in data:
                 dic = {}
-                dic["id"] = datos[0]
-                dic["id_cerdo"] = datos[1]
-                dic["title"] = datos[2]
-                dic["descripcion"] = datos[3]
-                dic["start"] = datos[4]
-                dic["color"] = datos[5]
-                dic["textColor"] = datos[6]
-                dic["tipo"] = datos[7]
-                dic["estado"] = datos[8]
-                dic["cerdo"] = datos[9]
-                dic["galpon_cerdo"] = datos[10]
+                dic["id"] = datos[0] 
+                dic["title"] = datos[1]
+                dic["descripcion"] = datos[2]
+                dic["start"] = datos[3]
+                dic["color"] = datos[4]
+                dic["textColor"] = datos[5]
+                dic["tipo"] = datos[6]
+                dic["estado"] = datos[7] 
+                dic["galpon_cerdo"] = datos[8]
                 new_lista.append(dic)
             return new_lista
         except Exception as e:
@@ -75,26 +71,24 @@ class Vacunas():
         try:
             query = mysql.connection.cursor()
             query.execute("""SELECT
-                            calendario.id,
-                            calendario.id_cerdo,
-                            calendario.title,
-                            calendario.descripcion,
-                            calendario.`start`,
-                            calendario.color,
-                            calendario.textColor,
-                            calendario.tipo,
-                            calendario.estado,
-                            CONCAT_WS( ' ', 'Codigo: ', cerdo.codigo, '- Raza: ', raza.raza, '- Sexo: ', cerdo.sexo ) AS cerdo,
-                            CONCAT_WS( ' ', 'Número: ', galpon.numero, '- Galpón: ', tipo_galpon.tipo_galpon, '- Fecha fin: ', galpon_cerdo_new.fecha_f ) AS galpon_cerdo 
-                        FROM
-                            calendario
-                            INNER JOIN cerdo ON calendario.id_cerdo = cerdo.id_cerdo
-                            INNER JOIN raza ON cerdo.raza = raza.id_raza
-                            INNER JOIN galpon_cerdo_new ON calendario.galpon_id = galpon_cerdo_new.id
-                            INNER JOIN galpon ON galpon_cerdo_new.id_galpon = galpon.id_galpon
-                            INNER JOIN tipo_galpon ON galpon.id_tipo = tipo_galpon.id_tipo 
-                        WHERE
-                            calendario.estado = 1 ORDER BY 	calendario.`start` ASC""")
+                        calendario.id,
+                        calendario.title,
+                        calendario.descripcion,
+                        calendario.`start`,
+                        calendario.color,
+                        calendario.textColor,
+                        calendario.tipo,
+                        calendario.estado,
+                        CONCAT_WS( ' ', 'Número: ', galpon.numero, '- Galpón: ', tipo_galpon.tipo_galpon, '- Fecha fin: ', galpon_cerdo_new.fecha_f ) AS galpon_cerdo 
+                    FROM
+                        calendario
+                        INNER JOIN galpon_cerdo_new ON calendario.galpon_id = galpon_cerdo_new.id
+                        INNER JOIN galpon ON galpon_cerdo_new.id_galpon = galpon.id_galpon
+                        INNER JOIN tipo_galpon ON galpon.id_tipo = tipo_galpon.id_tipo 
+                    WHERE
+                        calendario.estado = 1 
+                    ORDER BY
+                        calendario.`start` ASC""")
             data = query.fetchall()
             query.close() 
             new_lista = []
@@ -103,18 +97,16 @@ class Vacunas():
             else:
                 for datos in data:
                     dic = {}
-                    dic["id"] = datos[0]
-                    dic["id_cerdo"] = datos[1]
-                    dic["title"] = datos[2]
-                    dic["descripcion"] = datos[3]                     
-                    Convert = datetime.strptime(str(datos[4]), '%Y-%m-%d')
+                    dic["id"] = datos[0] 
+                    dic["title"] = datos[1]
+                    dic["descripcion"] = datos[2]                     
+                    Convert = datetime.strptime(str(datos[3]), '%Y-%m-%d')
                     dic["start"] = Convert.strftime('%Y-%m-%d') 
-                    dic["color"] = datos[5]
-                    dic["textColor"] = datos[6]
-                    dic["tipo"] = datos[7]
-                    dic["estado"] = datos[8]
-                    dic["cerdo"] = datos[9]
-                    dic["galpon_cerdo"] = datos[10]
+                    dic["color"] = datos[4]
+                    dic["textColor"] = datos[5]
+                    dic["tipo"] = datos[6]
+                    dic["estado"] = datos[7] 
+                    dic["galpon_cerdo"] = datos[8]
                     new_lista.append(dic)
                 return {"data": new_lista}
         except Exception as e:
@@ -127,7 +119,7 @@ class Vacunas():
     def Calendario_editar(id, titulo, descripcion, tipo, fecha_evento, color, color_etiqueta):
         try:
             query = mysql.connection.cursor()
-            query.execute('SELECT * FROM calendario WHERE start = "{0}" AND tipo = "{1}" AND id != "{2}" AND estado = 1'. format(fecha_evento,tipo,id))
+            query.execute('SELECT * FROM calendario WHERE start="{0}" AND tipo="{1}" AND id!="{2}" AND estado = 1'. format(fecha_evento,tipo,id))
             data = query.fetchone()
             if not data:
                 query.execute('UPDATE calendario SET title="{0}",descripcion="{1}",start="{2}",color="{3}",textColor="{4}",tipo="{5}" WHERE id="{6}"'.format(titulo,descripcion,fecha_evento,color_etiqueta,color,tipo,id))

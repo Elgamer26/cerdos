@@ -112,10 +112,10 @@ class Usuario():
         return 0
 
     # modelo para registrar los permisos del rol
-    def Crear_permisos_rol(id, usuario, config, cerdo, galpon, cergal, compraventa, alicerdo, insumo, medicamento, alimentacion, alimcerdo, pesaje, enfertrata, cerdosenfer, tratamiento):
+    def Crear_permisos_rol(id, usuario, config, cerdo, galpon, compra_venta, alimentacion, vacuna_despara, enfermedad_tratamiento, informes):
         try:
             query = mysql.connection.cursor()
-            query.execute('INSERT INTO permisos (rol_id,usuario,config,cerdo,galpon,cerdo_galpon,compra_venta,alimento_cerdos,insumos_cerdo,medicamento,alimentacion,alimentaion_cerdo,pesaje,enfermedades_tratamiento,cerdo_enfermo,tratamiento) VALUES ("{0}","{1}","{2}","{3}","{4}","{5}","{6}","{7}","{8}","{9}","{10}","{11}","{12}","{13}","{14}","{15}")'.format(id, usuario, config, cerdo, galpon, cergal, compraventa, alicerdo, insumo, medicamento, alimentacion, alimcerdo, pesaje, enfertrata, cerdosenfer, tratamiento))
+            query.execute('INSERT INTO permisos (rol_id,usuario,config,cerdo,galpon,compra_venta,alimentacion,vacuna_despara,enfermedad_tratamiento,informes) VALUES ("{0}","{1}","{2}","{3}","{4}","{5}","{6}","{7}","{8}","{9}")'.format(id,usuario,config,cerdo,galpon,compra_venta,alimentacion, vacuna_despara,enfermedad_tratamiento,informes))
             query.connection.commit()
             query.close()
             return 1  # se inserto correcto
@@ -126,10 +126,10 @@ class Usuario():
         return 0
 
     # modelo para editar los permisos del rol
-    def Editar_permisos_rol(id_rol, id_permiso, usuario, config, cerdo, galpon, cergal, compraventa, alicerdo, insumo, medicamento, alimentacion, alimcerdo, pesaje, enfertrata, cerdosenfer, tratamiento):
+    def Editar_permisos_rol(id_rol, id_permiso, usuario, config, cerdo, galpon, compra_venta, alimentacion, vacuna_despara, enfermedad_tratamiento, informes):
         try:
             query = mysql.connection.cursor()
-            query.execute('UPDATE permisos SET usuario = "{0}" ,config = "{1}" ,cerdo = "{2}" ,galpon = "{3}" ,cerdo_galpon = "{4}" ,compra_venta = "{5}" ,alimento_cerdos = "{6}" ,insumos_cerdo = "{7}" ,medicamento = "{8}" ,alimentacion = "{9}" ,alimentaion_cerdo = "{10}" ,pesaje = "{11}" ,enfermedades_tratamiento = "{12}" ,cerdo_enfermo = "{13}" ,tratamiento = "{14}" WHERE rol_id = "{15}" AND id = "{16}"'.format(usuario, config, cerdo, galpon, cergal, compraventa, alicerdo, insumo, medicamento, alimentacion, alimcerdo, pesaje, enfertrata, cerdosenfer, tratamiento, id_rol, id_permiso))
+            query.execute('UPDATE permisos SET usuario = "{0}" ,config = "{1}" ,cerdo = "{2}" ,galpon = "{3}",compra_venta = "{4}" ,alimentacion = "{5}" ,vacuna_despara = "{6}" ,enfermedad_tratamiento = "{7}" , informes = "{8}" WHERE rol_id = "{9}" AND id = "{10}"'.format(usuario, config, cerdo, galpon, compra_venta, alimentacion, vacuna_despara, enfermedad_tratamiento, informes, id_rol, id_permiso))
             query.connection.commit()
             query.close()
             return 1  # se inserto correcto

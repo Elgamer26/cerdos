@@ -1,5 +1,15 @@
 var tabla_alimentos_c;
 
+////////////// buscar galpon de cerdos
+$("#buscar_galpon_text").on("keyup", function () {
+    let valor = $(this).val();
+    if (valor != "" || valor.length != 0 || valor.trim() != "") {
+        listar_galpon_cerdos_buscar(valor);
+    } else {
+        listar_galpon_cerdos();
+    }
+})
+
 ////////////// buscar cerdo en galpon
 $("#inpu_buscar_cerdo").on("keyup", function () {
     let valor = $(this).val();
@@ -146,7 +156,7 @@ function guardar_la_alimentacion_toda() {
                     $(".card_aiment_todo").LoadingOverlay("hide");
                     return Swal.fire(
                         "Alimentación exitosa",
-                        "La alimentación de todo el galón se registro con exito",
+                        "La alimentación de todo el galón se registro con éxito",
                         "success"
                     );
                 }
@@ -248,7 +258,7 @@ function guardar_detalle_alimentacion_todo(id) {
                 $(".card_aiment_todo").LoadingOverlay("hide");
                 return Swal.fire(
                     "Alimentación exitosa",
-                    "La alimentación de todo el galón se registro con exito",
+                    "La alimentación de todo el galón se registro con éxito",
                     "success"
                 );
             }
@@ -379,7 +389,7 @@ function guardar_la_alimentacion_unitaria() {
                     $(".card_aiment_uni").LoadingOverlay("hide");
                     return Swal.fire(
                         "Alimentación exitosa",
-                        "La alimentación del cerdo se registro con exito",
+                        "La alimentación del cerdo se registro con éxito",
                         "success"
                     );
                 }
@@ -465,7 +475,7 @@ function guardar_detalle_alimentacion_uniitaria(id) {
                 $(".card_aiment_uni").LoadingOverlay("hide");
                 return Swal.fire(
                     "Alimentación exitosa",
-                    "La alimentación del cerdo se registro con exito",
+                    "La alimentación del cerdo se registro con éxito",
                     "success"
                 );
             }
@@ -567,7 +577,7 @@ function guardar_pesaje_cedo_cerdo() {
 
                 return Swal.fire(
                     "Registro guardado",
-                    "El peso del cerdo de guardó con exito",
+                    "El peso del cerdo de guardó con éxito",
                     "success"
                 );
 
@@ -694,7 +704,7 @@ function guardar_vacunasaa_cerdoo() {
 
                 return Swal.fire(
                     "Registro guardado",
-                    "La vacuna del cerdo de guardó con exito",
+                    "La vacuna del cerdo de guardó con éxito",
                     "success"
                 );
 
@@ -754,6 +764,9 @@ function registrar_todo_vacuncacion_cerdo() {
 }
 
 function guardar_vacunasaa_cerdoo_todoo() {
+    var id_galpon_cerdo = $("#id_galpon_cerdo").val();
+    var fecha_vacuna_t = $("#fecha_vacuna_t").val();
+
     var id_vacuna = $("#vacuna_t").val();
     var semana = $("#semana_vacuna_t").val();
     var cantidad = $("#cantidad_dosis_t").val();
@@ -824,6 +837,9 @@ function guardar_vacunasaa_cerdoo_todoo() {
     formdata.append("semana", semana);
     formdata.append("id_c", id_c);
 
+    formdata.append("id_galpon_cerdo", id_galpon_cerdo);
+    formdata.append("fecha_vacuna_t", fecha_vacuna_t);
+
     $.ajax({
         url: "/alimento/guardar_vacunasaa_cerdoo_todo",
         type: "POST",
@@ -845,7 +861,7 @@ function guardar_vacunasaa_cerdoo_todoo() {
 
                 return Swal.fire(
                     "Registro guardado",
-                    "Las vacunas de los cerdos se guardó con exito",
+                    "Las vacunas de los cerdos se guardó con éxito",
                     "success"
                 );
 
@@ -966,7 +982,7 @@ function guardar_muerte_cerdo() {
 
                 return Swal.fire(
                     "Registro guardado",
-                    "La muerte del cerdo se guardó con exito",
+                    "La muerte del cerdo se guardó con éxito",
                     "success"
                 );
 
@@ -1097,7 +1113,7 @@ function guardar_desparasitantee_cerdoo() {
                 $("#modal_medicamento_cerdo").modal("hide");
                 return Swal.fire(
                     "Registro guardado",
-                    "La desparasitación del cerdo se guardó con exito",
+                    "La desparasitación del cerdo se guardó con éxito",
                     "success"
                 );
             } else {
@@ -1156,6 +1172,9 @@ function registrar_medicamento_cerdo_todo() {
 }
 
 function guardar_desparasitacion_cerdoo_todoo() {
+    var id_galpon_cerdo = $("#id_galpon_cerdo").val();
+    var fecha_desparasitacion_t = $("#fecha_desparasitacion_t").val();
+
     var id_desparasitante = $("#desparasitante_t").val();
     var semana = $("#semana_desparasitacion_t").val();
     var cantidad = $("#cantidad_desparasitante_t").val();
@@ -1226,6 +1245,9 @@ function guardar_desparasitacion_cerdoo_todoo() {
     formdata.append("semana", semana);
     formdata.append("id_c", id_c);
 
+    formdata.append("id_galpon_cerdo", id_galpon_cerdo);
+    formdata.append("fecha_desparasitacion_t", fecha_desparasitacion_t);
+
     $.ajax({
         url: "/alimento/guardar_desparasitantee_cerdoo_todo",
         type: "POST",
@@ -1243,7 +1265,7 @@ function guardar_desparasitacion_cerdoo_todoo() {
                 $("#modal_medicamento_cerdo_t").modal("hide");
                 return Swal.fire(
                     "Registro guardado",
-                    "La desparasitación de los cerdos se guardó con exito",
+                    "La desparasitación de los cerdos se guardó con éxito",
                     "success"
                 );
             } else {

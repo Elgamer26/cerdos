@@ -85,6 +85,44 @@ class Galpon():
             return error
         return 0
 
+    ####################
+    # modelo de buscar el galpon new
+    def Listar_galpon_cerdos_buscar(valor):
+        try:
+            query = mysql.connection.cursor()
+            query.execute("""SELECT
+                            galpon_cerdo_new.id,
+                            galpon.numero,
+                            tipo_galpon.tipo_galpon,
+                            galpon.capacidad,
+                            galpon_cerdo_new.fecha_i,
+                            galpon_cerdo_new.fecha_f,
+                            galpon_cerdo_new.semana,
+                            COUNT( detallegalpon_cerdo.id ) AS cantidad,
+                            galpon.observacion,
+                            galpon_cerdo_new.id_galpon 
+                        FROM
+                            galpon_cerdo_new
+                            INNER JOIN detallegalpon_cerdo ON galpon_cerdo_new.id = detallegalpon_cerdo.id_galpon
+                            INNER JOIN cerdo ON detallegalpon_cerdo.id_cerdo = cerdo.id_cerdo
+                            INNER JOIN galpon ON galpon_cerdo_new.id_galpon = galpon.id_galpon
+                            INNER JOIN tipo_galpon ON galpon.id_tipo = tipo_galpon.id_tipo
+                            INNER JOIN raza ON cerdo.raza = raza.id_raza 
+                            WHERE galpon.numero LIKE '%{0}%' OR tipo_galpon.tipo_galpon LIKE '%{0}%'
+                        GROUP BY
+                            galpon_cerdo_new.id_galpon 
+                        ORDER BY
+                            galpon_cerdo_new.id DESC""".format(valor))
+            data = query.fetchall()
+            query.close()
+            return data
+        except Exception as e:
+            query.close()
+            error = "Ocurrio un problema: " + str(e)
+            return error
+        return 0
+
+
     # modelo para listar los cerdos del galpon
     def Listar_cerdos_galpon_tabla(id):
         try:

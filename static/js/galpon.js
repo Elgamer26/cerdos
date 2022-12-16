@@ -28,8 +28,8 @@ function guardar_tipo_g() {
         tabla_tipo_galpon.ajax.reload();
         $("#modal_nueva_tipo_galpon").modal("hide");
         return Swal.fire(
-          "Registro exitoso",
-          "El tipo de galpón se creo con exito",
+          "Registro éxitoso",
+          "El tipo de galpón se creo con éxito",
           "success"
         );
       } else if (response == 2) {
@@ -290,8 +290,8 @@ function editar_tipo_g() {
         tabla_tipo_galpon.ajax.reload();
         $("#modal_editar_tipo_g").modal("hide");
         return Swal.fire(
-          "Registro exitoso",
-          "El tipo de galpón se creo con exito",
+          "Registro éxitoso",
+          "El tipo de galpón se creo con éxito",
           "success"
         );
       } else if (response == 2) {
@@ -363,8 +363,8 @@ function registrar_galpon() {
         $(".card").LoadingOverlay("hide");
         cargar_contenido("contenido_principal", "/create_galpon");
         return Swal.fire(
-          "Registro exitoso",
-          "El galpón se creo con exito",
+          "Registro éxitoso",
+          "El galpón se creo con éxito",
           "success"
         );
       } else if (response == 2) {
@@ -462,6 +462,16 @@ function listar_galpones() {
             return "<span class='badge badge-success'>ACTIVO</span>";
           } else {
             return "<span class='badge badge-danger'>INACTIVO</span>";
+          }
+        },
+      },
+      {
+        data: "disponible",
+        render: function (data, type, row) {
+          if (data == 1) {
+            return "<span class='badge badge-success'>Disponible</span>";
+          } else {
+            return "<span class='badge badge-danger'>Ocupado</span>";
           }
         },
       },
@@ -685,8 +695,8 @@ function editar_galpon() {
         $("#modal_editar_galpon").modal("hide");
         tabla_galon.ajax.reload();
         return Swal.fire(
-          "Editado con exito",
-          "El galpón se edito con exito",
+          "Editado con éxito",
+          "El galpón se edito con éxito",
           "success"
         );
       } else if (response == 2) {

@@ -127,7 +127,7 @@ class Cerdo():
             cerdo.id_cerdo, cerdo.codigo, cerdo.nombre, cerdo.sexo, raza.raza, cerdo.raza,
             cerdo.peso, cerdo.origen, cerdo.fecha, cerdo.detalle,
             cerdo.foto, cerdo.estado, cerdo.etapa, cerdo.tipo_ingreso, cerdo.costo
-            FROM cerdo INNER JOIN raza ON cerdo.raza = raza.id_raza WHERE cerdo.estado !=2 AND cerdo.estado !=3 ORDER BY id_cerdo DESC""")
+            FROM cerdo INNER JOIN raza ON cerdo.raza = raza.id_raza WHERE cerdo.estado = 1 ORDER BY id_cerdo DESC""")
             data = query.fetchall()
             query.close()
             new_lista = []

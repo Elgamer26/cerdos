@@ -1,10 +1,8 @@
 var tabla_tipo_vacuna, tabla_vacunas, tabla_lote_vacuna;
 
 function registrar_calendario_cerdo() {
-  var titulo = $("#evento_titulo").val();
-  var cerdo = $("#cerdo").val();
-  var galpon = $("#galpon_cerdo").val();
-  var cerdo_text = $("#cerdo option:selected").text();
+  var titulo = $("#evento_titulo").val(); 
+  var galpon = $("#galpon_cerdo").val(); 
   var descripcion = $("#descripcion").val();
   var tipo = $("#tipo").val();
   var fecha_evento = $("#fecha_evento").val();
@@ -12,12 +10,11 @@ function registrar_calendario_cerdo() {
   var color_etiqueta = $("#color_etiqueta").val();
 
   if (
-    titulo.trim() == "" ||
-    cerdo == 0 ||
+    titulo.trim() == "" || 
     descripcion.trim() == "" ||
     tipo == 0
   ) {
-    validar_registro_calendario_save(titulo, cerdo, descripcion, tipo);
+    validar_registro_calendario_save(titulo, descripcion, tipo);
 
     return swal.fire(
       "Campo vacios",
@@ -25,8 +22,7 @@ function registrar_calendario_cerdo() {
       "warning"
     );
   } else {
-    $("#titulo_obligg").html("");
-    $("#cerdo_obligg").html("");
+    $("#titulo_obligg").html(""); 
     $("#descripcion_obligg").html("");
     $("#tipoo_obligg").html("");
   }
@@ -46,7 +42,6 @@ function registrar_calendario_cerdo() {
 
   var formdata = new FormData();
   formdata.append("titulo", titulo);
-  formdata.append("cerdo", cerdo);
   formdata.append("galpon", galpon);
   formdata.append("descripcion", descripcion);
   formdata.append("tipo", tipo);
@@ -72,17 +67,15 @@ function registrar_calendario_cerdo() {
           Listar_tabla_calendar();
 
           return Swal.fire(
-            "Calendario creado con exito",
-            "El calendario creo con exito",
+            "Calendario creado con éxito",
+            "El calendario creo con éxito",
             "success"
           );
         } else if (resp == 2) {
           $(".bg-success").LoadingOverlay("hide");
           return Swal.fire(
             "Calendario ya existe",
-            "El cerdo seleccionado: '" +
-            cerdo_text +
-            "', ya tiene creado un evento: '" + tipo + "' en el calendario en la fecha: '" +
+            "El gapoón seleccionado ya tiene creado un evento: '" + tipo + "' en el calendario en la fecha: '" +
             fecha_evento +
             "', ya existe en el sistema",
             "warning"
@@ -108,17 +101,11 @@ function registrar_calendario_cerdo() {
   return false;
 }
 
-function validar_registro_calendario_save(titulo, cerdo, descripcion, tipo) {
+function validar_registro_calendario_save(titulo, descripcion, tipo) {
   if (titulo.trim() == "") {
     $("#titulo_obligg").html("Ingrese el titulo");
   } else {
     $("#titulo_obligg").html("");
-  }
-
-  if (cerdo == 0) {
-    $("#cerdo_obligg").html("Seleccione el cerdo");
-  } else {
-    $("#cerdo_obligg").html("");
   }
 
   if (descripcion.trim() == "") {
@@ -136,9 +123,7 @@ function validar_registro_calendario_save(titulo, cerdo, descripcion, tipo) {
 
 function editar_calendario_cerdo() {
   var id = $("#id_calendario").val();
-  var titulo = $("#evento_titulo_edit").val();
-  // var cerdo = $("#cerdo_edit").val();
-  var cerdo_text = $("#cerdo_edit option:selected").text();
+  var titulo = $("#evento_titulo_edit").val(); 
   var descripcion = $("#descripcion_edit").val();
   var tipo = $("#tipo_edit").val();
   var fecha_evento = $("#fecha_evento_edit").val();
@@ -158,8 +143,7 @@ function editar_calendario_cerdo() {
       "warning"
     );
   } else {
-    $("#titulo_obligg_edit").html("");
-    $("#cerdo_obligg_edit").html("");
+    $("#titulo_obligg_edit").html(""); 
     $("#descripcion_obligg_edit").html("");
     $("#tipoo_obligg_edit").html("");
   }
@@ -204,17 +188,15 @@ function editar_calendario_cerdo() {
           Listar_tabla_calendar();
 
           return Swal.fire(
-            "Calendario editado con exito",
-            "El calendario se edito con exito",
+            "Calendario editado con éxito",
+            "El calendario se edito con éxito",
             "success"
           );
         } else if (resp == 2) {
           $(".bg-primary").LoadingOverlay("hide");
           return Swal.fire(
             "Calendario ya existe",
-            "El cerdo seleccionado: '" +
-            cerdo_text +
-            "', ya tiene creado un evento: '" + tipo + "' en el calendario en la fecha: '" +
+            "Ya tiene creado un evento: '" + tipo + "' en el calendario en la fecha: '" +
             fecha_evento +
             "', ya existe en el sistema",
             "warning"
@@ -293,7 +275,7 @@ function eliminar_evento_calendario_ok(id) {
           
       return Swal.fire(
         "Evento eliminado",
-        "El evento se eliminó con exito",
+        "El evento se eliminó con éxito",
         "success"
       );
     } else {
@@ -423,7 +405,7 @@ function registra_tipo_vacuna() {
         $(".card-dark").LoadingOverlay("hide");
         $("#tipo_vacuna").val("");
 
-        $("#mensaje_tipo_i_success").text("El tipo de vacuna se creo con exito");
+        $("#mensaje_tipo_i_success").text("El tipo de vacuna se creo con éxito");
         $(".alerta_smsm_tipo_i_success").show(3000);
 
         tabla_tipo_vacuna.ajax.reload();
@@ -505,7 +487,7 @@ function editar_tipo_vacuna() {
         $("#tipo_vacuna").val("");
         $("#id_tipo_tv").val("");
 
-        $("#mensaje_tipo_i_success").text("El tipo de vacuna se edito con exito");
+        $("#mensaje_tipo_i_success").text("El tipo de vacuna se edito con éxito");
         $(".alerta_smsm_tipo_i_success").show(3000);
 
         tabla_tipo_vacuna.ajax.reload();
@@ -733,8 +715,8 @@ function guardar_vacunas_de_cerdos() {
           cargar_contenido("contenido_principal", "/vacunas");
 
           return Swal.fire(
-            "Vacuna creado con exito",
-            "La vacuna se creo con exito",
+            "Vacuna creado con éxito",
+            "La vacuna se creo con éxito",
             "success"
           );
         } else if (resp == 2) {
@@ -1081,7 +1063,7 @@ function eliminar_lote_vacuna_a(id) {
         tabla_lote_vacuna.ajax.reload();
         return Swal.fire(
           "Lote eliminado",
-          "EL lote de vacuna se eliminó con exito",
+          "EL lote de vacuna se eliminó con éxito",
           "success"
         );
       }
@@ -1305,8 +1287,8 @@ function editar_vacuna() {
           $("#modal_editar_vacuna").modal("hide");
           tabla_vacunas.ajax.reload();
           return Swal.fire(
-            "Vacuna editada con exito",
-            "La vacuna se edito con exito",
+            "Vacuna editada con éxito",
+            "La vacuna se edito con éxito",
             "success"
           );
 
@@ -1467,7 +1449,7 @@ function editar_foto_vacuna() {
           $("#modal_editar_foto_vacuna").modal("hide");
           return Swal.fire(
             "Foto cambiada",
-            "La foto de la vacuna se cambio con exito",
+            "La foto de la vacuna se cambio con éxito",
             "success"
           );
 
@@ -1662,8 +1644,8 @@ function registrar_detalle_vacunacion(id) {
         $(".card-success").LoadingOverlay("hide");
         cargar_contenido("contenido_principal", "/registro_vacunacion");
         return Swal.fire(
-          "Vacunación del cerdo creado con exito",
-          "La vacunación del cerdo se creo con exito",
+          "Vacunación del cerdo creado con éxito",
+          "La vacunación del cerdo se creo con éxito",
           "success"
         );
       }
@@ -1927,8 +1909,8 @@ function registrar_detalle_desparasitacion(id) {
         $(".card-success").LoadingOverlay("hide");
         cargar_contenido("contenido_principal", "/registro_desparasitacion");
         return Swal.fire(
-          "Desparasitación del cerdo creado con exito",
-          "La desparasitación del cerdo se creo con exito",
+          "Desparasitación del cerdo creado con éxito",
+          "La desparasitación del cerdo se creo con éxito",
           "success"
         );
       }

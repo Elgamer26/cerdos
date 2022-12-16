@@ -194,17 +194,11 @@ function registra_permisis_rol(id) {
   var config = document.getElementById("config_p").checked;
   var cerdo = document.getElementById("cerdo_p").checked;
   var galpon = document.getElementById("galpon_p").checked;
-  var cergal = document.getElementById("cergal_p").checked;
-  var compraventa = document.getElementById("compraventa_p").checked;
-  var alicerdo = document.getElementById("alicerdo_p").checked;
-  var insumo = document.getElementById("insumo_p").checked;
-  var medicamento = document.getElementById("medicamento_p").checked;
+  var compra_venta = document.getElementById("compraventa_p").checked;
   var alimentacion = document.getElementById("alimentacion_p").checked;
-  var alimcerdo = document.getElementById("alimcerdo_p").checked;
-  var pesaje = document.getElementById("pesaje_p").checked;
-  var enfertrata = document.getElementById("enfertrata_p").checked;
-  var cerdosenfer = document.getElementById("cerdosenfer_p").checked;
-  var tratamiento = document.getElementById("tratamiento_p").checked;
+  var vacuna_despara = document.getElementById("vacuna_despara").checked;
+  var enfermedad_tratamiento = document.getElementById("enfer_trata").checked;
+  var informes = document.getElementById("infomres_p").checked; 
 
   $.ajax({
     url: "/usuario/crear_permisos_rol",
@@ -215,17 +209,11 @@ function registra_permisis_rol(id) {
       config: config,
       cerdo: cerdo,
       galpon: galpon,
-      cergal: cergal,
-      compraventa: compraventa,
-      alicerdo: alicerdo,
-      insumo: insumo,
-      medicamento: medicamento,
+      compra_venta: compra_venta,
       alimentacion: alimentacion,
-      alimcerdo: alimcerdo,
-      pesaje: pesaje,
-      enfertrata: enfertrata,
-      cerdosenfer: cerdosenfer,
-      tratamiento: tratamiento,
+      vacuna_despara: vacuna_despara,
+      enfermedad_tratamiento: enfermedad_tratamiento,
+      informes: informes 
     },
   }).done(function (response) {
     if (response > 0) {
@@ -233,8 +221,8 @@ function registra_permisis_rol(id) {
         $(".card-body").LoadingOverlay("hide");
         cargar_contenido("contenido_principal", "/vista_rol");
         return Swal.fire(
-          "Registro exitoso",
-          "El rol se creo con exito",
+          "Registro éxitoso",
+          "El rol se creo con éxito",
           "success"
         );
       }
@@ -481,8 +469,8 @@ function editar_rol() {
         $("#modal-primary").modal("hide");
         tabla_rol.ajax.reload();
         return Swal.fire(
-          "Editado con exito",
-          "El rol se edito con exito",
+          "Editado con éxito",
+          "El rol se edito con éxito",
           "success"
         );
       } else if (response == 2) {
@@ -552,49 +540,26 @@ function obtener_permisos(id) {
       ? ($("#galpon_p")[0].checked = true)
       : ($("#galpon_p")[0].checked = false);
 
-    data[6].toString() == "true"
-      ? ($("#cergal_p")[0].checked = true)
-      : ($("#cergal_p")[0].checked = false);
 
-    data[7].toString() == "true"
+    data[6].toString() == "true"
       ? ($("#compraventa_p")[0].checked = true)
       : ($("#compraventa_p")[0].checked = false);
 
-    data[8].toString() == "true"
-      ? ($("#alicerdo_p")[0].checked = true)
-      : ($("#alicerdo_p")[0].checked = false);
-
-    data[9].toString() == "true"
-      ? ($("#insumo_p")[0].checked = true)
-      : ($("#insumo_p")[0].checked = false);
-
-    data[10].toString() == "true"
-      ? ($("#medicamento_p")[0].checked = true)
-      : ($("#medicamento_p")[0].checked = false);
-
-    data[11].toString() == "true"
+    data[7].toString() == "true"
       ? ($("#alimentacion_p")[0].checked = true)
       : ($("#alimentacion_p")[0].checked = false);
 
-    data[12].toString() == "true"
-      ? ($("#alimcerdo_p")[0].checked = true)
-      : ($("#alimcerdo_p")[0].checked = false);
+    data[8].toString() == "true"
+      ? ($("#vacuna_despara")[0].checked = true)
+      : ($("#vacuna_despara")[0].checked = false);
 
-    data[13].toString() == "true"
-      ? ($("#pesaje_p")[0].checked = true)
-      : ($("#pesaje_p")[0].checked = false);
+    data[9].toString() == "true"
+      ? ($("#enfer_trata")[0].checked = true)
+      : ($("#enfer_trata")[0].checked = false);
 
-    data[14].toString() == "true"
-      ? ($("#enfertrata_p")[0].checked = true)
-      : ($("#enfertrata_p")[0].checked = false);
-
-    data[15].toString() == "true"
-      ? ($("#cerdosenfer_p")[0].checked = true)
-      : ($("#cerdosenfer_p")[0].checked = false);
-
-    data[16].toString() == "true"
-      ? ($("#tratamiento_p")[0].checked = true)
-      : ($("#tratamiento_p")[0].checked = false);
+    data[10].toString() == "true"
+      ? ($("#infomres_p")[0].checked = true)
+      : ($("#infomres_p")[0].checked = false);
 
     $(".card-info").LoadingOverlay("hide");
 
@@ -614,17 +579,12 @@ function editar_permisos() {
   var config = document.getElementById("config_p").checked;
   var cerdo = document.getElementById("cerdo_p").checked;
   var galpon = document.getElementById("galpon_p").checked;
-  var cergal = document.getElementById("cergal_p").checked;
-  var compraventa = document.getElementById("compraventa_p").checked;
-  var alicerdo = document.getElementById("alicerdo_p").checked;
-  var insumo = document.getElementById("insumo_p").checked;
-  var medicamento = document.getElementById("medicamento_p").checked;
+
+  var compra_venta = document.getElementById("compraventa_p").checked;
   var alimentacion = document.getElementById("alimentacion_p").checked;
-  var alimcerdo = document.getElementById("alimcerdo_p").checked;
-  var pesaje = document.getElementById("pesaje_p").checked;
-  var enfertrata = document.getElementById("enfertrata_p").checked;
-  var cerdosenfer = document.getElementById("cerdosenfer_p").checked;
-  var tratamiento = document.getElementById("tratamiento_p").checked;
+  var vacuna_despara = document.getElementById("vacuna_despara").checked;
+  var enfermedad_tratamiento = document.getElementById("enfer_trata").checked;
+  var informes = document.getElementById("infomres_p").checked; 
 
   $.ajax({
     url: "/usuario/editar_permisos_rol",
@@ -636,17 +596,11 @@ function editar_permisos() {
       config: config,
       cerdo: cerdo,
       galpon: galpon,
-      cergal: cergal,
-      compraventa: compraventa,
-      alicerdo: alicerdo,
-      insumo: insumo,
-      medicamento: medicamento,
+      compra_venta: compra_venta,
       alimentacion: alimentacion,
-      alimcerdo: alimcerdo,
-      pesaje: pesaje,
-      enfertrata: enfertrata,
-      cerdosenfer: cerdosenfer,
-      tratamiento: tratamiento,
+      vacuna_despara: vacuna_despara,
+      enfermedad_tratamiento: enfermedad_tratamiento,
+      informes: informes,
     },
   }).done(function (response) {
     $(".bg-warning").LoadingOverlay("show", {
@@ -658,8 +612,8 @@ function editar_permisos() {
         $(".bg-warning").LoadingOverlay("hide");
         $("#modal_editar_permisos").modal("hide");
         return Swal.fire(
-          "Permisos editados con exito",
-          "Los permisos del rol se editaron con exito",
+          "Permisos editados con éxito",
+          "Los permisos del rol se editaron con éxito",
           "success"
         );
       }
@@ -816,8 +770,8 @@ function registra_uuario() {
                       $(".card-body").LoadingOverlay("hide");
                       cargar_contenido("contenido_principal", "/create_user");
                       return Swal.fire(
-                        "Usuario creado con exito",
-                        "El usuario se creo con exito",
+                        "Usuario creado con éxito",
+                        "El usuario se creo con éxito",
                         "success"
                       );
                     } else {
@@ -893,7 +847,7 @@ function validar_registros_usuario(
   }
 
   if (telefono.length == 0 || telefono.trim() == "") {
-    $("#telefono_obligg").html("Ingrese el telefono");
+    $("#telefono_obligg").html("Ingrese el teléfono");
   } else {
     $("#telefono_obligg").html("");
   }
@@ -1280,8 +1234,8 @@ function editar_usuario() {
           $("#modaleditar_usuario").modal("hide");
           tabla_usuarios.ajax.reload();
           return Swal.fire(
-            "Usuario editado con exito",
-            "El usuario se edito con exito",
+            "Usuario editado con éxito",
+            "El usuario se edito con éxito",
             "success"
           );
         } else if (resp == 2) {
@@ -1354,7 +1308,7 @@ function validar_registros_usuario_editar(
   }
 
   if (telefono.length == 0 || telefono.trim() == "") {
-    $("#telefono_obligg").html("Ingrese el telefono");
+    $("#telefono_obligg").html("Ingrese el teléfono");
   } else {
     $("#telefono_obligg").html("");
   }
@@ -1442,7 +1396,7 @@ function editar_foto_usuario() {
           $("#modal_editar_foto").modal("hide");
           return Swal.fire(
             "Foto cambiada",
-            "La foto del usuario se cambio con exito",
+            "La foto del usuario se cambio con éxito",
             "success"
           );
         }
@@ -1657,7 +1611,7 @@ function editar_foto_emppresa() {
           cargar_contenido("contenido_principal", "/hacienda");
           return Swal.fire(
             "Foto cambiada",
-            "La foto del usuario se cambio con exito",
+            "La foto del usuario se cambio con éxito",
             "success"
           );
         }

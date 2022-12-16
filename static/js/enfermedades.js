@@ -61,8 +61,8 @@ function registrar_veterinario() {
           $(".card-success").LoadingOverlay("hide"); 
           cargar_contenido('contenido_principal','/veterinario');
           return Swal.fire(
-            "Veterinario creado con exito",
-            "El veterinariordo se creo con exito",
+            "Veterinario creado con éxito",
+            "El veterinariordo se creo con éxito",
             "success"
           );
 
@@ -435,8 +435,8 @@ function editar_veterinario() {
           $("#modal_editar_veterinario").modal("hide");
           tabla_veterinario.ajax.reload();
           return Swal.fire(
-            "Veterinario editado con exito",
-            "El veterinariordo se edito con exito",
+            "Veterinario editado con éxito",
+            "El veterinariordo se edito con éxito",
             "success"
           );
 
@@ -559,8 +559,8 @@ function registrar_tipo_enfermedad() {
           $(".card-success").LoadingOverlay("hide"); 
           cargar_contenido('contenido_principal','/tipo_enfermedad');
           return Swal.fire(
-            "Enfermedad creado con exito",
-            "La enfermedad se creo con exito",
+            "Enfermedad creado con éxito",
+            "La enfermedad se creo con éxito",
             "success"
           );
 
@@ -878,8 +878,8 @@ function editar_enfermedad() {
           tabla_enfermedad.ajax.reload();
 
           return Swal.fire(
-            "Enfermedad editada con exito",
-            "La enfermedad se edito con exito",
+            "Enfermedad editada con éxito",
+            "La enfermedad se edito con éxito",
             "success"
           );
 
@@ -979,8 +979,8 @@ function registrar_tipo_tratamientos() {
           $(".card-success").LoadingOverlay("hide"); 
           cargar_contenido('contenido_principal','/tipo_tratamientos');
           return Swal.fire(
-            "Tratamiento creado con exito",
-            "El tratamiento se creo con exito",
+            "Tratamiento creado con éxito",
+            "El tratamiento se creo con éxito",
             "success"
           );
 
@@ -1298,8 +1298,8 @@ function editar_tipo_tratamientos() {
           $("#modal_editar_tratamiento").modal("hide");
           tabla_tipo_tratamiento.ajax.reload();
           return Swal.fire(
-            "Tratamiento editado con exito",
-            "El tratamiento se edito con exito",
+            "Tratamiento editado con éxito",
+            "El tratamiento se edito con éxito",
             "success"
           );
 
@@ -1529,7 +1529,7 @@ function guardar_detalle_enfermedad_cerdo(id){
         cargar_contenido('contenido_principal','/registro_enfermos');
         return Swal.fire(
           "Registro guardado",
-          "El registro se guardo con exito",
+          "El registro se guardo con éxito",
           "success"
         );
 
@@ -1655,7 +1655,7 @@ function eliminar_cerdo_espera(id){
             cargar_contenido('contenido_principal','/cerdos_enfermos_espera');
             return Swal.fire(
               "Enfermedad eliminada",
-              "La enfermedad se elimino con exito",
+              "La enfermedad se elimino con éxito",
               "success"
             );
           }else{
@@ -1702,7 +1702,7 @@ function eliminar_detalle_enfermedad_cerdo(id){
             $("#modal_enfermedades_cerdo").modal("hide");
             return Swal.fire(
               "Enfermedad eliminada",
-              "La enfermedad se elimino del detalle con exito",
+              "La enfermedad se elimino del detalle con éxito",
               "success"
             );
 
@@ -2034,7 +2034,7 @@ function guardar_detalle_tratamiento_enfermedad(id){
         cargar_contenido('contenido_principal','/tratar_cerdos');
         return Swal.fire(
           "Registro guardado",
-          "El registro se guardo con exito",
+          "El registro se guardo con éxito",
           "success"
         );
       }

@@ -14,8 +14,7 @@ PATH_FILE = getcwd() + "/static/uploads/vacuna/"
 def calendario_registrar():
     if request.method == 'POST':
   
-        titulo = request.form['titulo']
-        cerdo = request.form['cerdo']
+        titulo = request.form['titulo'] 
         galpon = request.form['galpon']
         descripcion = request.form['descripcion']
         tipo = request.form['tipo']
@@ -23,7 +22,7 @@ def calendario_registrar():
         color = request.form['color'] 
         color_etiqueta = request.form['color_etiqueta']  
         
-        dato = Vacunas.Calendario_registrar(titulo, cerdo, descripcion, tipo, fecha_evento, color, color_etiqueta, galpon)
+        dato = Vacunas.Calendario_registrar(titulo, descripcion, tipo, fecha_evento, color, color_etiqueta, galpon)
         return str(dato)
 
 # controlador para listar los eventos del calendario

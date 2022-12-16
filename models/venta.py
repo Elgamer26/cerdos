@@ -77,3 +77,117 @@ class Venta():
             return error
         return 0
     
+    def Listar_cerdos_vender():
+        try:
+            query = mysql.connection.cursor()
+            query.execute("""SELECT
+                        cerdo.id_cerdo,
+                        cerdo.codigo,
+                        cerdo.nombre,
+                        cerdo.sexo,
+                        raza.raza,
+                        cerdo.peso,
+                        cerdo.estado,
+                        cerdo.etapa,
+                        cerdo.costo,
+	                    cerdo.foto
+                    FROM
+                        cerdo
+                        INNER JOIN raza ON cerdo.raza = raza.id_raza 
+                    WHERE
+                        cerdo.estado = 1 
+                        AND cerdo.galpon = 'si' ORDER BY cerdo.peso DESC""")
+            data = query.fetchall()
+            query.close() 
+            return data
+        except Exception as e:
+            query.close()
+            error = "Ocurrio un problema: " + str(e)
+            return error
+        return 0
+
+    def Registra_veenta_cerdos(cliente, fecha_c, numero_venta, tipo_comprobante, iva, subtotal, impuesto_sub, total_pagar):
+        try:
+            query = mysql.connection.cursor()
+            query.execute('SELECT * FROM venta_cerdos WHERE numero_venta = "{0}"'. format(numero_venta))
+            data = query.fetchone()
+            if not data:
+                query.execute('INSERT INTO venta_cerdos (cliente_id,fecha,numero_venta,documento,iva,subtotal,impuesto,total) VALUES ("{0}","{1}","{2}","{3}","{4}","{5}","{6}","{7}")'.format(cliente,fecha_c,numero_venta,tipo_comprobante,iva,subtotal,impuesto_sub,total_pagar))
+                query.connection.commit()
+                # me devuelve el ultimo id insertado
+                id = query.lastrowid
+                query.close()
+                return id  # se inserto correcto
+            else:
+                query.close()
+                return 2
+        except Exception as e:
+            query.close()
+            error = "Ocurrio un problema: " + str(e)
+            return error
+        return 0
+
+    def Registrar_detalle_venta_cerdo(id, idc, peso, precio, total):
+        try:
+            query = mysql.connection.cursor()
+            query.execute('INSERT INTO detalle_venta_cerdos (id_venta,id_cerdo,peso,precio,total) VALUES ("{0}","{1}","{2}","{3}","{4}")'.format(id,idc,peso,precio,total))
+            query.connection.commit()
+            
+            query.execute('UPDATE cerdo SET estado=3 WHERE id_cerdo="{0}"'.format(idc))
+            query.connection.commit()
+            
+            query.close()
+            return 1
+        except Exception as e:
+            query.close()
+            error = "Ocurrio un problema: " + str(e)
+            return error
+        return 0
+
+    def Listar_ventas_cerdos():
+        try:
+            query = mysql.connection.cursor()
+            query.execute("""SELECT
+	                venta_cerdos.id,
+                    CONCAT_WS( ' ', cliente.nombres, cliente.apellidos ) AS cliente,
+                    venta_cerdos.fecha,
+                    venta_cerdos.numero_venta,
+                    venta_cerdos.documento,
+                    venta_cerdos.iva,
+                    venta_cerdos.subtotal,
+                    venta_cerdos.impuesto,
+                    venta_cerdos.total,
+                    venta_cerdos.estado 
+                FROM
+                    venta_cerdos
+                    INNER JOIN cliente ON venta_cerdos.cliente_id = cliente.id 
+                ORDER BY
+                    venta_cerdos.id DESC""")
+            data = query.fetchall()
+            query.close() 
+            return data
+        except Exception as e:
+            query.close()
+            error = "Ocurrio un problema: " + str(e)
+            return error
+        return 0
+
+    def venta_cerdo_anular(id):
+        try:
+            query = mysql.connection.cursor()
+            query.execute("UPDATE venta_cerdos SET estado=0 WHERE id='{0}'".format(id))
+            query.connection.commit()
+            
+            query.execute("""UPDATE detalle_venta_cerdos
+                    INNER JOIN cerdo ON detalle_venta_cerdos.id_cerdo = cerdo.id_cerdo 
+                    SET cerdo.estado=1 
+                    WHERE detalle_venta_cerdos.id_venta = '{0}'""".format(id))
+            query.connection.commit()
+            
+            query.close()
+            return 1
+        except Exception as e:
+            query.close()
+            error = "Ocurrio un problema: " + str(e)
+            return error
+        return 0

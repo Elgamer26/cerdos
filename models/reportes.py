@@ -1345,4 +1345,93 @@ class Reportes():
             query.close()
             error = "Ocurrio un problema: " + str(e)
             return error
-        return 0   
+        return 0  
+
+    def Detalle_costo_produccion_cerdos(id):
+        try:
+            query = mysql.connection.cursor()
+            query.execute("""CALL costro_produccion_cerdo({0})""".format(id))
+            data = query.fetchone()
+            query.close() 
+            return data
+        except Exception as e:
+            query.close()
+            error = "Ocurrio un problema: " + str(e)
+            return error
+        return 0 
+
+    def Listar_ventas_cerdos(id):
+        try:
+            query = mysql.connection.cursor()
+            query.execute("""SELECT
+	                venta_cerdos.id,
+                    CONCAT_WS( ' ', cliente.nombres, cliente.apellidos ) AS cliente,
+                    cliente.cedula,
+                    venta_cerdos.fecha,
+                    venta_cerdos.numero_venta,
+                    venta_cerdos.documento,
+                    venta_cerdos.iva,
+                    venta_cerdos.subtotal,
+                    venta_cerdos.impuesto,
+                    venta_cerdos.total,
+                    venta_cerdos.estado 
+                FROM
+                    venta_cerdos
+                    INNER JOIN cliente ON venta_cerdos.cliente_id = cliente.id 
+                WHERE venta_cerdos.id = '{0}'""".format(id))
+            data = query.fetchone()
+            query.close() 
+            return data
+        except Exception as e:
+            query.close()
+            error = "Ocurrio un problema: " + str(e)
+            return error
+        return 0
+    
+    def Detalle_venta_cerdos(id):
+        try:
+            query = mysql.connection.cursor()
+            query.execute("""SELECT
+                        CONCAT_WS( ' ', cerdo.codigo, cerdo.sexo, raza.raza ) AS cerdo,
+                        detalle_venta_cerdos.peso,
+                        detalle_venta_cerdos.precio,
+                        detalle_venta_cerdos.total
+                    FROM
+                        detalle_venta_cerdos
+                        INNER JOIN cerdo ON detalle_venta_cerdos.id_cerdo = cerdo.id_cerdo
+                        INNER JOIN raza ON cerdo.raza = raza.id_raza 
+                    WHERE
+                        detalle_venta_cerdos.id_venta = '{0}'""".format(id))
+            data = query.fetchall()
+            query.close() 
+            return data
+        except Exception as e:
+            query.close()
+            error = "Ocurrio un problema: " + str(e)
+            return error
+        return 0
+
+    def Informe_ventas_cerdos(f_i, f_f):
+        try:
+            query = mysql.connection.cursor()
+            query.execute("""SELECT 
+                    venta_cerdos.fecha,
+                    venta_cerdos.numero_venta, 
+                    venta_cerdos.iva,
+                    venta_cerdos.subtotal,
+                    venta_cerdos.impuesto,
+                    venta_cerdos.total,
+                    venta_cerdos.estado 
+                FROM
+                    venta_cerdos
+                    INNER JOIN cliente ON venta_cerdos.cliente_id = cliente.id 
+                WHERE venta_cerdos.estado = 1 
+                AND DATE(venta_cerdos.fecha) BETWEEN '{0}' AND '{1}'""".format(f_i, f_f))
+            data = query.fetchall()
+            query.close() 
+            return data
+        except Exception as e:
+            query.close()
+            error = "Ocurrio un problema: " + str(e)
+            return error
+        return 0

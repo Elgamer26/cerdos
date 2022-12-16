@@ -26,14 +26,19 @@
                         <div class="card-header">
                             <h3 class="card-title">Listado de galónes en uso</h3>
                         </div>
+
+                        <div class="row"> 
+                          <div class="col-lg-8">
+                            <div class="form-group col-lg-8">
+                              <label for="galpon_actual">Buscar el gapón de los cerdos:</label>
+                              <input type="text" class="form-control" id="buscar_galpon_text" placeholder="Buscar por número o tipo de galpón" />
+                            </div> 
+                          </div> 
+                        </div>
+
                         <div class="card-body">
                             <div class="row" id="unir_galpones_cerdo"> 
- 
-
- 
-                                 
-                             
-                                     
+    
                             </div>
                         </div>
                     </div>
@@ -103,6 +108,7 @@
 </div>
 
 <script src="static/js/galpon.js"></script>
+<script src="static/js/procesos.js"></script>
 
 <script>
     listar_galpon_cerdos();
@@ -136,6 +142,7 @@
       });
 
     }
+    
 
     function modal_pasar_cerdos(number, type, capacidad, id_galpon, id_cergo_galpon) {
 
@@ -251,6 +258,95 @@
               $("#unir_galpones_cerdo").html(llenat);
           } 
           
+        },
+ 
+      });
+
+    }
+
+    function listar_galpon_cerdos_buscar(valor){
+
+      $.ajax({
+        url: "/galpon/listar_galpon_cerdos_buscar",
+        type: "POST",
+        data: {valor: valor},
+        success: function (resp) {
+          $("#unir_galpones_cerdo").empty();
+          if (resp.length > 0) {
+              var llenat = "";
+              resp.forEach((row) => {
+
+                var fecha_i = new Date(row[4]);
+                var Fecha_inicio = fecha_i.getFullYear()  + "-" + (fecha_i.getMonth()+1) + "-" + fecha_i.getDate();
+
+                var fecha_f = new Date(row[5]);
+                var Fecha_fin = fecha_f.getFullYear()  + "-" + (fecha_f.getMonth()+1) + "-" + fecha_f.getDate();
+                
+                  llenat += `
+                  <div class="col-12 col-sm-6 col-md-4 d-flex align-items-stretch flex-column">
+                    <div class="card bg-light d-flex flex-fill">
+                      
+                      <div class="card-header text-muted border-bottom-0">
+                        Galpón de cerdos
+                      </div>
+                      <div class="card-body pt-0">
+                        <div class="row">
+                          <div class="col-7">
+                            <h2 class="lead"><b>Número galpón:</b></h2>
+                            <p class="text-muted text-sm"><b>  ${row[1]} </b> </p>
+                            <ul class="ml-4 mb-0 fa-ul text-muted"> 
+
+                              <li class="small"><span class="fa-li"><i class="fas fa-lg fa-bookmark"></i></span> Tipo: <b>${row[2]}</b></li>
+                              <li class="small"><span class="fa-li"><i class="fas fa-lg fa-building"></i></span> Capacidad: <b>${row[3]}</b></li>
+                            <!-- <li class="small"><span class="fa-li"><i class="fas fa-lg fa-paw"></i></span> Cerdos en galpón:  <b>${row[6]}</b></li> -->
+
+                              <li class="small"><span class="fa-li"><i class="fas fa-lg fa-calendar"></i></span> Fecha inicio: <b>${Fecha_inicio}</b></li>
+                              <li class="small"><span class="fa-li"><i class="fas fa-lg fa-calendar"></i></span> Fecha fin:  <b>${Fecha_fin}</b></li>
+                              <li class="small"><span class="fa-li"><i class="fas fa-lg fa-calendar"></i></span> Semanas:  <b>${row[6]}</b></li>
+
+                              <li class="small"><span class="fa-li"><i class="fas fa-lg fa-eye"></i></span> Observación:  <b>${row[8]}</b></li>
+
+                            </ul>
+                          </div>
+                          <div class="col-5 text-center">
+                            <img src="static/uploads/cerdo/cerdo.jpg" alt="user-avatar" class="img-circle img-fluid">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="card-footer">                                     
+
+                          <a onclick="cargar_contenido('contenido_principal','/ver_cerdos_galpo_new/${row[0]}');" class="btn btn-sm bg-warning">
+                            <b> <i class="fas fa-eye"></i> Ver cerdos </b>
+                          </a>
+                          - 
+                          <a target="_blank" href="/reporte/informa_galpon_cerdo/${row[0]}" class="btn btn-sm btn-primary">
+                            <b> <i class="fas fa-file"></i> Reporte </b>
+                          </a>
+                          -
+                          <a onclick="modal_pasar_cerdos(${row[1]}, '${row[2]}', ${row[3]}, ${row[9]}, ${row[0]});" class="btn btn-sm btn-info">
+                            <b> <i class="fas fa-home"></i> Mover </b>
+                          </a>
+                      </div>
+
+                    </div>
+                  </div>`;
+              });
+              $("#unir_galpones_cerdo").html(llenat);
+          }else{
+            $("#unir_galpones_cerdo").html(`<div class="col-12">
+              <div class="card bg-light d-flex flex-fill">    
+                <div class="card-body pt-0">
+                  <div class="row">
+                    <div class="col-12">
+                      <h2 class="lead"><b>NO HAY GALPÓN CON ESTE VALOR:</b></h2>
+                      <p class="text-muted text-sm"><b>  ${valor} </b> </p>
+                    </div> 
+                  </div>
+                </div>
+
+              </div>
+              </div>`);
+          }
         },
  
       });

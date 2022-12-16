@@ -36,7 +36,7 @@
                               <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true">Lista de Ventas</a>
                             </li>
                             <li class="nav-item">
-                              <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">Registro de compra</a>
+                              <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">Registro de venta</a>
                             </li> 
                           </ul>
                           <div class="tab-content" id="pills-tabContent">
@@ -54,21 +54,16 @@
                                         <div class="form-group col-lg-12 col-12">
                   
                                           <table
-                                          id="tabla_compra_insumo"
+                                          id="tabla_venta_cerdo"
                                           class="table table-display table-hover responsive nowrap text-center"
                                           style="width: 100%" >
                                           <thead>
-                                            <tr> 
-                                              <th style="width: 1px;">#</th>
-                                              <th>Acci&oacute;n</th>
-                                              <th>Usuario</th>
+                                            <tr>  
+                                              <th>Acci&oacute;n</th> 
                                               <th>cliente</th>
                                               <th>Fecha</th>
-                                              <th>N° compra</th>
-                                              <th>Tipo documento</th>
-                                              <th>Iva</th>
-                                              <th>Subtotal</th>
-                                              <th>Impuesto</th> 
+                                              <th>N° venta</th>
+                                              <th>Tipo documento</th> 
                                               <th>Total</th> 
                                               <th>Estado</th> 
                                             </tr>
@@ -78,33 +73,28 @@
 
                                             {% for c in data.lista %}
                   
-                                            <tr>
-                                              <td></td>
-                                                {% if c[10] == True %}
-                                                <td> <button onclick="anular_compa_insumo({{c[0]}});" class="btn btn-outline-danger"><i class="fa fa-times"></i></button> 
+                                            <tr> 
+                                                {% if c[9] == True %}
+                                                <td> <button onclick="anular_venta_cerdos({{c[0]}});" class="btn btn-outline-danger"><i class="fa fa-times"></i></button> 
                                                 - 
-                                                <a target="_blank" href="/reporte/compra_insumo/{{c[0]}}" class="btn btn-outline-primary"><i class="fa fa-file"></i></a> </td>
+                                                <a target="_blank" href="/reporte/venta_cerdos_factura/{{c[0]}}" class="btn btn-outline-primary"><i class="fa fa-file"></i></a> </td>
                                                 {% else %}
-                                                <td> <a target="_blank" href="/reporte/compra_insumo/{{c[0]}}" class="btn btn-outline-primary"><i class="fa fa-file"></i></a></td>
+                                                <td> <a target="_blank" href="/reporte/venta_cerdos_factura/{{c[0]}}" class="btn btn-outline-primary"><i class="fa fa-file"></i></a></td>
                                                 {% endif %} 
  
                                                 <td> {{c[1]}} </td>
                                                 <td> {{c[2]}}  </td>
-                                                <td> {{c[3]}}  </td>
-                                                <td> {{c[4]}}  </td>  
+                                                <td> {{c[3]}}  </td> 
                                                 
-                                                  {% if c[5] == "Factura" %}
+                                                  {% if c[4] == "Factura" %}
                                                   <td> <span style="font-size: 13px;" class="badge badge-success">Factura</span> </td>
                                                   {% else %}
-                                                  <td> <span style="font-size: 13px;" class="badge badge-warning">Nota compra</span> </td>
+                                                  <td> <span style="font-size: 13px;" class="badge badge-warning">Nota venta</span> </td>
                                                   {% endif %}                                                
 
-                                                <td> {{c[6]}} % </td> 
-                                                <td>$ {{c[7]}}  </td> 
-                                                <td>$ {{c[8]}} </td>
-                                                <td>$ {{c[9]}}  </td> 
+                                                <td>$ {{c[8]}}  </td> 
 
-                                                {% if c[10] == True %}
+                                                {% if c[9] == True %}
                                                 <td> <span style="font-size: 13px;" class="badge badge-success">Activo</span> </td>
                                                 {% else %}
                                                 <td> <span style="font-size: 13px;" class="badge badge-danger">Anulado</span> </td>
@@ -117,17 +107,12 @@
                                           </tbody>
                       
                                           <tfoot>
-                                            <tr> 
-                                              <th>#</th>
-                                              <th>Acci&oacute;n</th>
-                                              <th>Usuario</th>
+                                            <tr>  
+                                              <th>Acci&oacute;n</th> 
                                               <th>cliente</th>
                                               <th>Fecha</th>
-                                              <th>N° compra</th>
-                                              <th>Tipo documento</th>
-                                              <th>Iva</th>
-                                              <th>Subtotal</th>
-                                              <th>Impuesto</th> 
+                                              <th>N° venta</th>
+                                              <th>Tipo documento</th> 
                                               <th>Total</th> 
                                               <th>Estado</th> 
                                             </tr>
@@ -138,7 +123,7 @@
                       
                                       </div>
                                     </div>
-                                </div>
+                                </div> 
 
                             </div>
                              
@@ -202,7 +187,7 @@
 
                                         <div class="form-group col-lg-1 col-6">
                                             <label for="iva">Buscar</label>
-                                            <button class="btn btn-info" onclick="ver_insumo_comprar();"><i class="fa fa-search"></i> </button>
+                                            <button class="btn btn-info" onclick="ver_cerdos_disponibles();"><i class="fa fa-search"></i> </button>
                                         </div>
                                       </div>
                                     </div>
@@ -232,25 +217,21 @@
                                    </div>
 
                                     <div class="form-group col-lg-12 col-6 text-center">
-                                        <h3> <span class="badge badge-dark"><b>.:Detalle compra:.</b></span> </h3>                                
+                                        <h3> <span class="badge badge-dark"><b>.:Detalle venta:.</b></span> </h3>                                
                                         <h3 id="unir_no_hay">  </h3> 
-                                        <table id="tabla_compra_insumo" class="table table-display table-hover responsive nowrap text-center">
+                                        <table id="tabla_venta_cerdo" class="table table-display table-hover responsive nowrap text-center">
                                             <thead style="background: orange;">
                                                 <tr>                              
                                                     <th hidden>Id</th> 
-                                                    <th>Insumo</th> 
-                                                    <th>Precio</th> 
-                                                    <th>Cajas</th>
-                                                    <th>Unidad</th>
-                                                    <th>Descuento $</th>
-                                                    <th>Total</th>
-                                                    <th>Fecha elaboración</th>
-                                                    <th>Fecha expiración</th>
-                                                    <th>Quitar</th>
-                                                    <th hidden></th>
+                                                    <th>Cerdo</th> 
+                                                    <th>Foto</th> 
+                                                    <th>Peso Kg</th> 
+                                                    <th>Precio Kg</th> 
+                                                    <th>Total</th> 
+                                                    <th>Quitar</th> 
                                                 </tr>
                                             </thead>
-                                            <tbody id="tbody_tabla_compra_insumo">                  
+                                            <tbody id="tbody_tabla_venta_cerdo">                  
                     
                                             </tbody>
                                         </table>
@@ -261,7 +242,7 @@
                                 </div> 
 
                                 <div class="card-footer">
-                                  <button onclick="registra_compra_insumo();" class="btn btn-success">
+                                  <button onclick="registra_venta_cerdo();" class="btn btn-success">
                                       <i class="fa fa-save"></i> Guadar
                                   </button>
                                   -
@@ -288,11 +269,11 @@
   
 <script src="static/js/Ventas.js"></script> 
 
-<div class="modal fade" id="modal_insumo_compra">
+<div class="modal fade" id="modal_cerdos_disponibles">
     <div class="modal-dialog modal-xl">
         <div class="modal-content bg-success">
             <div class="modal-header">
-                <h4 class="modal-title">Insumos disponibles</h4>
+                <h4 class="modal-title">Cerdos disponibles</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -303,31 +284,35 @@
   
                     <div class="form-group col-lg-12 col-6">
                         
-                        <table id="tabla_insumo_compra" class="table table-display table-hover responsive nowrap text-center" style="width: 100%" >
+                        <table id="tabla_cerdos_disponibles" class="table table-display table-hover responsive nowrap text-center" style="width: 100%" >
                         <thead>
                           <tr>
                             <th hidden>#</th>
                             <th>Acci&oacute;n</th>
                             <th>Código</th>
-                            <th>Nombre</th>
-                            <th>Tipo insumo</th> 
-                            <th>Foto</th>
-                            <th hidden>Cantidad</th>
-                            <th>Precio</th> 
+                            <th>Raza</th>
+                            <th>Peso Kg</th> 
+                            <th>Sexo</th>
+                            <th>Etapa</th>
+                            <th>Foto</th> 
                           </tr>
                         </thead>
 
                         <tbody id="tbody_tabla_pasar">
-                            {% for a in data.insumo %}  
+                            {% for a in data.cerdos %}  
                             <tr>
                                 <td hidden>{{a[0]}}</td>
-                                <td><buttin class="evniar_detalle btn btn-success"><i class="fa fa-check"></i> </button></td>
+                                <td>
+                                  <button class="evniar_detalle btn btn-primary"><i class="fa fa-check"></i> </button>
+                                  -
+                                  <a target="_blank" href="/reporte/costo_produccion/{{a[0]}}" class="btn btn-success"><i class="fa fa-money-bill"></i> </a>
+                                </td>
                                 <td>{{a[1]}}</td>
-                                <td>{{a[2]}}</td>
-                                <td>{{a[4]}}</td>                            
-                                <td><img class='img-circle' src='static/uploads/insumo/{{a[8]}}' width='50px' /></td>
-                                <td hidden> <span style="font-size: 15px;" class="badge badge-warning">{{a[5]}}</span></td>
-                                <td>{{a[6]}}</td> 
+                                <td>{{a[4]}}</td>
+                                <td>{{a[5]}}</td>        
+                                <td>{{a[3]}} </td>
+                                <td>{{a[7]}}</td> 
+                                <td><img class='img-circle' src='static/uploads/cerdo/{{a[9]}}' width='50px' /></td> 
                               </tr>                          
                             {% endfor %}  
                           </tbody>
@@ -337,11 +322,11 @@
                             <th hidden>#</th>
                             <th>Acci&oacute;n</th>
                             <th>Código</th>
-                            <th>Nombre</th>
-                            <th>Tipo insumo</th> 
-                            <th>Foto</th>
-                            <th hidden>Cantidad</th>
-                            <th>Precio</th> 
+                            <th>Raza</th>
+                            <th>Peso Kg</th> 
+                            <th>Sexo</th>
+                            <th>Etapa</th>
+                            <th>Foto</th> 
                           </tr>
                         </tfoot>
                       </table>
@@ -362,7 +347,7 @@
 </div>
 
 <script>  
-    $("#tabla_compra_insumo").DataTable({
+    $("#tabla_venta_cerdo").DataTable({
       language: {
         rows: "%d fila seleccionada",
         processing: "Tratamiento en curso...",
@@ -393,7 +378,7 @@
 
     $(".cliente_select").select2();
 
-    $("#tabla_insumo_compra").DataTable({
+    $("#tabla_cerdos_disponibles").DataTable({
         language: {
             rows: "%d fila seleccionada",
             processing: "Tratamiento en curso...",
@@ -419,25 +404,25 @@
               sortAscending: ": active para ordenar la columa en orden ascendente",
               sortDescending: ": active para ordenar la columna en orden descendente",
             },
-          },
+        },
+        order: [[3, "asc"]],
     });
 
-    function ver_insumo_comprar(){
-        $("#modal_insumo_compra").modal({ backdrop: "static", keyboard: false });
-        $("#modal_insumo_compra").modal("show");
+    function ver_cerdos_disponibles(){
+        $("#modal_cerdos_disponibles").modal({ backdrop: "static", keyboard: false });
+        $("#modal_cerdos_disponibles").modal("show");
     }
 
     $(".evniar_detalle").on("click", function(){
       var iva = $("#iva").val();      
       var id = $(this).parents("tr").find("td")[0].innerHTML;
-      var codigo = $(this).parents("tr").find("td")[2].innerHTML;
-      var alimento = $(this).parents("tr").find("td")[4].innerHTML;
-      var foto = $(this).parents("tr").find("td")[5].innerHTML;
-      var precio = $(this).parents("tr").find("td")[7].innerHTML;
+      var cerdo = $(this).parents("tr").find("td")[2].innerHTML + " " + $(this).parents("tr").find("td")[3].innerHTML + " " + $(this).parents("tr").find("td")[5].innerHTML;
+      var peso = $(this).parents("tr").find("td")[4].innerHTML; 
+      var foto = $(this).parents("tr").find("td")[7].innerHTML; 
 
       if(iva.trim() == "" || iva.length == 0){
         $("#ivaa_obligg").html("Ingrese iva");
-        $("#modal_insumo_compra").modal("hide");
+        $("#modal_cerdos_disponibles").modal("hide");
         return Swal.fire(
           "Campo vacío",
           "Ingrese un valor en el campos iva",
@@ -447,68 +432,44 @@
         $("#ivaa_obligg").html("");
       }
 
-      if (validar_alimento_tabla(id)) {
+      if (validar_cerdo_tabla(id)) {
         return Swal.fire(
           "Mensaje de advertencia",
-          "El alimento: '" +
-          alimento +
+          "El cerdo: '" +
+          cerdo +
             "' , ya fue agregado al detalle",
           "warning"
         );
       }
 
-      var min = 999;
-      var max = 9999;
-      var numberr = Math.floor(Math.random()*(max-min+1)+min);
+      var total_peso = 0
+      
 
       var datos_agg = "<tr>";
         datos_agg += "<td hidden for='id'>" + id + "</td>"; 
-        datos_agg += "<td>" + alimento + "</td>"; 
-        datos_agg += "<td>" + precio + "</td>";   
-        
-        datos_agg += "<td><input id='cantida_a' style='width: 70px;' onkeypress='return soloNumeros(event);' type='number' min='1' class='form-control' value='1' placeholder='cantidad' /></td>";
-        datos_agg += "<td><input id='unidad_a' style='width: 70px;' type='number' onkeypress='return soloNumeros(event);' min='1' class='form-control' value='1' placeholder='Unidad' /></td>";
-        datos_agg += "<td><input id='descuento_a' style='width: 70px;' onkeypress='return filterfloat(event, this);' type='text' class='form-control' value='0' placeholder='descuento' onkeypress='return soloNumeros(event);' /></td>";
-        datos_agg += "<td>" + precio + "</td>";   
-
-        datos_agg += "<td><input style='width: 130px;' class='form-control fecha_i" + id + " calendario_creacion' type='date' id='fecha_i'></td>";
-        datos_agg += "<td><input style='width: 130px;' class='form-control fecha_f" + id + " calendario_expiracion' type='date' id='fecha_f'></td>"; 
-        
+        datos_agg += "<td>" + cerdo + "</td>"; 
+        datos_agg += "<td> " + foto + " </td>"; 
+        datos_agg += "<td>" + peso + "</td>";   
+        datos_agg += "<td><input id='cantida_a' style='width: 150px;' onkeypress='return filterfloat(event, this);' type='number' min='0' class='form-control' value='0' placeholder='cantidad' /></td>"; 
+        datos_agg += "<td>" + total_peso + "</td>";   
         datos_agg += "<td> <button class='remover btn btn-danger'><i class='fa fa-trash'></i></button></td>";
-        datos_agg += "<td hidden>CIL-"+numberr+"</td>"; 
         datos_agg += "</tr>";
       
         //esto me ayuda a enviar los datos a la tabla
-        $("#tbody_tabla_compra_insumo").append(datos_agg);
-        $("#modal_insumo_compra").modal("hide");
+        $("#tbody_tabla_venta_cerdo").append(datos_agg);
+        $("#modal_cerdos_disponibles").modal("hide");
         sumartotalneto();
 
-        var n = new Date();
-        var y = n.getFullYear();
-        var m = n.getMonth() + 1;
-        var d = n.getDate();
-        if (d < 10) {
-            d = '0' + d;
-        }
-        if (m < 10) {
-            m = '0' + m;
-        }
-     
-        $(".fecha_i" + id + "").val(y + "-" + m + "-" + d);
-        $(".fecha_f" + id + "").val(y + "-" + m + "-" + d);
-
-        mostar_creacion(fecha_creacion, y + "-" + m + "-" + d);
-        mostar_expiracion(y + "-" + m + "-" + d, fecha_expitacion);
     });
 
-    function validar_alimento_tabla(id) {
+    function validar_cerdo_tabla(id) {
       let idverificar = document.querySelectorAll(
-        "#tbody_tabla_compra_insumo td[for='id']"
+        "#tbody_tabla_venta_cerdo td[for='id']"
       );
       return [].filter.call(idverificar, (td) => td.textContent == id).length == 1;
     }
 
-    $("#tbody_tabla_compra_insumo").on("click", ".remover", function () {
+    $("#tbody_tabla_venta_cerdo").on("click", ".remover", function () {
       var td = this.parentNode;
       var tr = td.parentNode;
       var table = tr.parentNode;
@@ -517,32 +478,20 @@
     });
 
     // para la cantidad del producto
-    $("#tbody_tabla_compra_insumo").on("keyup", "#cantida_a", function () {
-      var cantidad = $(this).parents("tr").find('input[type="number"]').val();
-      var descuento = $(this).parents("tr").find('#descuento_a').val();
-      var precio = $(this).parents("tr").find("td")[2].innerHTML; 
-      var total = parseFloat(precio).toFixed(2) * parseInt(cantidad) - parseInt(descuento);
-      $(this).parents("tr").find("td")[6].innerHTML = parseFloat(total).toFixed(2);  
+    $("#tbody_tabla_venta_cerdo").on("keyup", "#cantida_a", function () {
+      var precio = $(this).parents("tr").find('input[type="number"]').val(); 
+      var peso = $(this).parents("tr").find("td")[3].innerHTML; 
+      var total = parseFloat(peso).toFixed(2) * parseInt(precio);
+      $(this).parents("tr").find("td")[5].innerHTML = parseFloat(total).toFixed(2);  
       sumartotalneto();    
     });
 
-    $("#tbody_tabla_compra_insumo").on("change", "#cantida_a", function () {
-      var cantidad = $(this).parents("tr").find('input[type="number"]').val();
-      var descuento = $(this).parents("tr").find('#descuento_a').val();
-      var precio = $(this).parents("tr").find("td")[2].innerHTML; 
-      var total = parseFloat(precio).toFixed(2) * parseInt(cantidad) - parseInt(descuento);
-      $(this).parents("tr").find("td")[6].innerHTML = parseFloat(total).toFixed(2);  
+    $("#tbody_tabla_venta_cerdo").on("change", "#cantida_a", function () {
+      var precio = $(this).parents("tr").find('input[type="number"]').val(); 
+      var peso = $(this).parents("tr").find("td")[3].innerHTML; 
+      var total = parseFloat(peso).toFixed(2) * parseInt(precio);
+      $(this).parents("tr").find("td")[5].innerHTML = parseFloat(total).toFixed(2);  
       sumartotalneto();    
-    });
-
-    //para el descuento del producto
-    $("#tbody_tabla_compra_insumo").on("keyup", "#descuento_a", function () {
-      var cantidad = $(this).parents("tr").find('#cantida_a').val();
-      var descuento = $(this).parents("tr").find('#descuento_a').val();
-      var precio = $(this).parents("tr").find("td")[2].innerHTML; 
-      var total = parseFloat(precio).toFixed(2) * parseInt(cantidad) - parseInt(descuento) ;
-      $(this).parents("tr").find("td")[6].innerHTML = parseFloat(total).toFixed(2);  
-      sumartotalneto();
     });
 
     function sumartotalneto() {
@@ -553,9 +502,9 @@
       let subtotal = 0;
       let impuesto = document.getElementById("iva").value;
 
-      $("#tabla_compra_insumo tbody#tbody_tabla_compra_insumo tr").each(
+      $("#tabla_venta_cerdo tbody#tbody_tabla_venta_cerdo tr").each(
           function() {
-              arreglo_total.push($(this).find("td").eq(6).text());
+              arreglo_total.push($(this).find("td").eq(5).text());
               count++;
           }
       );

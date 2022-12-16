@@ -87,8 +87,7 @@
                                       style="width: 100%" >
                                       <thead>
                                         <tr>  
-                                          <th>Galpón</th>
-                                          <th>Cerdo</th>
+                                          <th>Galpón</th> 
                                           <th>Titulo</th> 
                                           <th>Fecha</th>
                                           <th>Tipo</th>  
@@ -101,8 +100,7 @@
                   
                                       <tfoot>
                                         <tr>  
-                                          <th>Galpón</th>
-                                          <th>Cerdo</th>
+                                          <th>Galpón</th> 
                                           <th>Titulo</th> 
                                           <th>Fecha</th>
                                           <th>Tipo</th>  
@@ -221,8 +219,7 @@
           //este funcion mostrara los datos del evento seleccionado del cintillo
           eventClick: function(calEvent, jsEvent, view) {
 
-              $("#titulo_obligg_edit").html("");
-              $("#cerdo_obligg_edit").html("");
+              $("#titulo_obligg_edit").html(""); 
               $("#descripcion_obligg_edit").html("");
               $("#tipoo_obligg_edit").html("");
               $("#color_obligg_edit").html("");
@@ -230,8 +227,7 @@
 
               $("#id_calendario").val(calEvent.id);
               $("#titulo_evento_editar").html("Fecha de evento: " + moment(calEvent.start).format("YYYY-MM-DD"));
-              $("#evento_titulo_edit").val(calEvent.title);
-              $("#cerdo_editt").val(calEvent.cerdo);
+              $("#evento_titulo_edit").val(calEvent.title); 
               $("#galpon_cerdo_editt").val(calEvent.galpon_cerdo);
               $("#fecha_evento_edit").val(moment(calEvent.start).format("YYYY-MM-DD"));
               $("#descripcion_edit").val(calEvent.descripcion);
@@ -254,7 +250,7 @@
 </script>
 
 <div class="modal fade" id="modal_canlendario_register">
-    <div class="modal-dialog modal-xl">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content bg-success">
             <div class="modal-header">
                 <h4 class="modal-title" id="titulo_evento_re"></h4>
@@ -285,13 +281,13 @@
                       </select> 
                     </div> 
 
-                    <div class="form-group col-lg-6 espiner_cerdo">
+                    <!--<div class="form-group col-lg-6 espiner_cerdo">
                         <label for="cerdo">Cerdo:</label>
                         <select class="form-control cerdo_select" style="width: 100%" id="cerdo">
                             <option value="0">--- Seleccione cerdo ---</option> 
                         </select>
                         <span style="color: red" id="cerdo_obligg"></span>
-                    </div>
+                    </div>-->
 
                     <div class="col-lg-6">
                         <div class="form-group">
@@ -348,7 +344,7 @@
 </div>
 
 <div class="modal fade" id="modal_canlendario_editar">
-  <div class="modal-dialog modal-xl">
+  <div class="modal-dialog modal-lg">
       <div class="modal-content bg-primary">
           <div class="modal-header">
               <h4 class="modal-title" id="titulo_evento_editar"></h4>
@@ -376,10 +372,10 @@
                     <input readonly type="text" maxlength="200" id="galpon_cerdo_editt" class="form-control"> 
                 </div>
 
-                  <div class="form-group col-lg-6">
+                  <!-- <div class="form-group col-lg-6">
                       <label for="cerdo_editt">Cerdo:</label>
                       <input readonly type="text" maxlength="200" id="cerdo_editt" class="form-control">    
-                  </div>
+                  </div> -->
 
                   <div class="col-lg-6">
                       <div class="form-group">
@@ -441,7 +437,7 @@
 
   $(".galpon_cerdo").select2();
 
-  $("#galpon_cerdo").on("change", function(){
+  /* $("#galpon_cerdo").on("change", function(){
     var id = $(this).val();
     
     if(id == 0){
@@ -472,7 +468,7 @@
             $("#cerdo").html(cadena); 
         }
     });
-  });
+  });*/
 
   function Listar_tabla_calendar(){
     $.ajax({
@@ -490,8 +486,7 @@
                   tipo = `<span style="font-size: 13px;" class="badge badge-warning">${row["tipo"]}</span>`;
                 }
                 llenat += `<tr> 
-                        <td> ${row['galpon_cerdo']} </td>
-                        <td> ${row['cerdo']}    </td>
+                        <td> ${row['galpon_cerdo']} </td> 
                         <td> ${row['title']}  </td>
                         <td> ${row['start']}  </td>
                         <td> ${tipo}  </td>     

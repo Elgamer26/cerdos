@@ -27,8 +27,8 @@ function guardar_raza() {
         tabla_razas.ajax.reload();
         $("#modal_nueva_raza").modal("hide");
         return Swal.fire(
-          "Registro exitoso",
-          "La raza se creo con exito",
+          "Registro éxitoso",
+          "La raza se creo con éxito",
           "success"
         );
       } else if (response == 2) {
@@ -291,8 +291,8 @@ function editar_raza() {
         tabla_razas.ajax.reload();
 
         return Swal.fire(
-          "Editado con exito",
-          "La raza se edito con exito",
+          "Editado con éxito",
+          "La raza se edito con éxito",
           "success"
         );
       } else if (response == 2) {
@@ -424,8 +424,8 @@ function registrar_cerdo() {
           $(".card-body").LoadingOverlay("hide");
           cargar_contenido("contenido_principal", "/new_cerdo");
           return Swal.fire(
-            "Cerdo creado con exito",
-            "El cerdo se creo con exito",
+            "Cerdo creado con éxito",
+            "El cerdo se creo con éxito",
             "success"
           );
         } else if (resp == 2) {
@@ -797,7 +797,7 @@ function editar_foto_cerdo() {
           $("#modal_editar_foto_cerdo").modal("hide");
           return Swal.fire(
             "Foto cambiada",
-            "La foto del cerdo se cambio con exito",
+            "La foto del cerdo se cambio con éxito",
             "success"
           );
         }
@@ -965,8 +965,8 @@ function editar_cerdos() {
           $("#modaleditar_cerdo").modal("hide");
           tabla_cerdo.ajax.reload();
           return Swal.fire(
-            "Cerdo editado con exito",
-            "El cerdo se edito con exito",
+            "Cerdo editado con éxito",
+            "El cerdo se edito con éxito",
             "success"
           );
 
@@ -1103,8 +1103,8 @@ function registrar_muertes_cerdos() {
             $(".card-success").LoadingOverlay("hide"); 
             cargar_contenido('contenido_principal','/cerdos_muertos')
             return Swal.fire(
-              "Registro exitoso",
-              "La muerte del cerdo se registro con exito",
+              "Registro éxitoso",
+              "La muerte del cerdo se registro con éxito",
               "success"
             ); 
           } else {
@@ -1176,7 +1176,7 @@ function eliminar_cerdo_muerto(id){
             cargar_contenido('contenido_principal','/cerdos_muertos')
             return Swal.fire(
               "Eliminado",
-              "El registro se elimino con exito",
+              "El registro se elimino con éxito",
               "success"
             ); 
 

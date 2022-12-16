@@ -1853,7 +1853,7 @@
       $(".espiner_disponible_c").LoadingOverlay("show");
 
       $.ajax({
-          url: "/alimento/traer_cantidad_dosis_lote_disponibles",
+          url: "/alimento/traer_cantidad_dosis_lote",
           type: "POST",
           data: {
               id: desc[1]
@@ -1867,7 +1867,6 @@
         }
       });
     });
-
 
     ///// desparasitanción de cerdo
     function modal_desparasitante_cerdo(id)

@@ -318,13 +318,13 @@ class Compras():
         return 0
     
     # modelo para registrar el insumo
-    def Crear_insumo(_codigo, _nombre, _tipo, _cantidad, _precio, _detalle, archivo):
+    def Crear_insumo(_codigo, _nombre, _tipo, _cantidad, _precio, _detalle, archivo, _presentacion):
         try:
             query = mysql.connection.cursor()
             query.execute('SELECT * FROM insumo WHERE codigo = "{0}"'. format(_codigo))
             data = query.fetchone()
             if not data:
-                query.execute('INSERT INTO insumo (codigo,nombre,tipo_id,cantidad,precio,detalle,foto) VALUES ("{0}","{1}","{2}","{3}","{4}","{5}","{6}")'.format(_codigo,_nombre,_tipo,_cantidad,_precio,_detalle,archivo))
+                query.execute('INSERT INTO insumo (codigo,nombre,tipo_id,cantidad,precio,detalle,foto,presentacion) VALUES ("{0}","{1}","{2}","{3}","{4}","{5}","{6}","{7}")'.format(_codigo,_nombre,_tipo,_cantidad,_precio,_detalle,archivo,_presentacion))
                 query.connection.commit()
                 query.close()
                 return 1  # se inserto correcto
@@ -351,7 +351,8 @@ class Compras():
                             insumo.precio,
                             insumo.detalle,
                             insumo.foto,
-                            insumo.estado 
+                            insumo.estado,
+                            insumo.presentacion
                         FROM
                             insumo
                             INNER JOIN tipo_insumo ON insumo.tipo_id = tipo_insumo.id ORDER BY insumo.id DESC""")
@@ -369,7 +370,8 @@ class Compras():
                 dic["precio"] = datos[6]
                 dic["detalle"] = datos[7]
                 dic["foto"] = datos[8] 
-                dic["estado"] = datos[9]       
+                dic["estado"] = datos[9] 
+                dic["presentacion"] = datos[10]       
                 new_lista.append(dic)
             return {"data": new_lista}
         except Exception as e:
@@ -393,13 +395,13 @@ class Compras():
         return 0
     
     # modelo para editar el insumo
-    def Editar_insumo(_codigo, _nombre, _tipo, _cantidad, _precio, _detalle, id):
+    def Editar_insumo(_codigo, _nombre, _tipo, _cantidad, _precio, _detalle, id, presentacion):
         try:
             query = mysql.connection.cursor()
             query.execute('SELECT * FROM insumo WHERE codigo="{0}" AND id!="{1}"'. format(_codigo,id))
             data = query.fetchone()
             if not data:
-                query.execute('UPDATE insumo SET codigo="{0}",nombre="{1}",tipo_id="{2}",cantidad="{3}",precio="{4}",detalle="{5}"WHERE id = "{6}"'.format(_codigo,_nombre,_tipo,_cantidad,_precio,_detalle,id))
+                query.execute('UPDATE insumo SET codigo="{0}",nombre="{1}",tipo_id="{2}",cantidad="{3}",precio="{4}",detalle="{5}",presentacion="{6}" WHERE id ="{7}"'.format(_codigo,_nombre,_tipo,_cantidad,_precio,_detalle,presentacion,id))
                 query.connection.commit()
                 query.close()
                 return 1  # se inserto correcto

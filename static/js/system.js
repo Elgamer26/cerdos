@@ -149,8 +149,8 @@ function editar_usuario_loegado() {
           $("#modaleditar_usuario_logeado").modal("hide");
           datos_usuarios_logeo();
           return Swal.fire(
-            "Datos editados con exito",
-            "Los datos del usuario se edito con exito",
+            "Datos editados con éxito",
+            "Los datos del usuario se edito con éxito",
             "success"
           );
         } else if (resp == 2) {
@@ -280,7 +280,7 @@ function editar_foto_usuario_logeado() {
 
           return Swal.fire(
             "Foto cambiada",
-            "La foto del usuario se cambio con exito",
+            "La foto del usuario se cambio con éxito",
             "success"
           );
         }
@@ -379,8 +379,8 @@ function editar_password_l() {
           datos_usuarios_logeo();
 
           return Swal.fire(
-            "Password editados con exito",
-            "El password se edito con exito",
+            "Password editados con éxito",
+            "El password se edito con éxito",
             "success"
           );
         }
@@ -454,7 +454,7 @@ function subir_foto_1() {
           cargar_contenido('contenido_principal', '/pag_web');
           return Swal.fire(
             "Imgen subida",
-            "La imagen de la web se actualizó con exito",
+            "La imagen de la web se actualizó con éxito",
             "success"
           );
         }
@@ -498,7 +498,7 @@ function subir_foto_2() {
           cargar_contenido('contenido_principal', '/pag_web');
           return Swal.fire(
             "Imgen subida",
-            "La imagen de la web se actualizó con exito",
+            "La imagen de la web se actualizó con éxito",
             "success"
           );
         }
@@ -542,7 +542,7 @@ function subir_foto_3() {
           cargar_contenido('contenido_principal', '/pag_web');
           return Swal.fire(
             "Imgen subida",
-            "La imagen de la web se actualizó con exito",
+            "La imagen de la web se actualizó con éxito",
             "success"
           );
         }
@@ -604,7 +604,7 @@ function editar_detalle_foto() {
         cargar_contenido('contenido_principal', '/pag_web');
         return Swal.fire(
           "Datos actualizados",
-          "Los datos se actualizarón con exito",
+          "Los datos se actualizarón con éxito",
           "success"
         );
       }
@@ -936,7 +936,7 @@ function listar_calendario_dasboard() {
       left: 'prev,next today',
       center: 'title',
       right: 'month,listWeek'
-  },
+    },
     defaultDate: dia,
     editable: true,
     eventLimit: true, // allow "more" link when too many events
@@ -969,7 +969,6 @@ function listar_calendario_dasboard() {
 
       $("#titulo_evento_editar").html("Fecha de evento: " + moment(calEvent.start).format("YYYY-MM-DD"));
       $("#evento_titulo_dasboard").val(calEvent.title);
-      $("#cerdo_dasboardt").val(calEvent.cerdo);
       $("#galpon_cerdo_dasboardt").val(calEvent.galpon_cerdo);
       $("#fecha_evento_dasboard").val(moment(calEvent.start).format("YYYY-MM-DD"));
       $("#descripcion_dasboard").val(calEvent.descripcion);
@@ -986,4 +985,54 @@ function listar_calendario_dasboard() {
     },
 
   });
+}
+
+
+///////////// permisos del usuario logeado
+function obtener_permisos_del_usuaro_logeado() {
+
+  $.ajax({
+    url: "/usuario/obterner_permiso_usuario_logeado",
+    type: "GET",
+    success: function (data) {
+
+      data[2].toString() == "true"
+        ? ($(".usuario_p_lo").show())
+        : ($(".usuario_p_lo").hide());
+
+      data[3].toString() == "true"
+        ? ($(".configuracion_p_lo").show())
+        : ($(".configuracion_p_lo").hide());
+
+      data[4].toString() == "true"
+        ? ($(".cerdos_p_lo").show())
+        : ($(".cerdos_p_lo").hide());
+
+      data[5].toString() == "true"
+        ? ($(".galpones_p_lo").show())
+        : ($(".galpones_p_lo").hide());
+
+      data[6].toString() == "true"
+        ? ($(".comppras_ventas_p_lo").show())
+        : ($(".comppras_ventas_p_lo").hide());
+
+      data[7].toString() == "true"
+        ? ($(".alimentacion_p_lo").show())
+        : ($(".alimentacion_p_lo").hide());
+
+      data[8].toString() == "true"
+        ? ($(".vacuna_desparasita_p_lo").show())
+        : ($(".vacuna_desparasita_p_lo").hide());
+
+      data[9].toString() == "true"
+        ? ($(".enfermedad_trata_p_lo").show())
+        : ($(".enfermedad_trata_p_lo").hide());
+
+      data[10].toString() == "true"
+        ? ($(".informes_p_lo").show())
+        : ($(".informes_p_lo").hide());
+
+    }
+  });
+  return false;
 }

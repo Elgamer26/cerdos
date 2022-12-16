@@ -1205,6 +1205,7 @@ function guardar_insumo() {
   var cantidad = $("#cantidad").val();
   var precio = $("#precio_c").val();
   var detalle = $("#detalle_a").val();
+  var presentacion = $("#presentacion").val();
 
   if (
     codigo.length == 0 ||
@@ -1218,7 +1219,9 @@ function guardar_insumo() {
     precio < 0 ||
     precio.trim() == "" ||
     detalle.length == 0 ||
-    detalle.trim() == ""
+    detalle.trim() == "" ||
+    presentacion.length == 0 ||
+    presentacion.trim() == ""
   ) {
     validar_registro_insumo(
       codigo,
@@ -1226,7 +1229,8 @@ function guardar_insumo() {
       tipo,
       cantidad,
       precio,
-      detalle
+      detalle,
+      presentacion
     );
 
     return swal.fire(
@@ -1241,6 +1245,7 @@ function guardar_insumo() {
     $("#cantidad_obligg").html("");
     $("#precio_obligg").html("");
     $("#detalle_obligg").html("");
+    $("#presentacion_obligg").html("");
   }
 
   var formdata = new FormData();
@@ -1252,6 +1257,7 @@ function guardar_insumo() {
   formdata.append("cantidad", cantidad);
   formdata.append("precio", precio);
   formdata.append("detalle", detalle);
+  formdata.append("presentacion", presentacion);
   formdata.append("foto", foto);
 
   $.ajax({
@@ -1304,7 +1310,8 @@ function validar_registro_insumo(
   tipo,
   cantidad,
   precio,
-  detalle
+  detalle,
+  presentacion
 ) {
   if (codigo.length == 0 || codigo.trim() == "") {
     $("#codigo_oblig").html("Ingrese código");
@@ -1340,6 +1347,12 @@ function validar_registro_insumo(
     $("#detalle_obligg").html("Ingrese el detalle del insumo");
   } else {
     $("#detalle_obligg").html("");
+  }
+
+  if (presentacion.length == 0 || presentacion.trim() == "") {
+    $("#presentacion_obligg").html("Ingrese la presentación");
+  } else {
+    $("#presentacion_obligg").html("");
   }
 }
 
@@ -1390,7 +1403,7 @@ function listar_insumos() {
           );
         },
       },
-      { data: "cantidad" },
+      { data: "presentacion" },
       { data: "precio" },
       { data: "detalle" },
       {
@@ -1569,6 +1582,7 @@ $("#tabla_insumo").on("click", ".editar", function () {
   $("#cantidad_edit").val(data.cantidad);
   $("#precio_c_edit").val(data.precio);
   $("#detalle_a_edit").val(data.detalle);
+  $("#presentacion_edit").val(data.presentacion);
 
   $("#codigo_oblig_edi").html("");
   $("#nombre_obligg_edi").html("");
@@ -1576,6 +1590,7 @@ $("#tabla_insumo").on("click", ".editar", function () {
   $("#cantidad_obligg_edi").html("");
   $("#precio_obligg_edi").html("");
   $("#detalle_obligg_edi").html("");
+  $("#presentacion_edit_obligg").html("");
 
   $("#modal_editar_insumo").modal({ backdrop: "static", keyboard: false });
   $("#modal_editar_insumo").modal("show");
@@ -1589,6 +1604,7 @@ function editar_insumo() {
   var cantidad = $("#cantidad_edit").val();
   var precio = $("#precio_c_edit").val();
   var detalle = $("#detalle_a_edit").val();
+  var presentacion = $("#presentacion_edit").val();
 
   if (
     codigo.length == 0 ||
@@ -1602,7 +1618,10 @@ function editar_insumo() {
     precio < 0 ||
     precio.trim() == "" ||
     detalle.length == 0 ||
-    detalle.trim() == ""
+    detalle.trim() == "" ||
+
+    presentacion.length == 0 ||
+    presentacion.trim() == ""
   ) {
     validar_editar_insumo(
       codigo,
@@ -1610,7 +1629,8 @@ function editar_insumo() {
       tipo,
       cantidad,
       precio,
-      detalle
+      detalle,
+      presentacion
     );
 
     return swal.fire(
@@ -1625,6 +1645,7 @@ function editar_insumo() {
     $("#cantidad_obligg_edi").html("");
     $("#precio_obligg_edi").html("");
     $("#detalle_obligg_edi").html("");
+    $("#presentacion_edit_obligg").html("");
   }
 
   var formdata = new FormData();
@@ -1634,6 +1655,7 @@ function editar_insumo() {
   formdata.append("tipo", tipo);
   formdata.append("cantidad", cantidad);
   formdata.append("precio", precio);
+  formdata.append("presentacion", presentacion)
   formdata.append("detalle", detalle);
 
   $.ajax({
@@ -1692,7 +1714,8 @@ function validar_editar_insumo(
   tipo,
   cantidad,
   precio,
-  detalle
+  detalle,
+  presentacion
 ) {
   if (codigo.length == 0 || codigo.trim() == "") {
     $("#codigo_oblig_edi").html("Ingrese código");
@@ -1728,6 +1751,12 @@ function validar_editar_insumo(
     $("#detalle_obligg_edi").html("Ingrese el detalle del insumo");
   } else {
     $("#detalle_obligg_edi").html("");
+  }
+
+  if (presentacion.length == 0 || presentacion.trim() == "") {
+    $("#presentacion_edit_obligg").html("Ingrese la presentación");
+  } else {
+    $("#presentacion_edit_obligg").html("");
   }
 }
 

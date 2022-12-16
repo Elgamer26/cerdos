@@ -1332,6 +1332,36 @@ class Alimento():
             return error
         return 0
     
+    def Guardar_vacunasaa_cerdoo_todo(_id_v, _id_l, _cantidad, _semana, _id_c, id_galpon_cerdo, fecha_vacuna_t):
+        try:
+            query = mysql.connection.cursor()
+            query.execute('INSERT INTO vacunacion (vacuna_id,semana,cerdo_id,dosis) VALUES ("{0}","{1}","{2}","{3}")'.format(_id_v,_semana,_id_c,_cantidad))
+            query.connection.commit()
+            
+            # me devuelve el ultimo id insertado
+            #id = query.lastrowid
+            
+            query.execute('UPDATE lote_vacuna SET cantidad=cantidad-"{0}" WHERE id = "{1}"'.format(_cantidad, _id_l))
+            query.connection.commit()
+            
+            query.execute("SELECT cantidad FROM lote_vacuna WHERE id='{0}'".format(_id_l))
+            valor = query.fetchone()
+            
+            if(valor[0] <= int(0)):
+                query.execute("DELETE FROM lote_vacuna WHERE id='{0}'".format(_id_l))
+                query.connection.commit()
+                
+            query.execute("DELETE FROM calendario WHERE tipo='Vacuna' AND galpon_id='{0}' AND start <= '{1}'".format(id_galpon_cerdo, fecha_vacuna_t))
+            query.connection.commit()
+
+            query.close()
+            return 1  # se inserto correcto 
+        except Exception as e:
+            query.close()
+            error = "Ocurrio un problema: " + str(e)
+            return error
+        return 0
+    
     def Guardar_muerte_cerdo(id_cerdo, ig_galpon, fecha, hora, motivo_muerte, semana):
         try:
             query = mysql.connection.cursor()
@@ -1364,6 +1394,33 @@ class Alimento():
             if(valor[0] <= int(0)):
                 query.execute("DELETE FROM lote_medicamento WHERE id='{0}'".format(_id_l))
                 query.connection.commit()
+
+            query.close()
+            return 1  # se inserto correcto 
+        except Exception as e:
+            query.close()
+            error = "Ocurrio un problema: " + str(e)
+            return error
+        return 0
+    
+    def Guardar_desparasitantee_cerdoo_todo(_id_d, _id_l, _cantidad, _semana, _id_c, id_galpon_cerdo, fecha_desparasitacion_t):
+        try:
+            query = mysql.connection.cursor()
+            query.execute('INSERT INTO desparasitacion (medicamento_id,semana,cerdo_id,cantidad) VALUES ("{0}","{1}","{2}","{3}")'.format(_id_d,_semana,_id_c,_cantidad))
+            query.connection.commit()
+                        
+            query.execute('UPDATE lote_medicamento SET cantidad = cantidad - "{0}" WHERE id = "{1}"'.format(_cantidad, _id_l))
+            query.connection.commit()
+            
+            query.execute("SELECT cantidad FROM lote_medicamento WHERE id='{0}'".format(_id_l))
+            valor = query.fetchone()
+            
+            if(valor[0] <= int(0)):
+                query.execute("DELETE FROM lote_medicamento WHERE id='{0}'".format(_id_l))
+                query.connection.commit()
+            
+            query.execute("DELETE FROM calendario WHERE tipo='Desparasitación' AND galpon_id='{0}' AND start <= '{1}'".format(id_galpon_cerdo, fecha_desparasitacion_t))
+            query.connection.commit()
 
             query.close()
             return 1  # se inserto correcto 

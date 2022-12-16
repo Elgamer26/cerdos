@@ -216,6 +216,14 @@ def listar_cerdos_en_galpon():
         dato = Galpon.Listar_cerdos_en_galpon()
         return jsonify(dato)
     
+############ BUSCAR LOS GALPONES CON TODOS SUS CERDOS
+@galpon.route('/listar_galpon_cerdos_buscar', methods=['POST'])
+def listar_galpon_cerdos_buscar():
+    if request.method == 'POST':
+        valor = request.form['valor'] 
+        dato = Galpon.Listar_galpon_cerdos_buscar(valor)
+        return jsonify(dato)
+    
 @galpon.route('/listar_galpones', methods=['GET'])
 def listar_galpones():
     if request.method == 'GET': 

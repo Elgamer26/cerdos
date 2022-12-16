@@ -48,14 +48,14 @@
                                 </div>
 
                                 <div class="form-group col-lg-6 col-6">
-                                    <label for="ruc">ruc</label> &nbsp;&nbsp; <label style="color:red;" id="ruc_validad"></label>
+                                    <label for="ruc">Ruc</label> &nbsp;&nbsp; <label style="color:red;" id="ruc_validad"></label>
                                     <input type="text" maxlength="13" class="form-control" id="ruc"
                                         placeholder="Ingrese ruc" onkeypress="return soloNumeros(event)" value="{{ data[2] }}" onpaste="return false"/>
                                     <span style="color: red" id="ruc_obligg"></span>
                                 </div>
 
                                 <div class="form-group col-lg-6 col-6">
-                                    <label for="telefono">Telefono</label>
+                                    <label for="telefono">Teléfono</label>
                                     <input type="text" maxlength="14" class="form-control" id="telefono"
                                         placeholder="Ingrese telefono" onkeypress="return soloNumeros(event)" value="{{ data[3] }}"/>
                                     <span style="color: red" id="telefono_obligg"></span>
@@ -93,7 +93,7 @@
 
                         <div class="card-footer">
                             <button onclick="editar_empresa();" class="btn btn-success">
-                                <i class="fa fa-save"></i> Guadar
+                                <i class="fa fa-save"></i> Guardar
                             </button>
                             -
                             <button onclick="cargar_contenido('contenido_principal','/hacienda');"

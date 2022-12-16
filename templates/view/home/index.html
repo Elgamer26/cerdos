@@ -180,7 +180,7 @@
         <nav class="mt-2">
           <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           
-            <li class="nav-item">
+            <li class="nav-item usuario_p_lo">
               <a href="#" class="nav-link">
                 <i class="nav-icon fas fa-users"></i>
                 <p>
@@ -210,7 +210,7 @@
               </ul>
             </li>
 
-            <li class="nav-item">
+            <li class="nav-item configuracion_p_lo">
               <a href="#" class="nav-link">
                 <i class="nav-icon fas fa-wrench"></i>
                 <p>
@@ -235,7 +235,7 @@
               </ul>
             </li>
 
-            <li class="nav-item">
+            <li class="nav-item cerdos_p_lo">
               <a href="#" class="nav-link">
                 <i class="nav-icon fa fa-paw"></i>
                 <p>
@@ -271,7 +271,7 @@
               </ul>
             </li>
 
-            <li class="nav-item">
+            <li class="nav-item galpones_p_lo">
               <a href="#" class="nav-link">
                 <i class="nav-icon fa fa-home"></i>
                 <p>
@@ -315,7 +315,7 @@
               </ul>
             </li>
 
-            <li class="nav-item">
+            <li class="nav-item comppras_ventas_p_lo">
               <a href="#" class="nav-link">
                 <i class="nav-icon fa fa-shopping-cart"></i>
                 <p>
@@ -477,7 +477,7 @@
                   <a href="#" class="nav-link">
                     <i class="nav-icon fa fa-money-bill" style="color: green;"></i>
                     <p>
-                      Ventas y pedidos
+                      Ventas
                       <i class="right fas fa-angle-left"></i>
                     </p>
                   </a>
@@ -495,19 +495,19 @@
                         <p>Venta de cerdos</p>
                       </a>
                     </li>
-                    <li class="nav-item">
+                    <!-- <li class="nav-item">
                       <a onclick="cargar_contenido('contenido_principal','/compra_medicamento');" class="nav-link">
                         <i class="fa fa-circle nav-icon" style="color: orange;"></i>
                         <p>Pedidos</p>
                       </a>
-                    </li>
+                    </li>-->
              
                   </ul>
                 </li>
               </ul>
             </li>
 
-            <li class="nav-item">
+            <li class="nav-item alimentacion_p_lo">
               <a href="#" class="nav-link">
                 <i class="nav-icon fa fa-utensils"></i>
                 <p>
@@ -537,7 +537,7 @@
               </ul>
             </li>
 
-            <li class="nav-item">
+            <li class="nav-item vacuna_desparasita_p_lo">
               <a href="#" class="nav-link">
                 <i class="nav-icon fa fa-syringe"></i> 
                 <p>
@@ -634,7 +634,7 @@
               </ul>
             </li>
 
-            <li class="nav-item">
+            <li class="nav-item enfermedad_trata_p_lo">
               <a href="#" class="nav-link">
                 <i class="nav-icon fa fa-stethoscope"></i>
                 <p>
@@ -724,7 +724,7 @@
               </ul>
             </li>
 
-            <li class="nav-item">
+            <li class="nav-item informes_p_lo">
               <a href="#" class="nav-link">
                 <i class="nav-icon fa fa-file"></i>
                 <p>
@@ -772,7 +772,14 @@
                 </li>
 
                 <li class="nav-item">
-                  <a onclick="cargar_contenido('contenido_principal','/tipo_alimentacion');" class="nav-link">
+                  <a onclick="cargar_contenido('contenido_principal','/inform_costo_produccion');" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Costo de producción por cerdo</p>
+                  </a>
+                </li> 
+
+                <li class="nav-item">
+                  <a onclick="cargar_contenido('contenido_principal','/informe_venta_cerdos');" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Venta de cerdos</p>
                   </a>
@@ -865,12 +872,12 @@
                   </a>
                 </li> 
 
-                <li class="nav-item">
+                <!-- <li class="nav-item">
                   <a onclick="cargar_contenido('contenido_principal','/informa_cerdo');" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Informe de control y seguimiento de la crianza</p>
                   </a>
-                </li> 
+                </li> -->
 
               </ul>
             </li>
@@ -1463,7 +1470,7 @@
 </div>
 
 <div class="modal fade" id="modal_canlendario_dasboard">
-  <div class="modal-dialog modal-xl">
+  <div class="modal-dialog modal-lg">
       <div class="modal-content bg-primary">
           <div class="modal-header">
               <h4 class="modal-title">Detalle del evento</h4>
@@ -1488,10 +1495,10 @@
                     <input readonly type="text" maxlength="200" id="galpon_cerdo_dasboardt" class="form-control"> 
                 </div>
 
-                  <div class="form-group col-lg-6">
+                  <!-- <div class="form-group col-lg-6">
                       <label for="cerdo_dasboardt">Cerdo:</label>
                       <input readonly type="text" maxlength="200" id="cerdo_dasboardt" class="form-control">    
-                  </div>
+                  </div> -->
 
                   <div class="col-lg-6">
                       <div class="form-group">
@@ -1542,6 +1549,7 @@
 </div>
 
 <script>
+  obtener_permisos_del_usuaro_logeado();
   //// para controlar las fecha de dias depues y dias antes
   var fecha_atras;
   var fecha_adelante;

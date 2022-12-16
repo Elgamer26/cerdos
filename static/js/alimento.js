@@ -115,7 +115,7 @@ function registra_tipo_a() {
         $("#tipo_alimento").val("");
 
         $("#mensaje_tipo_a_success").text(
-          "El tipo de alimento se creo con exito"
+          "El tipo de alimento se creo con éxito"
         );
         $(".alerta_smsm_tipo_a_success").show(3000);
         tabla_tipo_a.ajax.reload();
@@ -279,7 +279,7 @@ function editar_tipo_a() {
         $("#tipo_alimento").val("");
 
         $("#mensaje_tipo_a_success").text(
-          "El tipo de alimento se edito con exito"
+          "El tipo de alimento se edito con éxito"
         );
         $(".alerta_smsm_tipo_a_success").show(3000);
         tabla_tipo_a.ajax.reload();
@@ -426,7 +426,7 @@ function registra_marca_a() {
         $("#marca_alimento").val("");
 
         $("#mensaje_marca_a_success").text(
-          "El tipo de alimento se creo con exito"
+          "El tipo de alimento se creo con éxito"
         );
         $(".alerta_smsm_marca_a_success").show(3000);
         tabla_marca_a.ajax.reload();
@@ -590,7 +590,7 @@ function editar_marca_a() {
         $("#marca_alimento").val("");
 
         $("#mensaje_marca_a_success").text(
-          "El marca de alimento se edito con exito"
+          "El marca de alimento se edito con éxito"
         );
         $(".alerta_smsm_marca_a_success").show(3000);
         tabla_marca_a.ajax.reload();
@@ -704,8 +704,8 @@ function registrar_alimento() {
           cargar_contenido("contenido_principal", "/alimento");
 
           return Swal.fire(
-            "Alimento creado con exito",
-            "El alimento se creo con exito",
+            "Alimento creado con éxito",
+            "El alimento se creo con éxito",
             "success"
           );
         } else if (resp == 2) {
@@ -1031,7 +1031,7 @@ function eliminar_lote_alimento(id) {
         tabla_lote_alimento.ajax.reload();
         return Swal.fire(
           "Lote eliminado",
-          "EL lote de alimento se elimino con exito",
+          "EL lote de alimento se elimino con éxito",
           "success"
         );
       }
@@ -1188,7 +1188,7 @@ function editar_foto_alimento() {
           $("#modal_editar_foto_cerdo").modal("hide");
           return Swal.fire(
             "Foto cambiada",
-            "La foto del cerdo se cambio con exito",
+            "La foto del cerdo se cambio con éxito",
             "success"
           );
         }
@@ -1325,8 +1325,8 @@ function editar_alimento() {
           tabla_alimento.ajax.reload();
 
           return Swal.fire(
-            "Alimento editado con exito",
-            "El alimento se edito con exito",
+            "Alimento editado con éxito",
+            "El alimento se edito con éxito",
             "success"
           );
         } else if (resp == 2) {
@@ -1532,7 +1532,7 @@ function registra_tipo_alimentacion() {
         $("#tipo_alimentacion").val("");
 
         $("#mensaje_tipo_alimentacion_success").text(
-          "El tipo de alimento se creo con exito"
+          "El tipo de alimento se creo con éxito"
         );
         $(".alerta_sms_tipo_alimentacion_success").show(3000);
         tabla_tipo_alimentacion.ajax.reload();
@@ -1701,7 +1701,7 @@ function editar_tipo_alimentacion() {
         $("#id_tipo_alimentacion").val("");
 
         $("#mensaje_tipo_alimentacion_success").text(
-          "El tipo de alimentación se edito con exito"
+          "El tipo de alimentación se edito con éxito"
         );
         $(".alerta_sms_tipo_alimentacion_success").show(3000);
 
@@ -1931,7 +1931,7 @@ function guardar_detalle_alimentacion(id){
     if (resp > 0) {
       if (resp == 1) {
         Swal.fire({
-          title: "Registro realizada con exito",
+          title: "Registro realizada con éxito",
           text: "Desea imprimir la alimentación??",
           icon: "warning",
           showCancelButton: true,
@@ -2090,8 +2090,8 @@ function guardar_pesaje_cerdo(){
           $(".card-success").LoadingOverlay("hide");
           cargar_contenido("contenido_principal", "/peso_cerdo");
           return Swal.fire(
-            "Registro exitoso",
-            "El peso del cerdo se registro con exito",
+            "Registro éxitoso",
+            "El peso del cerdo se registro con éxito",
             "success"
           );
         }

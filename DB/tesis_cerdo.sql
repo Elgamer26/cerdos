@@ -11,7 +11,7 @@
  Target Server Version : 80028
  File Encoding         : 65001
 
- Date: 10/12/2022 21:04:33
+ Date: 15/12/2022 19:55:59
 */
 
 SET NAMES utf8mb4;
@@ -40,7 +40,7 @@ CREATE TABLE `alimentacion`  (
   CONSTRAINT `alimentacion_ibfk_1` FOREIGN KEY (`alimento_id`) REFERENCES `alimento` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `alimentacion_ibfk_2` FOREIGN KEY (`tipo_id`) REFERENCES `tipo_alimentcion` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `alimentacion_ibfk_3` FOREIGN KEY (`id_cerdo`) REFERENCES `cerdo` (`id_cerdo`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 42 CHARACTER SET = utf8 COLLATE = utf8_spanish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 46 CHARACTER SET = utf8 COLLATE = utf8_spanish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of alimentacion
@@ -49,6 +49,10 @@ INSERT INTO `alimentacion` VALUES (38, 2, 1, 1, '2022-12-08 17:49:23', 40, 'PARA
 INSERT INTO `alimentacion` VALUES (39, 2, 1, 1, '2022-12-08 18:03:48', 100, 'para engorda de los cerdos y salud', 1, 1, 3);
 INSERT INTO `alimentacion` VALUES (40, 2, 1, 1, '2022-12-08 18:03:48', 100, 'para engorda de los cerdos y salud', 1, 1, 4);
 INSERT INTO `alimentacion` VALUES (41, 2, 2, 1, '2022-12-08 18:22:19', 10, 'alimentación de salud', 1, 1, 4);
+INSERT INTO `alimentacion` VALUES (42, 2, 2, 1, '2022-12-12 11:44:30', 5, 'para  salud del cerdo', 1, 2, 3);
+INSERT INTO `alimentacion` VALUES (43, 2, 2, 1, '2022-12-12 11:44:30', 5, 'para  salud del cerdo', 1, 2, 4);
+INSERT INTO `alimentacion` VALUES (44, 2, 1, 1, '2022-12-14 10:25:35', 1, 'PARA SALUD DEL CERDO', 1, 1, 5);
+INSERT INTO `alimentacion` VALUES (45, 2, 2, 1, '2022-12-14 12:22:45', 2, 'PARA ENGORDA', 1, 1, 5);
 
 -- ----------------------------
 -- Table structure for alimento
@@ -76,10 +80,10 @@ CREATE TABLE `alimento`  (
 -- ----------------------------
 -- Records of alimento
 -- ----------------------------
-INSERT INTO `alimento` VALUES (1, '808715633', 'DON CHANCHO', 3, 2, 24, 100.20, 30, ' ALIMENTO PARA ENGORDA DEL CERDO Y PARA CRECIMIENTO', '20220923200226_prod-5.jpg', 1);
-INSERT INTO `alimento` VALUES (2, '157962197', 'NUEVO ALIMENTO editaado', 2, 3, 68, 321.00, 35, ' Detalle del saco de alimento del cerdo editado ', '20220923203750AdminLTELogo.png', 1);
+INSERT INTO `alimento` VALUES (1, '808715633', 'DON CHANCHO', 3, 2, 24, 24.00, 30, ' ALIMENTO PARA ENGORDA DEL CERDO Y PARA CRECIMIENTO', '20220923200226_prod-5.jpg', 1);
+INSERT INTO `alimento` VALUES (2, '157962197', 'NUEVO ALIMENTO editaado', 2, 3, 68, 25.00, 35, ' Detalle del saco de alimento del cerdo editado ', '20220923203750AdminLTELogo.png', 1);
 INSERT INTO `alimento` VALUES (3, '888408884', 'Repuestos AlmaZull', 5, 4, 76, 23.00, 34, ' Detalle del saco de alimento del cerdo', 'alimento.jpg', 1);
-INSERT INTO `alimento` VALUES (4, '69008286', 'BALANCEADOR ', 1, 1, 15, 50.50, 200, ' ALIMENTO PARA ENGORDA DE LOS CERDOS EN CRECIMIENTO', 'alimento.jpg', 1);
+INSERT INTO `alimento` VALUES (4, '69008286', 'BALANCEADOR ', 1, 1, 15, 30.00, 200, ' ALIMENTO PARA ENGORDA DE LOS CERDOS EN CRECIMIENTO', 'alimento.jpg', 1);
 INSERT INTO `alimento` VALUES (5, '62452', 'BLUE GLASS EDIT', 3, 3, 21, 10.00, 300, ' Detalle del saco de alimento del cerdo', 'alimento.jpg', 1);
 
 -- ----------------------------
@@ -88,7 +92,6 @@ INSERT INTO `alimento` VALUES (5, '62452', 'BLUE GLASS EDIT', 3, 3, 21, 10.00, 3
 DROP TABLE IF EXISTS `calendario`;
 CREATE TABLE `calendario`  (
   `id` int NOT NULL AUTO_INCREMENT,
-  `id_cerdo` int NULL DEFAULT NULL,
   `title` varchar(255) CHARACTER SET utf8 COLLATE utf8_spanish_ci NULL DEFAULT NULL,
   `descripcion` varchar(255) CHARACTER SET utf8 COLLATE utf8_spanish_ci NULL DEFAULT NULL,
   `start` date NULL DEFAULT NULL,
@@ -96,14 +99,17 @@ CREATE TABLE `calendario`  (
   `textColor` char(100) CHARACTER SET utf8 COLLATE utf8_spanish_ci NULL DEFAULT NULL,
   `tipo` char(50) CHARACTER SET utf8 COLLATE utf8_spanish_ci NULL DEFAULT NULL,
   `estado` int NULL DEFAULT 1,
+  `galpon_id` int NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
-  INDEX `id_cerdo`(`id_cerdo`) USING BTREE,
-  CONSTRAINT `calendario_ibfk_1` FOREIGN KEY (`id_cerdo`) REFERENCES `cerdo` (`id_cerdo`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8 COLLATE = utf8_spanish_ci ROW_FORMAT = Dynamic;
+  INDEX `galpon_id`(`galpon_id`) USING BTREE,
+  CONSTRAINT `calendario_ibfk_2` FOREIGN KEY (`galpon_id`) REFERENCES `galpon_cerdo_new` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE = InnoDB AUTO_INCREMENT = 15 CHARACTER SET = utf8 COLLATE = utf8_spanish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of calendario
 -- ----------------------------
+INSERT INTO `calendario` VALUES (12, 'vacuna', 'vacunar ', '2022-12-16', '#000000', '#ff0000', 'Vacuna', 1, 2);
+INSERT INTO `calendario` VALUES (13, 'Desparasitacion', 'Desparasitacion de galpón', '2022-12-16', '#000000', '#ff0000', 'Desparasitación', 1, 3);
 
 -- ----------------------------
 -- Table structure for cerdo
@@ -128,15 +134,39 @@ CREATE TABLE `cerdo`  (
   PRIMARY KEY (`id_cerdo`) USING BTREE,
   INDEX `raza`(`raza`) USING BTREE,
   CONSTRAINT `cerdo_ibfk_1` FOREIGN KEY (`raza`) REFERENCES `raza` (`id_raza`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8 COLLATE = utf8_spanish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8 COLLATE = utf8_spanish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of cerdo
 -- ----------------------------
-INSERT INTO `cerdo` VALUES (1, '964664418', 'pepe pig', 'Hembra', 2, '30', 'de la tev', '2022-11-10', ' en una cerdo bien sucia', '20220912121318user2-160x160.jpg', 1, 'si', 'Iniciador', 'Nacimiento', 0.00);
+INSERT INTO `cerdo` VALUES (1, '964664418', 'pepe pig', 'Hembra', 2, '30', 'de la tev', '2022-11-10', ' en una cerdo bien sucia', '20220912121318user2-160x160.jpg', 2, 'si', 'Iniciador', 'Nacimiento', 0.00);
 INSERT INTO `cerdo` VALUES (2, '964664411', 'pepe pig dos editado', 'Macho', 3, '25', 'Origen del cerdo editado', '2022-09-01', ' Detalle del cerdo editado', '20220912121337user.png', 1, 'si', 'Iniciador', 'Nacimiento', 0.00);
-INSERT INTO `cerdo` VALUES (3, '866533776', 'CERDO BLANCO DE A NIEVES', 'Hembra', 4, '44', 'LA GRANJA DE LA MONTAÑA', '2022-11-25', ' CERDO BLANCO QUE COME DE TODO Y ESTA BIEN GORDO', 'cerdo.jpg', 1, 'si', 'Crecimiento', 'Nacimiento', 0.00);
+INSERT INTO `cerdo` VALUES (3, '866533776', 'CERDO BLANCO DE A NIEVES', 'Hembra', 4, '50', 'LA GRANJA DE LA MONTAÑA', '2022-11-25', ' CERDO BLANCO QUE COME DE TODO Y ESTA BIEN GORDO', 'cerdo.jpg', 1, 'si', 'Crecimiento', 'Nacimiento', 0.00);
 INSERT INTO `cerdo` VALUES (4, '46285', 'CHANCHITO', 'Macho', 1, '45', 'LA GRANJA DE LA MONTAÑA', '2022-12-07', ' Detalle del cerdo', 'cerdo.jpg', 1, 'si', 'Crecimiento', 'Compra', 800.00);
+INSERT INTO `cerdo` VALUES (5, '2959', 'Black jack', 'Hembra', 7, '7', 'HACIENDA AMADA ANGELICA', '2022-12-14', ' CERDO EN BUEN ESTADO Y SALUD LISTO PARA CRIAR', 'cerdo.jpg', 1, 'si', 'Preiniciador', 'Nacimiento', 0.00);
+INSERT INTO `cerdo` VALUES (6, '36339', 'KING PING', 'Macho', 6, '6', 'LA GRANJA DE LA MONTAÑA', '2022-12-14', ' CERDO MACHO PARA ENGORDE Y VENTA', 'cerdo.jpg', 1, 'no', 'Lactancia', 'Compra', 550.00);
+
+-- ----------------------------
+-- Table structure for cliente
+-- ----------------------------
+DROP TABLE IF EXISTS `cliente`;
+CREATE TABLE `cliente`  (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `nombres` varchar(255) CHARACTER SET utf8 COLLATE utf8_spanish_ci NULL DEFAULT NULL,
+  `apellidos` varchar(255) CHARACTER SET utf8 COLLATE utf8_spanish_ci NULL DEFAULT NULL,
+  `domicilio` varchar(255) CHARACTER SET utf8 COLLATE utf8_spanish_ci NULL DEFAULT NULL,
+  `telefono` char(15) CHARACTER SET utf8 COLLATE utf8_spanish_ci NULL DEFAULT NULL,
+  `cedula` char(15) CHARACTER SET utf8 COLLATE utf8_spanish_ci NULL DEFAULT NULL,
+  `correo` varchar(255) CHARACTER SET utf8 COLLATE utf8_spanish_ci NULL DEFAULT NULL,
+  `estado` int NULL DEFAULT 1,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_spanish_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of cliente
+-- ----------------------------
+INSERT INTO `cliente` VALUES (1, 'JOSE JORGE', 'WONG VILLACRE', 'GUAYAQUIL', '01234567890', '0940321854', 'JORGEWON@GMAIL.COM', 1);
+INSERT INTO `cliente` VALUES (2, 'JOSE ALBERTH WESKER', 'ROJAS BLACK', 'MILAGRO AV SAN CARLOS', '0987654321', '0940321854001', 'ELGAMER-26@HOTMAIL.COM', 1);
 
 -- ----------------------------
 -- Table structure for compra_alimento
@@ -159,7 +189,7 @@ CREATE TABLE `compra_alimento`  (
   INDEX `proveedor_id`(`proveedor_id`) USING BTREE,
   CONSTRAINT `compra_alimento_ibfk_1` FOREIGN KEY (`usuario_id`) REFERENCES `usuario` (`usuario_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `compra_alimento_ibfk_2` FOREIGN KEY (`proveedor_id`) REFERENCES `proveedor` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 32 CHARACTER SET = utf8 COLLATE = utf8_spanish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 31 CHARACTER SET = utf8 COLLATE = utf8_spanish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of compra_alimento
@@ -191,7 +221,7 @@ CREATE TABLE `compra_insumo`  (
   INDEX `proveedor_id`(`proveedor_id`) USING BTREE,
   CONSTRAINT `compra_insumo_ibfk_1` FOREIGN KEY (`usuario_id`) REFERENCES `usuario` (`usuario_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `compra_insumo_ibfk_2` FOREIGN KEY (`proveedor_id`) REFERENCES `proveedor` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 14 CHARACTER SET = utf8 COLLATE = utf8_spanish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 15 CHARACTER SET = utf8 COLLATE = utf8_spanish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of compra_insumo
@@ -207,6 +237,7 @@ INSERT INTO `compra_insumo` VALUES (8, 1, 1, '2022-10-06', '202206051954321', 'n
 INSERT INTO `compra_insumo` VALUES (9, 1, 1, '2022-10-06', '202206052456', 'nota_venta', 0, 6993.00, 0.00, 6993.00, 1);
 INSERT INTO `compra_insumo` VALUES (12, 1, 1, '2022-12-10', '20220605190321', 'Factura', 12, 60.50, 7.26, 67.76, 1);
 INSERT INTO `compra_insumo` VALUES (13, 1, 1, '2022-12-10', '20220605203451', 'Factura', 12, 181.50, 21.78, 203.28, 1);
+INSERT INTO `compra_insumo` VALUES (14, 1, 1, '2022-12-13', '121209090', 'Factura', 12, 120.50, 14.46, 134.96, 1);
 
 -- ----------------------------
 -- Table structure for compra_medicamento
@@ -229,7 +260,7 @@ CREATE TABLE `compra_medicamento`  (
   INDEX `usuario_id`(`usuario_id`) USING BTREE,
   CONSTRAINT `compra_medicamento_ibfk_1` FOREIGN KEY (`proveedor_id`) REFERENCES `proveedor` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `compra_medicamento_ibfk_2` FOREIGN KEY (`usuario_id`) REFERENCES `usuario` (`usuario_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 15 CHARACTER SET = utf8 COLLATE = utf8_spanish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 16 CHARACTER SET = utf8 COLLATE = utf8_spanish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of compra_medicamento
@@ -238,6 +269,7 @@ INSERT INTO `compra_medicamento` VALUES (8, 1, 1, '2022-11-11', '20220605200640'
 INSERT INTO `compra_medicamento` VALUES (9, 1, 1, '2022-11-11', '20220702090749', 'Factura', 12, 120.00, 14.40, 134.40, 1);
 INSERT INTO `compra_medicamento` VALUES (13, 1, 1, '2022-12-08', '20220605190634', 'Factura', 12, 60.00, 7.20, 67.20, 1);
 INSERT INTO `compra_medicamento` VALUES (14, 1, 1, '2022-12-08', '202206012121', 'Factura', 12, 267.50, 32.10, 299.60, 1);
+INSERT INTO `compra_medicamento` VALUES (15, 1, 1, '2022-12-12', '091212109', 'Factura', 12, 100.00, 12.00, 112.00, 1);
 
 -- ----------------------------
 -- Table structure for compra_vacuna
@@ -260,7 +292,7 @@ CREATE TABLE `compra_vacuna`  (
   INDEX `usuario_id`(`usuario_id`) USING BTREE,
   CONSTRAINT `compra_vacuna_ibfk_2` FOREIGN KEY (`proveedor_id`) REFERENCES `proveedor` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `compra_vacuna_ibfk_3` FOREIGN KEY (`usuario_id`) REFERENCES `usuario` (`usuario_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 10 CHARACTER SET = utf8 COLLATE = utf8_spanish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8 COLLATE = utf8_spanish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of compra_vacuna
@@ -288,7 +320,7 @@ CREATE TABLE `desparasitacion`  (
   INDEX `cerdo_id`(`cerdo_id`) USING BTREE,
   CONSTRAINT `desparasitacion_ibfk_1` FOREIGN KEY (`medicamento_id`) REFERENCES `medicamento` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `desparasitacion_ibfk_2` FOREIGN KEY (`cerdo_id`) REFERENCES `cerdo` (`id_cerdo`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8 COLLATE = utf8_spanish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8 COLLATE = utf8_spanish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of desparasitacion
@@ -298,6 +330,12 @@ INSERT INTO `desparasitacion` VALUES (2, 5, 1, 3, 20, '2022-12-08 14:36:19');
 INSERT INTO `desparasitacion` VALUES (3, 4, 1, 4, 5, '2022-12-08 14:37:43');
 INSERT INTO `desparasitacion` VALUES (4, 5, 1, 3, 15, '2022-12-08 15:21:24');
 INSERT INTO `desparasitacion` VALUES (5, 5, 1, 4, 15, '2022-12-08 15:21:24');
+INSERT INTO `desparasitacion` VALUES (6, 6, 2, 3, 2, '2022-12-12 15:23:44');
+INSERT INTO `desparasitacion` VALUES (7, 6, 2, 4, 2, '2022-12-12 15:23:44');
+INSERT INTO `desparasitacion` VALUES (8, 4, 1, 5, 1, '2022-12-14 12:21:56');
+INSERT INTO `desparasitacion` VALUES (9, 4, 3, 3, 1, '2022-12-15 19:05:00');
+INSERT INTO `desparasitacion` VALUES (10, 4, 3, 4, 1, '2022-12-15 19:05:00');
+INSERT INTO `desparasitacion` VALUES (11, 4, 3, 3, 1, '2022-12-15 19:05:26');
 
 -- ----------------------------
 -- Table structure for detalle_alimentacion
@@ -313,7 +351,7 @@ CREATE TABLE `detalle_alimentacion`  (
   INDEX `id_cerdo`(`id_cerdo`) USING BTREE,
   CONSTRAINT `detalle_alimentacion_ibfk_1` FOREIGN KEY (`id_alimentacion`) REFERENCES `alimentacion` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `detalle_alimentacion_ibfk_2` FOREIGN KEY (`id_cerdo`) REFERENCES `cerdo` (`id_cerdo`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 37 CHARACTER SET = utf8 COLLATE = utf8_spanish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 36 CHARACTER SET = utf8 COLLATE = utf8_spanish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of detalle_alimentacion
@@ -337,7 +375,7 @@ CREATE TABLE `detalle_compra_alimento`  (
   INDEX `alimento_id`(`alimento_id`) USING BTREE,
   CONSTRAINT `detalle_compra_alimento_ibfk_1` FOREIGN KEY (`compra_alimento_id`) REFERENCES `compra_alimento` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `detalle_compra_alimento_ibfk_2` FOREIGN KEY (`alimento_id`) REFERENCES `alimento` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 38 CHARACTER SET = utf8 COLLATE = utf8_spanish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 37 CHARACTER SET = utf8 COLLATE = utf8_spanish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of detalle_compra_alimento
@@ -375,7 +413,7 @@ CREATE TABLE `detalle_compra_insumo`  (
   INDEX `insumo_id`(`insumo_id`) USING BTREE,
   CONSTRAINT `detalle_compra_insumo_ibfk_1` FOREIGN KEY (`compra_insumo_id`) REFERENCES `compra_insumo` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `detalle_compra_insumo_ibfk_2` FOREIGN KEY (`insumo_id`) REFERENCES `insumo` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 16 CHARACTER SET = utf8 COLLATE = utf8_spanish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 18 CHARACTER SET = utf8 COLLATE = utf8_spanish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of detalle_compra_insumo
@@ -395,6 +433,8 @@ INSERT INTO `detalle_compra_insumo` VALUES (12, 9, 1, 321.00, 21, 0.00, 6741.00,
 INSERT INTO `detalle_compra_insumo` VALUES (13, 9, 2, 12.00, 21, 0.00, 252.00, 1, NULL);
 INSERT INTO `detalle_compra_insumo` VALUES (14, 12, 1, 30.25, 2, 0.00, 60.50, 1, 10);
 INSERT INTO `detalle_compra_insumo` VALUES (15, 13, 1, 30.25, 6, 0.00, 181.50, 1, 5);
+INSERT INTO `detalle_compra_insumo` VALUES (16, 14, 1, 30.25, 2, 0.00, 60.50, 1, 5);
+INSERT INTO `detalle_compra_insumo` VALUES (17, 14, 2, 12.00, 5, 0.00, 60.00, 1, 2);
 
 -- ----------------------------
 -- Table structure for detalle_compra_medicamento
@@ -415,7 +455,7 @@ CREATE TABLE `detalle_compra_medicamento`  (
   INDEX `medicamento_id`(`medicamento_id`) USING BTREE,
   CONSTRAINT `detalle_compra_medicamento_ibfk_1` FOREIGN KEY (`compra_medicamento_id`) REFERENCES `compra_medicamento` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `detalle_compra_medicamento_ibfk_2` FOREIGN KEY (`medicamento_id`) REFERENCES `medicamento` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 18 CHARACTER SET = utf8 COLLATE = utf8_spanish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 19 CHARACTER SET = utf8 COLLATE = utf8_spanish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of detalle_compra_medicamento
@@ -425,6 +465,7 @@ INSERT INTO `detalle_compra_medicamento` VALUES (14, 9, 4, 12.00, 10, 0.00, 120.
 INSERT INTO `detalle_compra_medicamento` VALUES (15, 13, 4, 12.00, 5, 0.00, 60.00, 1, 10);
 INSERT INTO `detalle_compra_medicamento` VALUES (16, 14, 4, 12.00, 5, 0.00, 60.00, 1, 10);
 INSERT INTO `detalle_compra_medicamento` VALUES (17, 14, 5, 20.75, 10, 0.00, 207.50, 1, 5);
+INSERT INTO `detalle_compra_medicamento` VALUES (18, 15, 6, 10.00, 10, 0.00, 100.00, 1, 5);
 
 -- ----------------------------
 -- Table structure for detalle_compra_vacuna
@@ -480,7 +521,7 @@ CREATE TABLE `detalle_enfermedad_cerdo`  (
   INDEX `enfermedad_id`(`enfermedad_id`) USING BTREE,
   CONSTRAINT `detalle_enfermedad_cerdo_ibfk_1` FOREIGN KEY (`cerdo_enfermedad_id`) REFERENCES `enfermedad_cerdo` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `detalle_enfermedad_cerdo_ibfk_2` FOREIGN KEY (`enfermedad_id`) REFERENCES `enfermedad` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 11 CHARACTER SET = utf8 COLLATE = utf8_spanish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 17 CHARACTER SET = utf8 COLLATE = utf8_spanish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of detalle_enfermedad_cerdo
@@ -490,6 +531,10 @@ INSERT INTO `detalle_enfermedad_cerdo` VALUES (7, 5, 2, 1);
 INSERT INTO `detalle_enfermedad_cerdo` VALUES (8, 6, 1, 1);
 INSERT INTO `detalle_enfermedad_cerdo` VALUES (9, 7, 2, 1);
 INSERT INTO `detalle_enfermedad_cerdo` VALUES (10, 7, 1, 1);
+INSERT INTO `detalle_enfermedad_cerdo` VALUES (11, 8, 1, 1);
+INSERT INTO `detalle_enfermedad_cerdo` VALUES (12, 8, 2, 1);
+INSERT INTO `detalle_enfermedad_cerdo` VALUES (16, 11, 1, 1);
+INSERT INTO `detalle_enfermedad_cerdo` VALUES (17, 12, 1, 1);
 
 -- ----------------------------
 -- Table structure for detalle_enfermedad_insumo
@@ -505,7 +550,7 @@ CREATE TABLE `detalle_enfermedad_insumo`  (
   INDEX `insumo_id`(`insumo_id`) USING BTREE,
   CONSTRAINT `detalle_enfermedad_insumo_ibfk_1` FOREIGN KEY (`tratamiento_id`) REFERENCES `tratamiento_cerdos` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `detalle_enfermedad_insumo_ibfk_2` FOREIGN KEY (`insumo_id`) REFERENCES `insumo` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 16 CHARACTER SET = utf8 COLLATE = utf8_spanish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 18 CHARACTER SET = utf8 COLLATE = utf8_spanish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of detalle_enfermedad_insumo
@@ -514,6 +559,8 @@ INSERT INTO `detalle_enfermedad_insumo` VALUES (12, 16, 1, 1);
 INSERT INTO `detalle_enfermedad_insumo` VALUES (13, 17, 1, 1);
 INSERT INTO `detalle_enfermedad_insumo` VALUES (14, 18, 1, 10);
 INSERT INTO `detalle_enfermedad_insumo` VALUES (15, 18, 2, 10);
+INSERT INTO `detalle_enfermedad_insumo` VALUES (16, 19, 1, 1);
+INSERT INTO `detalle_enfermedad_insumo` VALUES (17, 19, 2, 1);
 
 -- ----------------------------
 -- Table structure for detalle_enfermedad_medicina
@@ -529,7 +576,7 @@ CREATE TABLE `detalle_enfermedad_medicina`  (
   INDEX `medicina_id`(`medicina_id`) USING BTREE,
   CONSTRAINT `detalle_enfermedad_medicina_ibfk_1` FOREIGN KEY (`trata_id`) REFERENCES `tratamiento_cerdos` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `detalle_enfermedad_medicina_ibfk_2` FOREIGN KEY (`medicina_id`) REFERENCES `medicamento` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 12 CHARACTER SET = utf8 COLLATE = utf8_spanish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 13 CHARACTER SET = utf8 COLLATE = utf8_spanish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of detalle_enfermedad_medicina
@@ -537,6 +584,7 @@ CREATE TABLE `detalle_enfermedad_medicina`  (
 INSERT INTO `detalle_enfermedad_medicina` VALUES (9, 16, 4, 1);
 INSERT INTO `detalle_enfermedad_medicina` VALUES (10, 17, 4, 1);
 INSERT INTO `detalle_enfermedad_medicina` VALUES (11, 18, 4, 10);
+INSERT INTO `detalle_enfermedad_medicina` VALUES (12, 19, 4, 5);
 
 -- ----------------------------
 -- Table structure for detalle_enfermedad_tratmiento
@@ -551,7 +599,7 @@ CREATE TABLE `detalle_enfermedad_tratmiento`  (
   INDEX `tipo_id`(`tipo_id`) USING BTREE,
   CONSTRAINT `detalle_enfermedad_tratmiento_ibfk_1` FOREIGN KEY (`tratamiento_id`) REFERENCES `tratamiento_cerdos` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `detalle_enfermedad_tratmiento_ibfk_2` FOREIGN KEY (`tipo_id`) REFERENCES `tipo_tratamiento` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 11 CHARACTER SET = utf8 COLLATE = utf8_spanish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 12 CHARACTER SET = utf8 COLLATE = utf8_spanish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of detalle_enfermedad_tratmiento
@@ -561,6 +609,8 @@ INSERT INTO `detalle_enfermedad_tratmiento` VALUES (7, 16, 2);
 INSERT INTO `detalle_enfermedad_tratmiento` VALUES (8, 17, 1);
 INSERT INTO `detalle_enfermedad_tratmiento` VALUES (9, 17, 2);
 INSERT INTO `detalle_enfermedad_tratmiento` VALUES (10, 18, 1);
+INSERT INTO `detalle_enfermedad_tratmiento` VALUES (11, 19, 1);
+INSERT INTO `detalle_enfermedad_tratmiento` VALUES (12, 19, 2);
 
 -- ----------------------------
 -- Table structure for detalle_vacunacion
@@ -579,11 +629,36 @@ CREATE TABLE `detalle_vacunacion`  (
   INDEX `vacuna_id`(`vacuna_id`) USING BTREE,
   CONSTRAINT `detalle_vacunacion_ibfk_1` FOREIGN KEY (`vacunacion_id`) REFERENCES `vacunacion` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `detalle_vacunacion_ibfk_2` FOREIGN KEY (`vacuna_id`) REFERENCES `vacuna` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8 COLLATE = utf8_spanish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8 COLLATE = utf8_spanish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of detalle_vacunacion
 -- ----------------------------
+
+-- ----------------------------
+-- Table structure for detalle_venta_cerdos
+-- ----------------------------
+DROP TABLE IF EXISTS `detalle_venta_cerdos`;
+CREATE TABLE `detalle_venta_cerdos`  (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `id_venta` int NULL DEFAULT NULL,
+  `id_cerdo` int NULL DEFAULT NULL,
+  `peso` char(40) CHARACTER SET utf8 COLLATE utf8_spanish_ci NULL DEFAULT NULL,
+  `precio` decimal(10, 2) NULL DEFAULT NULL,
+  `total` decimal(10, 2) NULL DEFAULT NULL,
+  `estado` int NULL DEFAULT 1,
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `id_venta`(`id_venta`) USING BTREE,
+  INDEX `id_cerdo`(`id_cerdo`) USING BTREE,
+  CONSTRAINT `detalle_venta_cerdos_ibfk_1` FOREIGN KEY (`id_venta`) REFERENCES `venta_cerdos` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `detalle_venta_cerdos_ibfk_2` FOREIGN KEY (`id_cerdo`) REFERENCES `cerdo` (`id_cerdo`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_spanish_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of detalle_venta_cerdos
+-- ----------------------------
+INSERT INTO `detalle_venta_cerdos` VALUES (1, 3, 2, '25', 1.00, 25.00, 1);
+INSERT INTO `detalle_venta_cerdos` VALUES (2, 3, 3, '50', 2.00, 100.00, 1);
 
 -- ----------------------------
 -- Table structure for detallegalpon_cerdo
@@ -599,7 +674,7 @@ CREATE TABLE `detallegalpon_cerdo`  (
   INDEX `id_cerdo`(`id_cerdo`) USING BTREE,
   CONSTRAINT `detallegalpon_cerdo_ibfk_1` FOREIGN KEY (`id_galpon`) REFERENCES `galpon_cerdo_new` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `detallegalpon_cerdo_ibfk_2` FOREIGN KEY (`id_cerdo`) REFERENCES `cerdo` (`id_cerdo`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8 COLLATE = utf8_spanish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8 COLLATE = utf8_spanish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of detallegalpon_cerdo
@@ -608,6 +683,7 @@ INSERT INTO `detallegalpon_cerdo` VALUES (1, 2, 1, '2022-12-02');
 INSERT INTO `detallegalpon_cerdo` VALUES (2, 2, 2, '2022-12-02');
 INSERT INTO `detallegalpon_cerdo` VALUES (3, 3, 3, '2022-12-02');
 INSERT INTO `detallegalpon_cerdo` VALUES (4, 3, 4, '2022-12-02');
+INSERT INTO `detallegalpon_cerdo` VALUES (5, 4, 5, '2022-12-14');
 
 -- ----------------------------
 -- Table structure for empresa
@@ -641,7 +717,7 @@ CREATE TABLE `enfermedad`  (
   `descripcion` text CHARACTER SET utf8 COLLATE utf8_spanish_ci NULL,
   `estado` int NULL DEFAULT 1,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_spanish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_spanish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of enfermedad
@@ -666,7 +742,7 @@ CREATE TABLE `enfermedad_cerdo`  (
   INDEX `veterinario_id`(`veterinario_id`) USING BTREE,
   CONSTRAINT `enfermedad_cerdo_ibfk_1` FOREIGN KEY (`cerdo_id`) REFERENCES `cerdo` (`id_cerdo`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `enfermedad_cerdo_ibfk_2` FOREIGN KEY (`veterinario_id`) REFERENCES `veterinario` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 8 CHARACTER SET = utf8 COLLATE = utf8_spanish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 13 CHARACTER SET = utf8 COLLATE = utf8_spanish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of enfermedad_cerdo
@@ -674,6 +750,9 @@ CREATE TABLE `enfermedad_cerdo`  (
 INSERT INTO `enfermedad_cerdo` VALUES (5, 1, 2, '2022-10-08', 'Sintomas', 'Diagnóstico', 0);
 INSERT INTO `enfermedad_cerdo` VALUES (6, 2, 1, '2022-10-12', 'Sintomas', 'Diagnóstico', 0);
 INSERT INTO `enfermedad_cerdo` VALUES (7, 1, 2, '2022-10-12', 'AAAAAAA', 'BBBBBBB', 0);
+INSERT INTO `enfermedad_cerdo` VALUES (8, 3, 2, '2022-12-13', 'OJOS ROJOS, VÓMITO', 'TIENE PARASITOS', 0);
+INSERT INTO `enfermedad_cerdo` VALUES (11, 1, 1, '2022-12-13', 'AA', 'AAA', 1);
+INSERT INTO `enfermedad_cerdo` VALUES (12, 2, 1, '2022-12-13', 'aaaaaaa', 'bbbbb', 1);
 
 -- ----------------------------
 -- Table structure for galpon
@@ -686,17 +765,20 @@ CREATE TABLE `galpon`  (
   `capacidad` int NULL DEFAULT NULL,
   `observacion` varchar(255) CHARACTER SET utf8 COLLATE utf8_spanish_ci NULL DEFAULT NULL,
   `estado` int NULL DEFAULT 1,
+  `disponible` int NULL DEFAULT 1,
   PRIMARY KEY (`id_galpon`) USING BTREE,
   INDEX `id_tipo`(`id_tipo`) USING BTREE,
   CONSTRAINT `galpon_ibfk_1` FOREIGN KEY (`id_tipo`) REFERENCES `tipo_galpon` (`id_tipo`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_spanish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8 COLLATE = utf8_spanish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of galpon
 -- ----------------------------
-INSERT INTO `galpon` VALUES (1, '123', 2, 3, 'para criar chancho', 1);
-INSERT INTO `galpon` VALUES (2, '321', 1, 5, 'aaa', 1);
-INSERT INTO `galpon` VALUES (3, '667893928', 2, 20, 'PARA LOS CERDO BERRACOS', 1);
+INSERT INTO `galpon` VALUES (1, '123', 2, 3, 'para criar chancho', 1, 0);
+INSERT INTO `galpon` VALUES (2, '321', 1, 5, 'aaa', 1, 0);
+INSERT INTO `galpon` VALUES (3, '66789', 2, 20, 'PARA LOS CERDO BERRACOS', 1, 0);
+INSERT INTO `galpon` VALUES (4, '13265', 5, 15, 'GALPÓN PARA TRASPASO DE CERDOS', 1, 1);
+INSERT INTO `galpon` VALUES (5, '13544', 3, 5, 'PARA LAS CERDAS EN CELO', 1, 1);
 
 -- ----------------------------
 -- Table structure for galpon_cerdo
@@ -718,9 +800,6 @@ CREATE TABLE `galpon_cerdo`  (
 -- ----------------------------
 -- Records of galpon_cerdo
 -- ----------------------------
-INSERT INTO `galpon_cerdo` VALUES (6, 2, 1, '2022-11-26', 1);
-INSERT INTO `galpon_cerdo` VALUES (7, 1, 2, '2022-11-12', 1);
-INSERT INTO `galpon_cerdo` VALUES (8, 3, 3, '2022-11-26', 1);
 
 -- ----------------------------
 -- Table structure for galpon_cerdo_new
@@ -736,13 +815,14 @@ CREATE TABLE `galpon_cerdo_new`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `id_galpon`(`id_galpon`) USING BTREE,
   CONSTRAINT `galpon_cerdo_new_ibfk_1` FOREIGN KEY (`id_galpon`) REFERENCES `galpon` (`id_galpon`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_spanish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8 COLLATE = utf8_spanish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of galpon_cerdo_new
 -- ----------------------------
 INSERT INTO `galpon_cerdo_new` VALUES (2, 1, '2022-12-02', '2023-05-11', 23, 1);
 INSERT INTO `galpon_cerdo_new` VALUES (3, 2, '2022-12-02', '2023-04-23', 20, 1);
+INSERT INTO `galpon_cerdo_new` VALUES (4, 3, '2022-12-14', '2023-05-01', 20, 1);
 
 -- ----------------------------
 -- Table structure for insumo
@@ -758,16 +838,18 @@ CREATE TABLE `insumo`  (
   `detalle` text CHARACTER SET utf8 COLLATE utf8_spanish_ci NULL,
   `foto` varchar(255) CHARACTER SET utf8 COLLATE utf8_spanish_ci NULL DEFAULT NULL,
   `estado` int NULL DEFAULT 1,
+  `presentacion` varchar(255) CHARACTER SET utf8 COLLATE utf8_spanish_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `tipo_id`(`tipo_id`) USING BTREE,
   CONSTRAINT `insumo_ibfk_1` FOREIGN KEY (`tipo_id`) REFERENCES `tipo_insumo` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_spanish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_spanish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of insumo
 -- ----------------------------
-INSERT INTO `insumo` VALUES (1, '92512111', 'Insumo cerdo', 1, 37, 30.25, ' Detalle del medicamento editado', '20221006095306AdminLTELogo.png', 1);
-INSERT INTO `insumo` VALUES (2, '399055551', 'Nombre del insumo', 3, 39, 12.00, ' Detalle del insumo', '20221006095325insumo.jpg', 1);
+INSERT INTO `insumo` VALUES (1, '92512111', 'Insumo cerdo', 1, 37, 30.25, ' Detalle del medicamento editado', '20221006095306AdminLTELogo.png', 1, 'Presentación 2x3');
+INSERT INTO `insumo` VALUES (2, '399055551', 'Nombre del insumo', 3, 39, 12.00, ' Detalle del insumo', '20221006095325insumo.jpg', 1, 'Presentación 200b');
+INSERT INTO `insumo` VALUES (3, '4455', 'Insumo de limpieza', 4, 1, 5.00, ' detalle del insumo', 'insumo.jpg', 1, 'limpieza 100x100');
 
 -- ----------------------------
 -- Table structure for lote_alimento
@@ -791,7 +873,7 @@ CREATE TABLE `lote_alimento`  (
 -- ----------------------------
 INSERT INTO `lote_alimento` VALUES (6, 1, 38, '2022-12-04', '2022-12-04', 'CAL-7645', '2022-12-04 08:53:12');
 INSERT INTO `lote_alimento` VALUES (8, 1, 300, '2022-12-04', '2023-01-05', 'CAL-9108', '2022-12-04 08:56:16');
-INSERT INTO `lote_alimento` VALUES (9, 2, 1490, '2022-12-04', '2026-10-14', 'CAL-4219', '2022-12-04 08:56:16');
+INSERT INTO `lote_alimento` VALUES (9, 2, 1477, '2022-12-04', '2026-10-14', 'CAL-4219', '2022-12-04 08:56:16');
 INSERT INTO `lote_alimento` VALUES (10, 3, 2380, '2022-12-04', '2023-10-11', 'CAL-6271', '2022-12-04 08:56:16');
 INSERT INTO `lote_alimento` VALUES (12, 5, 6000, '2022-12-04', '2024-06-05', 'CAL-2381', '2022-12-04 08:56:16');
 
@@ -810,12 +892,14 @@ CREATE TABLE `lote_insumo`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `insumo_id`(`insumo_id`) USING BTREE,
   CONSTRAINT `lote_insumo_ibfk_1` FOREIGN KEY (`insumo_id`) REFERENCES `insumo` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_spanish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8 COLLATE = utf8_spanish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of lote_insumo
 -- ----------------------------
 INSERT INTO `lote_insumo` VALUES (2, 1, 30, '2022-12-10', '2023-10-31', 'CIL-5147', '2022-12-10 13:45:07');
+INSERT INTO `lote_insumo` VALUES (3, 1, 9, '2021-10-13', '2024-11-06', 'CIL-1818', '2022-12-13 09:55:00');
+INSERT INTO `lote_insumo` VALUES (4, 2, 9, '2022-07-12', '2023-11-30', 'CIL-5093', '2022-12-13 09:55:00');
 
 -- ----------------------------
 -- Table structure for lote_medicamento
@@ -832,12 +916,13 @@ CREATE TABLE `lote_medicamento`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `medicamento_id`(`medicamento_id`) USING BTREE,
   CONSTRAINT `lote_medicamento_ibfk_1` FOREIGN KEY (`medicamento_id`) REFERENCES `medicamento` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_spanish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8 COLLATE = utf8_spanish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of lote_medicamento
 -- ----------------------------
-INSERT INTO `lote_medicamento` VALUES (2, 4, 35, '2022-12-08', '2022-12-08', 'CML-2698', '2022-12-08 13:06:30');
+INSERT INTO `lote_medicamento` VALUES (2, 4, 26, '2022-12-08', '2022-12-08', 'CML-2698', '2022-12-08 13:06:30');
+INSERT INTO `lote_medicamento` VALUES (4, 6, 46, '2022-05-01', '2024-02-20', 'CML-1496', '2022-12-12 15:22:32');
 
 -- ----------------------------
 -- Table structure for lote_vacuna
@@ -859,7 +944,7 @@ CREATE TABLE `lote_vacuna`  (
 -- ----------------------------
 -- Records of lote_vacuna
 -- ----------------------------
-INSERT INTO `lote_vacuna` VALUES (3, 1, 458, '2022-12-03', '2024-01-30', 'CVL-3635', '2022-12-03 16:14:33');
+INSERT INTO `lote_vacuna` VALUES (3, 1, 445, '2022-12-03', '2024-01-30', 'CVL-3635', '2022-12-03 16:14:33');
 INSERT INTO `lote_vacuna` VALUES (4, 2, 30, '2022-12-03', '2023-12-29', 'CVL-5293', '2022-12-03 16:14:33');
 INSERT INTO `lote_vacuna` VALUES (5, 3, 60, '2022-12-03', '2024-03-06', 'CVL-1129', '2022-12-03 16:14:33');
 INSERT INTO `lote_vacuna` VALUES (6, 1, 400, '2022-12-03', '2025-11-13', 'CVL-4117', '2022-12-03 18:14:11');
@@ -903,16 +988,19 @@ CREATE TABLE `medicamento`  (
   `detalle` text CHARACTER SET utf8 COLLATE utf8_spanish_ci NULL,
   `foto` varchar(255) CHARACTER SET utf8 COLLATE utf8_spanish_ci NULL DEFAULT NULL,
   `estado` int NULL DEFAULT 1,
+  `presentacion` varchar(255) CHARACTER SET utf8 COLLATE utf8_spanish_ci NULL DEFAULT NULL,
+  `unidades` int NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `tipo_id`(`tipo_id`) USING BTREE,
   CONSTRAINT `medicamento_ibfk_1` FOREIGN KEY (`tipo_id`) REFERENCES `tipo_medicamento` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8 COLLATE = utf8_spanish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8 COLLATE = utf8_spanish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of medicamento
 -- ----------------------------
-INSERT INTO `medicamento` VALUES (4, '577707426', 'Biomacrotil Premix', 1, 53, 12.00, ' Detalle del medicamento', 'medicamento.jpg', 1);
-INSERT INTO `medicamento` VALUES (5, '141777745', 'Biomacrotil PS.', 2, 10, 20.75, ' Medicamento para el cerdo enfermo', 'medicamento.jpg', 1);
+INSERT INTO `medicamento` VALUES (4, '577707426', 'Biomacrotil Premix', 1, 53, 12.00, ' Detalle del medicamento', 'medicamento.jpg', 1, 'Cali-Dex 200.', 7);
+INSERT INTO `medicamento` VALUES (5, '141777745', 'Biomacrotil PS.', 2, 10, 20.75, ' Medicamento para el cerdo enfermo', 'medicamento.jpg', 1, 'Cali-Dex 200.', 7);
+INSERT INTO `medicamento` VALUES (6, '24568', 'Biomacrotil 200.', 1, 1, 10.00, 'Medicamento para el cerdo de tipo pastilla ingreso via oral', 'medicamento.jpg', 1, 'Cali-Dex 200.', 5);
 
 -- ----------------------------
 -- Table structure for movimientos
@@ -926,7 +1014,7 @@ CREATE TABLE `movimientos`  (
   PRIMARY KEY (`id_m`) USING BTREE,
   INDEX `id_g_c`(`id_g_c`) USING BTREE,
   CONSTRAINT `movimientos_ibfk_1` FOREIGN KEY (`id_g_c`) REFERENCES `galpon_cerdo` (`id_galpon_cerdo`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 23 CHARACTER SET = utf8 COLLATE = utf8_spanish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 22 CHARACTER SET = utf8 COLLATE = utf8_spanish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of movimientos
@@ -948,11 +1036,12 @@ CREATE TABLE `muertes`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `id_cerdo`(`id_cerdo`) USING BTREE,
   CONSTRAINT `muertes_ibfk_1` FOREIGN KEY (`id_cerdo`) REFERENCES `cerdo` (`id_cerdo`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8 COLLATE = utf8_spanish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 8 CHARACTER SET = utf8 COLLATE = utf8_spanish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of muertes
 -- ----------------------------
+INSERT INTO `muertes` VALUES (7, 1, '2022-12-14', 'POR ENFERMEDAD PORCINA DEL CERDO', 2, '10:53:00', 3, '2022-12-14 08:52:28');
 
 -- ----------------------------
 -- Table structure for permisos
@@ -965,28 +1054,22 @@ CREATE TABLE `permisos`  (
   `config` char(10) CHARACTER SET utf8 COLLATE utf8_spanish_ci NULL DEFAULT NULL,
   `cerdo` char(10) CHARACTER SET utf8 COLLATE utf8_spanish_ci NULL DEFAULT NULL,
   `galpon` char(10) CHARACTER SET utf8 COLLATE utf8_spanish_ci NULL DEFAULT NULL,
-  `cerdo_galpon` char(10) CHARACTER SET utf8 COLLATE utf8_spanish_ci NULL DEFAULT NULL,
   `compra_venta` char(10) CHARACTER SET utf8 COLLATE utf8_spanish_ci NULL DEFAULT NULL,
-  `alimento_cerdos` char(10) CHARACTER SET utf8 COLLATE utf8_spanish_ci NULL DEFAULT NULL,
-  `insumos_cerdo` char(10) CHARACTER SET utf8 COLLATE utf8_spanish_ci NULL DEFAULT NULL,
-  `medicamento` char(10) CHARACTER SET utf8 COLLATE utf8_spanish_ci NULL DEFAULT NULL,
   `alimentacion` char(10) CHARACTER SET utf8 COLLATE utf8_spanish_ci NULL DEFAULT NULL,
-  `alimentaion_cerdo` char(10) CHARACTER SET utf8 COLLATE utf8_spanish_ci NULL DEFAULT NULL,
-  `pesaje` char(10) CHARACTER SET utf8 COLLATE utf8_spanish_ci NULL DEFAULT NULL,
-  `enfermedades_tratamiento` char(10) CHARACTER SET utf8 COLLATE utf8_spanish_ci NULL DEFAULT NULL,
-  `cerdo_enfermo` char(10) CHARACTER SET utf8 COLLATE utf8_spanish_ci NULL DEFAULT NULL,
-  `tratamiento` char(10) CHARACTER SET utf8 COLLATE utf8_spanish_ci NULL DEFAULT NULL,
+  `vacuna_despara` char(10) CHARACTER SET utf8 COLLATE utf8_spanish_ci NULL DEFAULT NULL,
+  `enfermedad_tratamiento` char(10) CHARACTER SET utf8 COLLATE utf8_spanish_ci NULL DEFAULT NULL,
+  `informes` char(10) CHARACTER SET utf8 COLLATE utf8_spanish_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `rol_id`(`rol_id`) USING BTREE,
   CONSTRAINT `permisos_ibfk_1` FOREIGN KEY (`rol_id`) REFERENCES `rol` (`rol_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8 COLLATE = utf8_spanish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8 COLLATE = utf8_spanish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of permisos
 -- ----------------------------
-INSERT INTO `permisos` VALUES (2, 10, 'true', 'true', 'true', 'true', 'true', 'true', 'true', 'true', 'true', 'true', 'true', 'true', 'true', 'true', 'false');
-INSERT INTO `permisos` VALUES (3, 1, 'false', 'false', 'false', 'false', 'false', 'false', 'false', 'false', 'false', 'false', 'false', 'false', 'false', 'false', 'false');
-INSERT INTO `permisos` VALUES (4, 11, 'false', 'false', 'false', 'false', 'false', 'true', 'false', 'false', 'false', 'false', 'false', 'false', 'false', 'true', 'false');
+INSERT INTO `permisos` VALUES (2, 10, 'false', 'false', 'true', 'true', 'false', 'false', 'false', 'false', 'false');
+INSERT INTO `permisos` VALUES (3, 1, 'true', 'true', 'true', 'true', 'true', 'true', 'true', 'true', 'true');
+INSERT INTO `permisos` VALUES (4, 11, 'false', 'false', 'false', 'false', 'true', 'false', 'false', 'false', 'true');
 
 -- ----------------------------
 -- Table structure for peso_cerdo
@@ -1008,7 +1091,7 @@ CREATE TABLE `peso_cerdo`  (
   PRIMARY KEY (`peso_id`) USING BTREE,
   INDEX `cerdo_id`(`cerdo_id`) USING BTREE,
   CONSTRAINT `peso_cerdo_ibfk_1` FOREIGN KEY (`cerdo_id`) REFERENCES `cerdo` (`id_cerdo`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 18 CHARACTER SET = utf8 COLLATE = utf8_spanish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 21 CHARACTER SET = utf8 COLLATE = utf8_spanish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of peso_cerdo
@@ -1021,6 +1104,9 @@ INSERT INTO `peso_cerdo` VALUES (14, 1, '2022-12-03 11:12:39', 'exacto', '50', '
 INSERT INTO `peso_cerdo` VALUES (15, 1, '2022-12-03 11:15:17', 'exacto', '23', '30', 'Iniciador', '', '', 'bbbb', 1, 1);
 INSERT INTO `peso_cerdo` VALUES (16, 3, '2022-12-04 11:43:48', 'exacto', '56', '30', 'Iniciador', '', '', 'pesaje del cerdo', 1, 1);
 INSERT INTO `peso_cerdo` VALUES (17, 3, '2022-12-04 18:17:49', 'vivo', '30', '44', 'Crecimiento', '90', '80', 'Cerdo mas gordo y grande', 1, 1);
+INSERT INTO `peso_cerdo` VALUES (18, 3, '2022-12-13 12:20:05', 'exacto', '44', '50', 'Crecimiento', '', '', 'EN CRECIMIENTO', 1, 3);
+INSERT INTO `peso_cerdo` VALUES (19, 5, '2022-12-14 12:22:27', 'exacto', '5', '6', '', '', '', 'PESO DEL CERDO', 1, 1);
+INSERT INTO `peso_cerdo` VALUES (20, 5, '2022-12-14 17:09:36', 'exacto', '6', '7', 'Preiniciador', '', '', 'mas pesada', 1, 1);
 
 -- ----------------------------
 -- Table structure for proveedor
@@ -1076,7 +1162,7 @@ CREATE TABLE `rol`  (
   `rol` varchar(255) CHARACTER SET utf8 COLLATE utf8_spanish_ci NULL DEFAULT NULL,
   `estado` int NULL DEFAULT 1,
   PRIMARY KEY (`rol_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 12 CHARACTER SET = utf8 COLLATE = utf8_spanish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 14 CHARACTER SET = utf8 COLLATE = utf8_spanish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of rol
@@ -1120,7 +1206,7 @@ INSERT INTO `tipo_alimento` VALUES (1, 'ENGORDA', 1);
 INSERT INTO `tipo_alimento` VALUES (2, 'SALUD', 1);
 INSERT INTO `tipo_alimento` VALUES (3, 'ESTADO FISICO', 1);
 INSERT INTO `tipo_alimento` VALUES (4, 'PROCREACION', 1);
-INSERT INTO `tipo_alimento` VALUES (5, 'FITNESS', 0);
+INSERT INTO `tipo_alimento` VALUES (5, 'FITNESS', 1);
 
 -- ----------------------------
 -- Table structure for tipo_galpon
@@ -1131,7 +1217,7 @@ CREATE TABLE `tipo_galpon`  (
   `tipo_galpon` varchar(255) CHARACTER SET utf8 COLLATE utf8_spanish_ci NULL DEFAULT NULL,
   `estado` int NULL DEFAULT 1,
   PRIMARY KEY (`id_tipo`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8 COLLATE = utf8_spanish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8 COLLATE = utf8_spanish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of tipo_galpon
@@ -1140,6 +1226,7 @@ INSERT INTO `tipo_galpon` VALUES (1, 'GOLPON LECHON', 1);
 INSERT INTO `tipo_galpon` VALUES (2, 'GALPON BERRACO', 1);
 INSERT INTO `tipo_galpon` VALUES (3, 'GALPON DE HEMBRAS EN CELO', 1);
 INSERT INTO `tipo_galpon` VALUES (4, 'GALPON DE MACHOS EN CELO', 1);
+INSERT INTO `tipo_galpon` VALUES (5, 'GALPÓN TRASPASO', 1);
 
 -- ----------------------------
 -- Table structure for tipo_insumo
@@ -1230,7 +1317,7 @@ CREATE TABLE `tratamiento_cerdos`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `enfer_cerdo_id`(`enfer_cerdo_id`) USING BTREE,
   CONSTRAINT `tratamiento_cerdos_ibfk_1` FOREIGN KEY (`enfer_cerdo_id`) REFERENCES `enfermedad_cerdo` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 19 CHARACTER SET = utf8 COLLATE = utf8_spanish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 20 CHARACTER SET = utf8 COLLATE = utf8_spanish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of tratamiento_cerdos
@@ -1238,6 +1325,7 @@ CREATE TABLE `tratamiento_cerdos`  (
 INSERT INTO `tratamiento_cerdos` VALUES (16, 5, '123 Kg', '2022-10-12', '2022-10-12', 'Observación', 1, '2022-10-12 14:06:31');
 INSERT INTO `tratamiento_cerdos` VALUES (17, 6, '110 Kg', '2022-10-12', '2022-10-12', 'Observación', 1, '2022-10-12 14:51:00');
 INSERT INTO `tratamiento_cerdos` VALUES (18, 7, '123 Kg', '2022-10-12', '2022-10-12', '1234567890 DE TODO UN POCO', 1, '2022-10-12 14:52:49');
+INSERT INTO `tratamiento_cerdos` VALUES (19, 8, '44 Kg', '2022-06-13', '2023-07-05', 'para salvar a cerdo se lo tratará con medicamentos', 1, '2022-12-13 10:30:18');
 
 -- ----------------------------
 -- Table structure for usuario
@@ -1317,7 +1405,7 @@ CREATE TABLE `vacunacion`  (
   INDEX `vacuna_id`(`vacuna_id`) USING BTREE,
   CONSTRAINT `vacunacion_ibfk_1` FOREIGN KEY (`cerdo_id`) REFERENCES `cerdo` (`id_cerdo`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `vacunacion_ibfk_2` FOREIGN KEY (`vacuna_id`) REFERENCES `vacuna` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 18 CHARACTER SET = utf8 COLLATE = utf8_spanish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 20 CHARACTER SET = utf8 COLLATE = utf8_spanish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of vacunacion
@@ -1333,6 +1421,38 @@ INSERT INTO `vacunacion` VALUES (14, 4, 1, 1, 20, '2022-12-04 19:24:55');
 INSERT INTO `vacunacion` VALUES (15, 1, 1, 1, 5, '2022-12-04 19:28:13');
 INSERT INTO `vacunacion` VALUES (16, 2, 1, 1, 5, '2022-12-04 19:28:13');
 INSERT INTO `vacunacion` VALUES (17, 3, 1, 1, 2, '2022-12-04 19:51:47');
+INSERT INTO `vacunacion` VALUES (18, 5, 1, 1, 2, '2022-12-14 12:22:06');
+INSERT INTO `vacunacion` VALUES (19, 5, 1, 1, 2, '2022-12-14 20:08:46');
+INSERT INTO `vacunacion` VALUES (20, 3, 1, 3, 2, '2022-12-15 18:46:15');
+INSERT INTO `vacunacion` VALUES (21, 4, 1, 3, 2, '2022-12-15 18:46:15');
+INSERT INTO `vacunacion` VALUES (22, 3, 1, 3, 2, '2022-12-15 18:48:53');
+INSERT INTO `vacunacion` VALUES (23, 4, 1, 3, 2, '2022-12-15 18:48:53');
+INSERT INTO `vacunacion` VALUES (24, 5, 1, 1, 1, '2022-12-15 18:49:48');
+
+-- ----------------------------
+-- Table structure for venta_cerdos
+-- ----------------------------
+DROP TABLE IF EXISTS `venta_cerdos`;
+CREATE TABLE `venta_cerdos`  (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `cliente_id` int NULL DEFAULT NULL,
+  `fecha` date NULL DEFAULT NULL,
+  `numero_venta` char(50) CHARACTER SET utf8 COLLATE utf8_spanish_ci NULL DEFAULT NULL,
+  `documento` char(50) CHARACTER SET utf8 COLLATE utf8_spanish_ci NULL DEFAULT NULL,
+  `iva` int NULL DEFAULT NULL,
+  `subtotal` decimal(10, 2) NULL DEFAULT NULL,
+  `impuesto` decimal(10, 2) NULL DEFAULT NULL,
+  `total` decimal(10, 2) NULL DEFAULT NULL,
+  `estado` int NULL DEFAULT 1,
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `cliente_id`(`cliente_id`) USING BTREE,
+  CONSTRAINT `venta_cerdos_ibfk_1` FOREIGN KEY (`cliente_id`) REFERENCES `cliente` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_spanish_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of venta_cerdos
+-- ----------------------------
+INSERT INTO `venta_cerdos` VALUES (3, 1, '2022-12-15', '123456532', 'Factura', 12, 125.00, 15.00, 140.00, 1);
 
 -- ----------------------------
 -- Table structure for veterinario
@@ -1375,6 +1495,81 @@ CREATE TABLE `web`  (
 -- Records of web
 -- ----------------------------
 INSERT INTO `web` VALUES (1, '2022092618143620220924140704cerdito.png', '2022092613044120220907140512_IMG192202211510.png', '2022092613044920220907195019avatar5.png', 'Los mejores cerdos', 'la  mejor calidad de cerdo', 'los cerdos son cerdos');
+
+-- ----------------------------
+-- Procedure structure for costro_produccion_cerdo
+-- ----------------------------
+DROP PROCEDURE IF EXISTS `costro_produccion_cerdo`;
+delimiter ;;
+CREATE PROCEDURE `costro_produccion_cerdo`(in ind int)
+BEGIN
+
+DECLARE alimento DECIMAL(10,2);
+DECLARE vacuna DECIMAL(10,2);
+DECLARE desparasitante DECIMAL(10,2);
+DECLARE insumo DECIMAL(10,2);
+DECLARE medicamento DECIMAL(10,2);
+
+SELECT 
+ROUND( SUM(( alimento.precio / alimento.peso ) * alimentacion.cantidad ), 2)  INTO alimento
+FROM
+	alimentacion
+	INNER JOIN alimento ON alimentacion.alimento_id = alimento.id 
+WHERE
+	alimentacion.id_cerdo = ind 
+GROUP BY
+	alimentacion.id_cerdo; 
+	
+SELECT 
+ROUND( SUM(( vacuna.precio / vacuna.cantidad_dosis ) * vacunacion.dosis ), 2 ) INTO vacuna
+FROM
+	vacunacion
+	INNER JOIN vacuna ON vacunacion.vacuna_id = vacuna.id 
+WHERE
+	vacunacion.cerdo_id = ind 
+GROUP BY
+	vacunacion.cerdo_id;
+	
+SELECT 
+ROUND( SUM(( medicamento.precio / medicamento.unidades ) * desparasitacion.cantidad ), 2) INTO desparasitante
+FROM
+	desparasitacion
+	INNER JOIN medicamento ON desparasitacion.medicamento_id = medicamento.id 
+WHERE
+	desparasitacion.cerdo_id = ind 
+GROUP BY
+	desparasitacion.cerdo_id;
+	
+
+SELECT 
+ROUND( SUM(( medicamento.precio / medicamento.unidades ) * detalle_enfermedad_medicina.cantidad ), 2) INTO medicamento
+FROM
+	detalle_enfermedad_medicina
+	INNER JOIN tratamiento_cerdos ON detalle_enfermedad_medicina.trata_id = tratamiento_cerdos.id
+	INNER JOIN enfermedad_cerdo ON tratamiento_cerdos.enfer_cerdo_id = enfermedad_cerdo.id
+	INNER JOIN medicamento ON detalle_enfermedad_medicina.medicina_id = medicamento.id 
+WHERE
+	enfermedad_cerdo.cerdo_id = ind 
+GROUP BY
+	enfermedad_cerdo.cerdo_id;
+	
+
+SELECT
+ROUND( SUM(( insumo.precio / detalle_enfermedad_insumo.cantidad ) * detalle_enfermedad_insumo.cantidad ), 2) INTO insumo 
+FROM
+	detalle_enfermedad_insumo
+	INNER JOIN insumo ON detalle_enfermedad_insumo.insumo_id = insumo.id
+	INNER JOIN tratamiento_cerdos ON detalle_enfermedad_insumo.tratamiento_id = tratamiento_cerdos.id
+	INNER JOIN enfermedad_cerdo ON tratamiento_cerdos.enfer_cerdo_id = enfermedad_cerdo.id
+	WHERE enfermedad_cerdo.cerdo_id = ind
+	GROUP BY enfermedad_cerdo.cerdo_id;
+	
+SELECT alimento, vacuna, desparasitante, medicamento, insumo;
+
+
+END
+;;
+delimiter ;
 
 -- ----------------------------
 -- Procedure structure for Machoo_Hembra
