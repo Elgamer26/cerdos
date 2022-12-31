@@ -7,3 +7,12 @@ class Complement:
         year = date.year
         messsage = "{} de {} del {}".format(day, month, year)
         return messsage
+    
+    # para el correo
+    def data_email():
+        data = {
+            'correo': 'haciendamada@amada.i-sistener.xyz',
+            'password': 'HaciendAmada1.'
+        }
+        return data
+    

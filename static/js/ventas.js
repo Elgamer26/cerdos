@@ -488,66 +488,66 @@ function validar_editar_cliente(
 //// VENTA DE CERDO 
 function registra_venta_cerdo() {
     Swal.fire({
-      title: 'Guardar venta de cerdo?',
-      text: "La venta se guardará en el sistema!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Si, guardar!'
+        title: 'Guardar venta de cerdo?',
+        text: "La venta se guardará en el sistema!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Si, guardar!'
     }).then((result) => {
-      if (result.isConfirmed) {
-        guardar_venta_cerdo();
-      }
+        if (result.isConfirmed) {
+            guardar_venta_cerdo();
+        }
     })
 }
- 
+
 function guardar_venta_cerdo() {
     var cliente = $("#cliente").val();
     var fecha_c = $("#fecha_c").val();
     var numero_venta = $("#numero_venta").val();
     var tipo_comprobante = $("#tipo_comprobante").val();
     var iva = $("#iva").val();
-  
+
     var subtotal = $("#subtotal").val();
     var impuesto_sub = $("#impuesto_sub").val();
     var total_pagar = $("#total_pagar").val();
     var count = 0;
-  
+
     if (cliente == "0" ||
-      numero_venta.length == 0 ||
-      numero_venta.trim() == "" ||
-      iva.length == 0 ||
-      iva.trim() == "") {
-  
-      validar_registro_compra_medicamento(cliente, numero_venta, iva);
-      return swal.fire(
-        "Campo vacios",
-        "Los campos no deben quedar vacios, complete los datos",
-        "warning"
-      );
+        numero_venta.length == 0 ||
+        numero_venta.trim() == "" ||
+        iva.length == 0 ||
+        iva.trim() == "") {
+
+        validar_registro_compra_medicamento(cliente, numero_venta, iva);
+        return swal.fire(
+            "Campo vacios",
+            "Los campos no deben quedar vacios, complete los datos",
+            "warning"
+        );
     } else {
-      $("#cliente_obligg").html("");
-      $("#numero_v_obligg").html("");
-      $("#ivaa_obligg").html("");
+        $("#cliente_obligg").html("");
+        $("#numero_v_obligg").html("");
+        $("#ivaa_obligg").html("");
     }
-  
+
     $("#tabla_venta_cerdo tbody#tbody_tabla_venta_cerdo tr").each(function () {
-      count++;
+        count++;
     }
     );
-  
+
     if (count == 0) {
-      $("#unir_no_hay").html('<span class="badge badge-danger"><b>.:No hay cerdos en el detalle de venta:.</b></span>');
-      return swal.fire(
-        "Detalle vacío",
-        "No hay cerdos en el detalle de venta",
-        "warning"
-      );
+        $("#unir_no_hay").html('<span class="badge badge-danger"><b>.:No hay cerdos en el detalle de venta:.</b></span>');
+        return swal.fire(
+            "Detalle vacío",
+            "No hay cerdos en el detalle de venta",
+            "warning"
+        );
     } else {
-      $("#unir_no_hay").html("");
+        $("#unir_no_hay").html("");
     }
-  
+
     var formdata = new FormData();
     formdata.append("cliente", cliente);
     formdata.append("fecha_c", fecha_c);
@@ -557,174 +557,190 @@ function guardar_venta_cerdo() {
     formdata.append("subtotal", subtotal);
     formdata.append("impuesto_sub", impuesto_sub);
     formdata.append("total_pagar", total_pagar);
-  
+
     $.ajax({
-      url: "/venta/registra_veenta_cerdos",
-      type: "POST",
-      //aqui envio toda la formdata
-      data: formdata,
-      contentType: false,
-      processData: false,
-      success: function (resp) {
-        if (resp > 0) {
-          if (resp != 2) {
-            guardar_detalle_venta_cerdos(parseInt(resp));
-          } else {
-            $(".card-success").LoadingOverlay("hide");
-            return Swal.fire(
-              "Número de venta ya existe",
-              "El número de venta: '" + numero_venta + "', ya existe en el sistema",
-              "warning"
-            );
-          }
-  
-        } else {
-  
-          $(".card-success").LoadingOverlay("hide");
-          return Swal.fire(
-            "Error",
-            "No se pudo crear la compra, falla en la matrix",
-            "error"
-          );
-        }
-      },
-  
-      beforeSend: function () {
-        $(".card-success").LoadingOverlay("show", {
-          text: "Cargando...",
-        });
-      },
+        url: "/venta/registra_veenta_cerdos",
+        type: "POST",
+        //aqui envio toda la formdata
+        data: formdata,
+        contentType: false,
+        processData: false,
+        success: function (resp) {
+            if (resp > 0) {
+                if (resp != 2) {
+                    guardar_detalle_venta_cerdos(parseInt(resp));
+                } else {
+                    $(".card-success").LoadingOverlay("hide");
+                    return Swal.fire(
+                        "Número de venta ya existe",
+                        "El número de venta: '" + numero_venta + "', ya existe en el sistema",
+                        "warning"
+                    );
+                }
+
+            } else {
+
+                $(".card-success").LoadingOverlay("hide");
+                return Swal.fire(
+                    "Error",
+                    "No se pudo crear la compra, falla en la matrix",
+                    "error"
+                );
+            }
+        },
+
+        beforeSend: function () {
+            $(".card-success").LoadingOverlay("show", {
+                text: "Cargando...",
+            });
+        },
     });
     return false;
 }
-  
+
 function validar_registro_compra_medicamento(cliente, numero_venta, iva) {
     if (cliente == "0") {
-      $("#cliente_obligg").html("Seleccione el cliente");
+        $("#cliente_obligg").html("Seleccione el cliente");
     } else {
-      $("#cliente_obligg").html("");
+        $("#cliente_obligg").html("");
     }
-  
+
     if (numero_venta.length == 0 || numero_venta.trim() == "") {
-      $("#numero_v_obligg").html("Ingrese número venta");
+        $("#numero_v_obligg").html("Ingrese número venta");
     } else {
-      $("#numero_v_obligg").html("");
+        $("#numero_v_obligg").html("");
     }
-  
+
     if (iva.length == 0 || iva.trim() == "") {
-      $("#ivaa_obligg").html("Ingrese el iva");
+        $("#ivaa_obligg").html("Ingrese el iva");
     } else {
-      $("#ivaa_obligg").html("");
+        $("#ivaa_obligg").html("");
     }
 }
- 
+
 function guardar_detalle_venta_cerdos(id) {
     var count = 0;
     var arrego_idcerdo = new Array();
     var arreglo_peso = new Array();
     var arreglo_precio = new Array();
-    var arreglo_total = new Array(); 
-  
+    var arreglo_total = new Array();
+
     $("#tabla_venta_cerdo tbody#tbody_tabla_venta_cerdo tr").each(
-      function () {
-        arrego_idcerdo.push($(this).find("td").eq(0).text());
-        arreglo_peso.push($(this).find("td").eq(3).text());
-        arreglo_precio.push($(this).find("#cantida_a").val()); 
-        arreglo_total.push($(this).find("td").eq(5).text()); 
-        count++;
-      }
+        function () {
+            arrego_idcerdo.push($(this).find("td").eq(0).text());
+            arreglo_peso.push($(this).find("td").eq(3).text());
+            arreglo_precio.push($(this).find("#cantida_a").val());
+            arreglo_total.push($(this).find("td").eq(5).text());
+            count++;
+        }
     );
-  
+
     //aqui combierto el arreglo a un string
     var idc = arrego_idcerdo.toString();
     var peso = arreglo_peso.toString();
     var precio = arreglo_precio.toString();
     var total = arreglo_total.toString();
-  
+
     if (count == 0) {
-      return false;
+        return false;
     }
-  
+
     $.ajax({
-      url: "/venta/registrar_detalle_venta_cerdo",
-      type: "POST",
-      data: {
-        id: id,
-        idc: idc,
-        peso: peso,
-        precio: precio,
-        total: total,
-      },
+        url: "/venta/registrar_detalle_venta_cerdo",
+        type: "POST",
+        data: {
+            id: id,
+            idc: idc,
+            peso: peso,
+            precio: precio,
+            total: total,
+        },
     }).done(function (resp) {
-      if (resp > 0) {
-        if (resp == 1) {
-          Swal.fire({
-            title: "Venta realizada con éxito",
-            text: "Desea imprimir la venta??",
-            icon: "warning",
-            showCancelButton: true,
-            showConfirmButton: true,
-            allowOutsideClick: false,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Si, Imprimir!!",
-          }).then((result) => {
-            if (result.value) {
-              window.open("/reporte/venta_cerdos_factura/" + parseInt(id) + "#zoom=100%", "Reporte de venta", "scrollbards=No");
-              cargar_contenido('contenido_principal', '/venta_cerdos');
+        if (resp > 0) {
+            if (resp == 1) {
+                Swal.fire({
+                    title: "Venta realizada con éxito",
+                    text: "Desea imprimir la venta??",
+                    icon: "warning",
+                    showCancelButton: true,
+                    showConfirmButton: true,
+                    allowOutsideClick: false,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Si, Imprimir!!",
+                }).then((result) => {
+                    if (result.value) {
+                        window.open("/reporte/venta_cerdos_factura/" + parseInt(id) + "#zoom=100%", "Reporte de venta", "scrollbards=No");
+                        cargar_contenido('contenido_principal', '/venta_cerdos');
+                    }
+                });
+                cargar_contenido('contenido_principal', '/venta_cerdos');
             }
-          });
-          cargar_contenido('contenido_principal', '/venta_cerdos');
+        } else {
+
+            return Swal.fire(
+                "Error",
+                "No se pudo crear el detalle de venta, falla en la matrix",
+                "error"
+            );
+
         }
-      } else {
-  
-        return Swal.fire(
-          "Error",
-          "No se pudo crear el detalle de venta, falla en la matrix",
-          "error"
-        );
-  
-      }
     });
 }
 
 function anular_venta_cerdos(id) {
     Swal.fire({
-      title: "Anular la venta de cerdo?",
-      text: "La venta se anulará!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Si, anular!",
+        title: "Anular la venta de cerdo?",
+        text: "La venta se anulará!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Si, anular!",
     }).then((result) => {
-      if (result.isConfirmed) {
-        venta_cerdo_anular(id);
-      }
+        if (result.isConfirmed) {
+            venta_cerdo_anular(id);
+        }
     });
 }
-  
+
 function venta_cerdo_anular(id) {
     $.ajax({
         url: "/venta/venta_cerdo_anular",
-      type: "POST",
-      data: { id: id },
+        type: "POST",
+        data: { id: id },
     }).done(function (response) {
-      if (response > 0) {
-        if (response == 1) {
-          cargar_contenido('contenido_principal', '/venta_cerdos');
-          return Swal.fire(
-            "Venta de cerdo anulada",
-            "La venta se anulo con éxtio",
-            "success"
-          );
+        if (response > 0) {
+            if (response == 1) {
+                cargar_contenido('contenido_principal', '/venta_cerdos');
+                return Swal.fire(
+                    "Venta de cerdo anulada",
+                    "La venta se anulo con éxtio",
+                    "success"
+                );
+            }
+        } else {
+            return Swal.fire(
+                "Error",
+                "No se pudo anular la venta, error en la matrix",
+                "error"
+            );
         }
-      } else {
-        return Swal.fire(
-          "Error",
-          "No se pudo anular la venta, error en la matrix",
-          "error"
-        );
-      }
+    });
+}
+
+//// envio de correo
+function envio_correo(id) {
+    alertify.warning('Enviando factura de venta al correo del cliente');
+    $.ajax({
+        url: "/venta/envio_correo_venta",
+        type: "POST",
+        data: { id: id },
+        async: true,
+    }).done(function (response) {
+        if (response != 1) {
+            alertify.error('Error al envio de correo');
+        }
+        return false;
     });
 }

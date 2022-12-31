@@ -1,0 +1,86 @@
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0"><i class="fa fa-file"></i> Cargar datos masivos de cerdos</h1>
+            </div>
+
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="/Admin">Inicio</a></li>
+                    <li class="breadcrumb-item active">Cargar datos</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12 col-12">
+                    <div class="card card-success">
+                        <div class="card-header">
+                            <h3 class="card-title">Nueva carga</h3>
+                        </div>
+
+                        <div class="card-body">
+                            <div class="row">
+
+                                <div class="col-md-6 mb-3 mx-auto text-center">
+                                    <label >Archivo Excel</label>
+
+                                    <img height="197" width="200"
+                                        class="border rounded mx-auto d-block img-fluid"
+                                        src="static/uploads/empresa/excel.jpg" />
+                                        <br>
+                                    <input type="file" class="form-control" id="archivo" onchange="mostrar_imagen(this)" />
+                                </div>
+                                
+                            </div>
+                        </div>
+                        <!-- /.card-body -->
+
+                        <div class="card-footer">
+                            <button onclick="registrar_archiivos();" class="btn btn-success">
+                                <i class="fa fa-save"></i> Guardar
+                            </button>
+                            -
+                            <button onclick="cargar_contenido('contenido_principal','/datos_masivos');"
+                                class="btn btn-danger">
+                                <i class="fa fa-svae"></i> Limpiar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row"></div>
+        </div>
+    </section>
+</div>
+
+<script src="static/js/cerdos.js"></script>
+
+<script>
+
+    function mostrar_imagen(input) {
+        var filename = document.getElementById("archivo").value;
+        var idxdot = filename.lastIndexOf(".") + 1;
+        var extfile = filename.substr(idxdot, filename.length).toLowerCase();
+        if (extfile == "cvs" || extfile == "xlsx") {
+            if (input.files) {
+                var reader = new FileReader();
+                reader.readAsDataURL(input.files[0]);
+            }
+        } else {
+            swal.fire(
+                "Mensaje de alerta",
+                "Solo se aceptan imagenes - USTED SUBIO UN ARCHIVO CON LA EXTENCIO ." +
+                extfile,
+                "warning"
+            );
+            return (document.getElementById("archivo").value = "");
+        }
+    }  
+
+</script>

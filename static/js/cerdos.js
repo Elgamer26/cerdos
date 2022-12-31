@@ -378,18 +378,18 @@ function registrar_cerdo() {
     $("#detalle_c_obligg").html("");
   }
 
-  if(tipo_ingreso == 'Compra'){
-    if(costo == '0.00' || costo.trim() == "" || costo.length == 0) {
+  if (tipo_ingreso == 'Compra') {
+    if (costo == '0.00' || costo.trim() == "" || costo.length == 0) {
       $("#costo_obligg").html("Ingrese costo de compra");
       return swal.fire(
         "No hay costo de compra",
         "Ingrese costo de compra",
         "warning"
       );
-    }else{
+    } else {
       $("#costo_obligg").html("");
     }
-  }else{
+  } else {
     $("#costo_obligg").html("");
   }
 
@@ -548,9 +548,9 @@ function listado_cerdos() {
         render: function (data, type, row) {
           if (data == 1) {
             return `<button style='font-size:10px;' type='button' class='inactivar btn btn-outline-danger' title='Inactivar el cerdo'><i class='fa fa-times' style='font-size: 15px;'></i></button> - <button style='font-size:10px;' type='button' class='editar btn btn-outline-primary' title='Editar el cerdo'><i class='fa fa-edit' style='font-size: 15px;'></i></button> - <button style='font-size:10px;' type='button' class='photo btn btn-outline-warning' title='Foto del cerdo'><i class='fa fa-image' style='font-size: 15px;'></i></button>`;
-          } else if (data == 0)  {
+          } else if (data == 0) {
             return `<button style='font-size:10px;' type='button' class='activar btn btn-outline-success' title='Activar el cerdo'><i class='fa fa-check' style='font-size: 15px;'></i></button> - <button style='font-size:10px;' type='button' class='editar btn btn-outline-primary' title='Editar el cerdo'><i class='fa fa-edit' style='font-size: 15px;'></i></button> - <button style='font-size:10px;' type='button' class='photo btn btn-outline-warning' title='foto del cerdo'><i class='fa fa-image' style='font-size: 15px;'></i></button>`;
-          }else{
+          } else {
             return `<button style='font-size:10px;' class='btn btn-outline-danger'><i class='fa fa-paw' style='font-size: 15px;'></i> Cerdo muerto</button>`;
           }
         },
@@ -919,18 +919,18 @@ function editar_cerdos() {
     $("#detalle_c_obligg").html("");
   }
 
-  if(tipo_ingreso == 'Compra'){
-    if(costo == '0.00' || costo.trim() == "" || costo.length == 0) {
+  if (tipo_ingreso == 'Compra') {
+    if (costo == '0.00' || costo.trim() == "" || costo.length == 0) {
       $("#costo_obligg").html("Ingrese costo de compra");
       return swal.fire(
         "No hay costo de compra",
         "Ingrese costo de compra",
         "warning"
       );
-    }else{
+    } else {
       $("#costo_obligg").html("");
     }
-  }else{
+  } else {
     $("#costo_obligg").html("");
   }
 
@@ -1080,11 +1080,11 @@ function registrar_muertes_cerdos() {
     confirmButtonText: "Si, guardar!",
   }).then((result) => {
     if (result.isConfirmed) {
-  
+
       var cerdo = $("#cerdo").val();
       var fecha = $("#fecha_c").val();
       var detalle = $("#detalle").val();
-    
+
       if (cerdo == 0 || fecha.trim() == "" || detalle.trim() == "") {
         validar_serdo_muerto(cerdo, fecha, detalle);
         return Swal.fire("Campos vacios", "Ingrese todos los datos completos", "warning");
@@ -1093,20 +1093,20 @@ function registrar_muertes_cerdos() {
         $("#fecha_c_obligg").html("");
         $("#detalle_oblig").html("");
       }
-    
+
       $.ajax({
         type: "POST",
         url: "/cerdo/registrar_muerte_cerdo",
         data: { cerdo: cerdo, fecha: fecha, detalle: detalle },
         success: function (response) {
           if (response == 1) {
-            $(".card-success").LoadingOverlay("hide"); 
-            cargar_contenido('contenido_principal','/cerdos_muertos')
+            $(".card-success").LoadingOverlay("hide");
+            cargar_contenido('contenido_principal', '/cerdos_muertos')
             return Swal.fire(
               "Registro éxitoso",
               "La muerte del cerdo se registro con éxito",
               "success"
-            ); 
+            );
           } else {
             $(".card-success").LoadingOverlay("hide");
             return Swal.fire(
@@ -1116,7 +1116,7 @@ function registrar_muertes_cerdos() {
             );
           }
         },
-    
+
         beforeSend: function () {
           $(".card-success").LoadingOverlay("show", {
             text: "Cargando...",
@@ -1129,8 +1129,7 @@ function registrar_muertes_cerdos() {
 
 }
 
-function validar_serdo_muerto(cerdo, fecha, detalle)
- {
+function validar_serdo_muerto(cerdo, fecha, detalle) {
   if (cerdo == 0) {
     $("#cerdo_obligg").html("Seleccione el cerdo");
   } else {
@@ -1151,7 +1150,7 @@ function validar_serdo_muerto(cerdo, fecha, detalle)
 
 }
 
-function eliminar_cerdo_muerto(id){
+function eliminar_cerdo_muerto(id) {
 
   Swal.fire({
     title: "Eliminar dato?",
@@ -1163,7 +1162,7 @@ function eliminar_cerdo_muerto(id){
     confirmButtonText: "Si, eiminar!",
   }).then((result) => {
     if (result.isConfirmed) {
-      
+
       $.ajax({
         type: "POST",
         url: "/cerdo/eliminar_cerdo_muerto",
@@ -1172,13 +1171,13 @@ function eliminar_cerdo_muerto(id){
 
           if (response == 1) {
 
-            $(".card-info").LoadingOverlay("hide"); 
-            cargar_contenido('contenido_principal','/cerdos_muertos')
+            $(".card-info").LoadingOverlay("hide");
+            cargar_contenido('contenido_principal', '/cerdos_muertos')
             return Swal.fire(
               "Eliminado",
               "El registro se elimino con éxito",
               "success"
-            ); 
+            );
 
           } else {
 
@@ -1191,7 +1190,7 @@ function eliminar_cerdo_muerto(id){
 
           }
         },
-    
+
         beforeSend: function () {
           $(".card-info").LoadingOverlay("show", {
             text: "Cargando...",
@@ -1203,4 +1202,81 @@ function eliminar_cerdo_muerto(id){
     }
   });
 
+}
+
+/////////
+//// cargar datos de archivo excel
+function registrar_archiivos() {
+  var archivo = $("#archivo").val();
+
+  if (
+    archivo.length == 0 ||
+    archivo.trim() == ""
+  ) {
+    return swal.fire(
+      "No hay archivo",
+      "Ingrese un archivo excel para cargar al sistema",
+      "warning"
+    );
+  }
+
+
+  var formdata = new FormData();
+  var archivo = $("#archivo")[0].files[0];
+  //est valores son como los que van en la data del ajax
+  formdata.append("archivo", archivo);
+
+  $.ajax({
+    url: "/cerdo/cargar_archivos",
+    type: "POST",
+    //aqui envio toda la formdata
+    data: formdata,
+    contentType: false,
+    processData: false,
+    success: function (resp) {
+      
+      $(".card-body").LoadingOverlay("hide");
+      return console.log(resp);
+
+      if (resp > 0) {
+        if (resp == 1) {
+          $(".card-body").LoadingOverlay("hide");
+          cargar_contenido("contenido_principal", "/new_cerdo");
+          return Swal.fire(
+            "Cerdo creado con éxito",
+            "El cerdo se creo con éxito",
+            "success"
+          );
+        } else if (resp == 2) {
+          $(".card-body").LoadingOverlay("hide");
+          return Swal.fire(
+            "Codigo ya existe",
+            "El codigo '" + codigo_cerdo + "', ya existe en el sistema",
+            "warning"
+          );
+        } else if (resp == 3) {
+          $(".card-body").LoadingOverlay("hide");
+          return Swal.fire(
+            "Nombre del cerdo ya existe",
+            "El nombre '" + nombre + "', ya existe en el sistema",
+            "warning"
+          );
+        }
+      } else {
+        $(".card-body").LoadingOverlay("hide");
+        return Swal.fire(
+          "Error",
+          "No se pudo crear el cerdo, falla en la matrix",
+          "error"
+        );
+      }
+
+    },
+    beforeSend: function () {
+      $(".card-body").LoadingOverlay("show", {
+        text: "Cargando...",
+      });
+    },
+  });
+  return false;
 }

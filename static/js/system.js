@@ -1036,3 +1036,22 @@ function obtener_permisos_del_usuaro_logeado() {
   });
   return false;
 }
+
+//// traer detalle del cerdo
+function ver_detalle_cerdo(id) {
+
+  $.ajax({
+    url: "/cerdo/ver_detalle_cerdo",
+    type: "POST",
+    data: { id: id },
+    success: function (data) {
+ 
+      $("#raza_cerdo").html(data[3]);
+      $("#peso_cerdo").html("Peso: " + data[4] + " Kg");
+      $("#sexo_cerdo").html("Sexo: " + data[2]);
+      $("#etap_cerdo").html("Etapa: " + data[7]);
+      $("#detalle_cerdo").html(data[5]);
+    }
+  });
+  return false;
+}

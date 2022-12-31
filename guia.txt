@@ -7,7 +7,9 @@ pip install flask_MySql, pip install flask-mysqldb,
 pip install Flask-MySQL
 pip install pdfkit
 pip install fpdf
+pip install flask-mail
 
+en caso que no se pueda usar pip --> python -m pip install 
 
 
 para el mysql del pythonanywhere subir la base de datos

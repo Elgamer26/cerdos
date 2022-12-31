@@ -187,38 +187,34 @@
 <script src="static/js/galpon.js"></script>
   
 <script>
-    //// para controlar las fecha de dias depues y dias antes
-    var fecha_inicioo;
-    var fecha_finn;
-    
-    fechai = new Date();
-    fechaf = new Date();
-    dia = fechai.getDate();
-    mes = fechai.getMonth()+1;// +1 porque los meses empiezan en 0
-    anio = fechai.getFullYear();
-    fechaf.setDate(fechaf.getDate() + 160);
-  
-    fecha_inicioo =  fechai.getFullYear() + "-" + (fechai.getMonth()+1) + "-" + (fechai.getDate()-6);  
-    fecha_finn = fechaf.getFullYear()  + "-" + (fechaf.getMonth()+1) + "-" + fechaf.getDate();
-
     $(".id_galpon").select2();
     listar_cerdo_galpon();
 
     $(document).ready(function() {
-        var n = new Date();
-        var y = n.getFullYear();
-        var m = n.getMonth() + 1;
-        var d = n.getDate();
-        if (d < 10) {
-            d = '0' + d;
-        }
-        if (m < 10) {
-            m = '0' + m;
-        }
-        document.getElementById("fecha_i").value = y + "-" + m + "-" + d; 
-        document.getElementById("fecha_f").value = y + "-" + m + "-" + d; 
 
+        //// para controlar las fecha de dias depues y dias antes
+        var fecha_inicioo;
+        var fecha_finn;
+        
+        fechai = new Date();
+        fechaf = new Date();
+ 
+        fechaf.setDate(fechaf.getDate() + 150);
+      
+        fecha_inicioo =  fechai.getFullYear() + "-" + (fechai.getMonth()+1) + "-" + (fechai.getDate()-6);  
+        fecha_finn = fechaf.getFullYear()  + "-" + (fechaf.getMonth()+1) + "-" + fechaf.getDate();
+
+        var n = new Date();
+        var n2 = new Date();
+        n.setDate(n.getDate() + 150);
+        //console.log(n.getFullYear() + "-" + ((n.getMonth() + 1) < 10 ? '0' + (n.getMonth() + 1) : (n.getMonth() + 1)) + "-" + (n.getDate() < 10 ? ('0' + n.getDate()) : n.getDate()));
+
+        document.getElementById("fecha_i").value = n2.getFullYear() + "-" + ((n2.getMonth() + 1) < 10 ? '0' + (n2.getMonth() + 1) : (n2.getMonth() + 1)) + "-" + (n2.getDate() < 10 ? ('0' + n2.getDate()) : n2.getDate()); 
+        document.getElementById("fecha_f").value = n.getFullYear() + "-" + ((n.getMonth() + 1) < 10 ? '0' + (n.getMonth() + 1) : (n.getMonth() + 1)) + "-" + (n.getDate() < 10 ? ('0' + n.getDate()) : n.getDate()); 
+    
         mostar_fecha(fecha_inicioo, fecha_finn);
+
+        ver_semanas();
     });
 
     $("#id_galpon").on("change", function(){

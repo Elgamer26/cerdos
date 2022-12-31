@@ -84,7 +84,7 @@
                                 </div>
 
                                 <div class="form-group col-lg-4 col-6">
-                                    <label for="fecha">Fecha</label> 
+                                    <label for="fecha">Fecha de registro</label> 
                                     <input type="date" class="calendario form-control" placeholder="Ingrese la fecha" id="fecha" />
                                     <span style="color: red" id="fecha_obligg"></span> 
                                 </div>
@@ -147,6 +147,21 @@
 <script>
     mostar_fecha(fecha_atras, fecha_adelante)
     
+    $(document).ready(function() {
+   
+          var n = new Date();
+          var y = n.getFullYear();
+          var m = n.getMonth() + 1;
+          var d = n.getDate();
+          if (d < 10) {
+              d = '0' + d;
+          }
+          if (m < 10) {
+              m = '0' + m;
+          }
+          document.getElementById("fecha").value = y + "-" + m + "-" + d;  
+      });
+      
     $(".raza_id").select2();
 
     $("#tipo_ingreso").on("change", function(){
@@ -163,10 +178,17 @@
 
         var data = $("#peso").val();
 
-        if(parseInt(data) > 0 && parseInt(data) <= 5.5){
+        if(data >= 10){
+            $("#peso").val("");
+            $("#peso").focus();
+            $("#etapa").val("");
+            return alertify.error('El peso del cerdo debe ser menor de 10 Kg');
+        }
+
+        if(parseInt(data) > 0 && parseInt(data) <= 5){
            return $("#etapa").val("Lactancia");
         } 
-        if(parseInt(data) >= 6.5 && parseInt(data) <= 15){
+        if(parseInt(data) >= 6 && parseInt(data) <= 15){
            return $("#etapa").val("Preiniciador");
         } 
         if(parseInt(data) >= 16 && parseInt(data) <= 30){

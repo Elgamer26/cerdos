@@ -77,7 +77,9 @@
                                                 {% if c[9] == True %}
                                                 <td> <button onclick="anular_venta_cerdos({{c[0]}});" class="btn btn-outline-danger"><i class="fa fa-times"></i></button> 
                                                 - 
-                                                <a target="_blank" href="/reporte/venta_cerdos_factura/{{c[0]}}" class="btn btn-outline-primary"><i class="fa fa-file"></i></a> </td>
+                                                <a target="_blank" href="/reporte/venta_cerdos_factura/{{c[0]}}" class="btn btn-outline-primary"><i class="fa fa-file"></i></a>
+                                                - 
+                                                <a onclick="envio_correo({{c[0]}})" class="btn btn-outline-warning"><i class="fa fa-envelope"></i></a> </td>
                                                 {% else %}
                                                 <td> <a target="_blank" href="/reporte/venta_cerdos_factura/{{c[0]}}" class="btn btn-outline-primary"><i class="fa fa-file"></i></a></td>
                                                 {% endif %} 

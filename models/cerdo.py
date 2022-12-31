@@ -279,3 +279,30 @@ class Cerdo():
             error = "Ocurrio un problema: " + str(e)
             return error
         return 0
+
+    # modelo para obterne los valores del cerdos para la tienda
+    def Ver_detalle_cerdo(id):
+        try:
+            query = mysql.connection.cursor()
+            query.execute("""SELECT
+                            cerdo.codigo,
+                            cerdo.nombre,
+                            cerdo.sexo,
+                            raza.raza,
+                            cerdo.peso, 
+                            cerdo.detalle,
+                            cerdo.foto, 
+                            cerdo.etapa
+                        FROM
+                            cerdo
+                            INNER JOIN raza ON cerdo.raza = raza.id_raza 
+                        WHERE
+                            cerdo.id_cerdo={0}""".format(id))
+            data = query.fetchone()
+            query.close() 
+            return data
+        except Exception as e:
+            query.close()
+            error = "Ocurrio un problema: " + str(e)
+            return error
+        return 0

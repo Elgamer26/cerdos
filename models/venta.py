@@ -191,3 +191,55 @@ class Venta():
             error = "Ocurrio un problema: " + str(e)
             return error
         return 0
+    
+    def Cabecera_factura(id):
+        try:
+            query = mysql.connection.cursor()
+            query.execute("""SELECT
+	                venta_cerdos.id,
+                    CONCAT_WS( ' ', cliente.nombres, cliente.apellidos ) AS cliente,
+                    cliente.correo,
+                    venta_cerdos.fecha,
+                    cliente.cedula,
+                    venta_cerdos.numero_venta,
+                    venta_cerdos.documento,
+                    venta_cerdos.iva,
+                    venta_cerdos.subtotal,
+                    venta_cerdos.impuesto,
+                    venta_cerdos.total,
+                    venta_cerdos.estado                    
+                FROM
+                    venta_cerdos
+                    INNER JOIN cliente ON venta_cerdos.cliente_id = cliente.id 
+                WHERE venta_cerdos.id={0}""".format(id))
+            data = query.fetchone()
+            query.close() 
+            return data
+        except Exception as e:
+            query.close()
+            error = "Ocurrio un problema: " + str(e)
+            return error
+        return 0
+
+    def Detalle_venta(id):
+        try:
+            query = mysql.connection.cursor()
+            query.execute("""SELECT
+                        CONCAT_WS( ' ', cerdo.codigo, cerdo.sexo, raza.raza ) AS cerdo,
+                        detalle_venta_cerdos.peso,
+                        detalle_venta_cerdos.precio,
+                        detalle_venta_cerdos.total
+                    FROM
+                        detalle_venta_cerdos
+                        INNER JOIN cerdo ON detalle_venta_cerdos.id_cerdo = cerdo.id_cerdo
+                        INNER JOIN raza ON cerdo.raza = raza.id_raza 
+                    WHERE
+                        detalle_venta_cerdos.id_venta = '{0}'""".format(id))
+            data = query.fetchall()
+            query.close() 
+            return data
+        except Exception as e:
+            query.close()
+            error = "Ocurrio un problema: " + str(e)
+            return error
+        return 0

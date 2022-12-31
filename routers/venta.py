@@ -1,6 +1,11 @@
-from flask import Blueprint, request
+from flask import Blueprint, request, render_template
 from flask import jsonify
 from models.venta import Venta
+from flask_mail import Message
+from utils.email import mail
+from utils.Complemento import Complement
+
+data = Complement.data_email()
 
 venta = Blueprint('venta', __name__)
 
@@ -83,3 +88,26 @@ def venta_cerdo_anular():
         id = request.form["id"] 
         valor = Venta.venta_cerdo_anular(id)
         return str(valor)
+
+@venta.route('/envio_correo_venta', methods=["POST"])
+def envio_correo_venta():
+    if request.method == "POST":
+        try:
+            id = request.form["id"] 
+            cabecera = Venta.Cabecera_factura(id)
+            detalle = Venta.Detalle_venta(id)
+                        
+            msg = Message('FACTURA DE VENTA CERDOS', 
+                sender=data['correo'],
+                recipients=[cabecera[2]])
+            
+            valores =  {
+                'cliente': cabecera,
+                'detalle': detalle
+            }
+            msg.html = render_template('view/ventas/factura_venta.html', valores = valores)
+            mail.send(msg)
+            return str(1)
+        except Exception as e:
+            return str(e)
+        

@@ -4,11 +4,15 @@ from flask import jsonify, session
 from models.cerdo import Cerdo
 import time
 
+import pandas as pd
+#openpyxl
+
 # es un enrutador
 # ojo cuando agas una redirecion usa index.luego la funcion
 cerdo = Blueprint('cerdo', __name__)
 # para mover la imagen
 PATH_FILE = getcwd() + "/static/uploads/cerdo/"
+PATH_EXCEL = getcwd() + "/static/uploads/excel/"
 
 # controlador para crear una nueva raza
 @cerdo.route('/crear_raza', methods=['POST'])
@@ -163,3 +167,52 @@ def eliminar_cerdo_muerto():
 
         dato = Cerdo.Eliminar_cerdo_muerto(_id)
         return str(dato)
+    
+# controlador para obterne los valores del cerdos para la tienda
+@cerdo.route('/ver_detalle_cerdo', methods=['POST'])
+def ver_detalle_cerdo():
+    if request.method == 'POST':
+        _id = request.form['id'] 
+        dato = Cerdo.Ver_detalle_cerdo(_id)
+        return jsonify(dato)
+    
+    
+    
+    
+    
+
+# para caargra archivos excel al sistema
+@cerdo.route('/cargar_archivos', methods=['POST'])
+def cargar_archivos():
+    if request.method == 'POST':
+        try:
+            file = request.files.get("archivo", False)           
+            file.save(PATH_EXCEL + file.filename)
+            
+            lista = []
+            df = pd.read_excel(PATH_EXCEL + file.filename, sheet_name='Cerdos')
+            df.set_index('Costo', inplace=True)
+            conteo = len(df.index)
+
+            for i in range(conteo):
+                componente = df.index[i]
+                lista.append(componente)
+            print(df) 
+            
+            
+            return 0
+
+
+            # if data == 1:
+                
+            #     # para no eliminar la foto por defecto
+            #     if foto_ac != "cerdo.jpg":
+            #         # esto es paar saber si el archivo existe y elimiarlo
+            #         if path.isfile(PATH_FILE + foto_ac) == True:
+            #             remove(PATH_FILE + foto_ac)
+                
+            #     return str(data)
+           
+        except Exception as e:
+            error = "Error " + str(e)
+            return error

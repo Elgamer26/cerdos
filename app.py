@@ -1,5 +1,6 @@
 from flask import Flask, render_template
 from flask_mysqldb import MySQL
+from flask_mail import Mail 
 
 from routers.index import index
 from routers.usuario import usuario
@@ -12,8 +13,11 @@ from routers.vacunas import vacunas
 from routers.web import web
 from routers.venta import venta
 
-
 from routers.reporte import reporte
+
+# complemento para el envio de correo
+from utils.Complemento import Complement
+data = Complement.data_email()
 
 app = Flask(__name__)
 app.secret_key = 'my_secret_key'
@@ -26,6 +30,16 @@ app.config['MYSQL_PASSWORD'] = 'elgamer1'
 app.config['MYSQL_DB'] = 'tesis_cerdo'
 # le paso la conexion al modulo
 MySQL(app)
+
+# Configuración del email
+app.config['MAIL_SERVER'] = 'smtp.hostinger.com'
+app.config['MAIL_PORT'] = 465
+app.config['MAIL_USERNAME'] = data['correo']
+app.config['MAIL_PASSWORD'] = data['password']
+app.config['MAIL_USE_TLS'] = False
+app.config['MAIL_USE_SSL'] = True
+mail = Mail(app)
+mail.init_app(app)
 
 # esto llama la vista carpeta routes archivo
 app.register_blueprint(index, url_prefix="/")

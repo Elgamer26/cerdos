@@ -147,6 +147,11 @@ def new_cerdo():
         codigo = random.randint(0, 99999)
     return render_template('view/cerdo/registro_cerdo.html', data = data, codigo = codigo)
 
+#vista crear cerdos
+@index.route('/datos_masivos')
+def datos_masivos():
+    return render_template('view/cerdo/datos_masivos.html')
+
 #vista listar cerdo
 @index.route('/list_cerdo')
 def list_cerdo():
