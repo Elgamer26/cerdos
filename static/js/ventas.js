@@ -1,4 +1,4 @@
-var tabla_cliente;
+var tabla_cliente, tabla_pedidos_cerdos;
 
 function registra_cliente() {
     var nombres = $("#nombres_cli").val();
@@ -716,7 +716,7 @@ function venta_cerdo_anular(id) {
                 cargar_contenido('contenido_principal', '/venta_cerdos');
                 return Swal.fire(
                     "Venta de cerdo anulada",
-                    "La venta se anulo con éxtio",
+                    "La venta se anuló con éxtio",
                     "success"
                 );
             }
@@ -739,10 +739,211 @@ function envio_correo(id) {
         data: { id: id },
         async: true,
     }).done(function (response) {
-        console.log(response);
+        // console.log(response);
         if (response != 1) {
             alertify.error('Error al envio de correo');
         }
         return false;
     });
 }
+
+/// listado de pedidos de cerdos
+function Listado_pedidos_cerdos() {
+    tabla_pedidos_cerdos = $("#tabla_pedidos_cerdos").DataTable({
+        ordering: true,
+        paging: true,
+        aProcessing: true,
+        aServerSide: true,
+        searching: { regex: true },
+        lengthMenu: [
+            [10, 25, 50, 100, -1],
+            [10, 25, 50, 100, "All"],
+        ],
+        pageLength: 10,
+        destroy: true,
+        async: false,
+        processing: true,
+
+        ajax: {
+            url: "/venta/listar_pedidos_cerdos",
+            type: "GET",
+        },
+        //hay que poner la misma cantidad de columnas y tambien en el html
+        columns: [
+            { defaultContent: "" },
+            {
+                data: "estado",
+                render: function (data, type, row) {
+                    if (data == 1) {
+                        return `<button class="btn_anular_pedido btn btn-outline-danger"><i class="fa fa-times"></i></button> - <a class="btn_pedido_file btn btn-outline-primary"><i class="fa fa-file"></i></a> - <a class="btn_envio_correo btn btn-outline-warning"><i class="fa fa-envelope"></i></a> </td>`;
+                    } else {
+                        return `<a class="btn_pedido_file btn btn-outline-primary"><i class="fa fa-file"></i></a>`;
+                    }
+                },
+            },
+            { data: "cliente" },
+            { data: "fecha" },
+            { data: "numero_pedido" },
+            { data: "direccion" },
+            { data: "correo" },
+            { data: "total" },
+            {
+                data: "estado",
+                render: function (data, type, row) {
+                    if (data == 1) {
+                        return "<span class='badge badge-success'>ACTIVO</span>";
+                    } else {
+                        return "<span class='badge badge-danger'>ANULADO</span>";
+                    }
+                },
+            },
+        ],
+
+        language: {
+            rows: "%d fila seleccionada",
+            processing: "Tratamiento en curso...",
+            search: "Buscar&nbsp;:",
+            lengthMenu: "Agrupar en _MENU_ items",
+            info: "Mostrando los item (_START_ al _END_) de un total _TOTAL_ items",
+            infoEmpty: "No existe datos.",
+            infoFiltered: "(filtrado de _MAX_ elementos en total)",
+            infoPostFix: "",
+            loadingRecords: "Cargando...",
+            zeroRecords: "No se encontro resultados en tu busqueda",
+            emptyTable: "No hay datos disponibles en la tabla",
+            paginate: {
+                first: "Primero",
+                previous: "Anterior",
+                next: "Siguiente",
+                last: "Ultimo",
+            },
+            select: {
+                rows: "%d fila seleccionada",
+            },
+            aria: {
+                sortAscending: ": active para ordenar la columa en orden ascendente",
+                sortDescending: ": active para ordenar la columna en orden descendente",
+            },
+        },
+        select: true,
+        responsive: "true",
+    });
+
+    //esto es para crearn un contador para la tabla este contador es automatico
+    tabla_pedidos_cerdos.on("draw.dt", function () {
+        var pageinfo = $("#tabla_pedidos_cerdos").DataTable().page.info();
+        tabla_pedidos_cerdos
+            .column(0, { page: "current" })
+            .nodes()
+            .each(function (cell, i) {
+                cell.innerHTML = i + 1 + pageinfo.start;
+            });
+    });
+}
+
+$("#tabla_pedidos_cerdos").on("click", ".btn_pedido_file", function () {
+    //esto esta extrayendo los datos de la tabla el (data)
+    var data = tabla_pedidos_cerdos.row($(this).parents("tr")).data(); //a que fila deteta que doy click
+    //esta condicion es importante para el responsibe porque salda un error si no lo pongo
+    if (tabla_pedidos_cerdos.row(this).child.isShown()) {
+        //esto es cuando esta en tamaño responsibo
+        var data = tabla_pedidos_cerdos.row(this).data();
+    }
+    var id = data.id;
+
+    Swal.fire({
+        title: "Pedido de cerdos",
+        text: "Desea imprimir el pedido de cerdos??",
+        icon: "warning",
+        showCancelButton: true,
+        showConfirmButton: true,
+        allowOutsideClick: false,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Si, Imprimir!!",
+    }).then((result) => {
+        if (result.value) {
+            window.open("/reporte/pedidos_cerdos_factura/" + parseInt(id) + "#zoom=100%", "Reporte de pedido", "scrollbards=No");
+        }
+    });
+});
+
+$("#tabla_pedidos_cerdos").on("click", ".btn_envio_correo", function () {
+    //esto esta extrayendo los datos de la tabla el (data)
+    var data = tabla_pedidos_cerdos.row($(this).parents("tr")).data(); //a que fila deteta que doy click
+    //esta condicion es importante para el responsibe porque salda un error si no lo pongo
+    if (tabla_pedidos_cerdos.row(this).child.isShown()) {
+        //esto es cuando esta en tamaño responsibo
+        var data = tabla_pedidos_cerdos.row(this).data();
+    }
+    var id = data.id;
+
+    alertify.warning('Enviando factura de pedido al correo del cliente');
+    $.ajax({
+        url: "/venta/envio_correo_pedido",
+        type: "POST",
+        data: { id: id },
+        async: true,
+    }).done(function (response) {
+        // console.log(response);
+        if (response != 1) {
+            alertify.error('Error al envio de correo');
+        }
+        return false;
+    });
+
+});
+
+$("#tabla_pedidos_cerdos").on("click", ".btn_anular_pedido", function () {
+    //esto esta extrayendo los datos de la tabla el (data)
+    var data = tabla_pedidos_cerdos.row($(this).parents("tr")).data(); //a que fila deteta que doy click
+    //esta condicion es importante para el responsibe porque salda un error si no lo pongo
+    if (tabla_pedidos_cerdos.row(this).child.isShown()) {
+        //esto es cuando esta en tamaño responsibo
+        var data = tabla_pedidos_cerdos.row(this).data();
+    }
+    var id = data.id;
+
+    Swal.fire({
+        title: "Anular pedido",
+        text: "Desea anular el pedido de cerdos??",
+        icon: "warning",
+        showCancelButton: true,
+        showConfirmButton: true,
+        allowOutsideClick: false,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Si, anular!!",
+    }).then((result) => {
+        if (result.value) {
+
+            $.ajax({
+                url: "/venta/anuar_pedido_cerdos",
+                type: "POST",
+                data: { id: id },
+                async: true,
+            }).done(function (response) {
+
+                if (response > 0) {
+                    if (response == 1) {
+                        tabla_pedidos_cerdos.ajax.reload();
+                        return Swal.fire(
+                            "Pedido de cerdo anulada",
+                            "El pedido se anuló con éxtio",
+                            "success"
+                        );
+                    }
+                } else {
+                    return Swal.fire(
+                        "Error",
+                        "No se pudo anular el pedido, error en la matrix",
+                        "error"
+                    );
+                }
+
+            });
+
+        }
+    });
+});
+

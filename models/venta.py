@@ -1,4 +1,6 @@
 from utils.db import mysql
+import random
+from datetime import datetime
 
 class Venta():
     def Registrar_cliente(nombres, apellidos, domicilio, telefono, cedula, correo):
@@ -238,6 +240,160 @@ class Venta():
             data = query.fetchall()
             query.close() 
             return data
+        except Exception as e:
+            query.close()
+            error = "Ocurrio un problema: " + str(e)
+            return error
+        return 0
+
+    def Procesar_pedidos(nombre, apellido, telefono, cedula, correo, direccion, subtotal, impuesto, total):
+        try:
+            codigo = random.randint(0, 99999999)
+            query = mysql.connection.cursor()
+            query.execute('INSERT INTO pedidos_cerdo (nombre,apellido,telefono,cedula,correo,direccion,subtotal,impuesto,total,numero_pedido) VALUES ("{0}","{1}","{2}","{3}","{4}","{5}","{6}","{7}","{8}","{9}")'.format(nombre,apellido,telefono,cedula,correo,direccion,subtotal,impuesto,total,codigo))
+            query.connection.commit()
+            # me devuelve el ultimo id insertado
+            id = query.lastrowid
+            query.close()
+            return id  # se inserto correcto
+        except Exception as e:
+            query.close()
+            error = "Ocurrio un problema: " + str(e)
+            return error
+        return 0
+    
+    def Registrar_detalle_pedido(id, idc, peso, precio, total):
+        try:
+            query = mysql.connection.cursor()
+            query.execute('INSERT INTO detalle_pedido_cerdo (id_pedido,id_cerdo,peso,precio,total) VALUES ("{0}","{1}","{2}","{3}","{4}")'.format(id,idc,peso,precio,total))
+            query.connection.commit()
+            
+            query.execute('UPDATE cerdo SET estado=3 WHERE id_cerdo="{0}"'.format(idc))
+            query.connection.commit()
+            
+            query.close()
+            return 1
+        except Exception as e:
+            query.close()
+            error = "Ocurrio un problema: " + str(e)
+            return error
+        return 0
+
+    def Listar_pedidos_cerdos():
+        try:
+            query = mysql.connection.cursor()
+            query.execute("""SELECT
+                        pedidos_cerdo.id,
+                        pedidos_cerdo.numero_pedido,
+                        CONCAT_WS( ' ', pedidos_cerdo.nombre, pedidos_cerdo.apellido, ' - ', pedidos_cerdo.cedula ) AS cliente,
+                        pedidos_cerdo.telefono,
+                        pedidos_cerdo.correo,
+                        pedidos_cerdo.direccion,
+                        pedidos_cerdo.subtotal,
+                        pedidos_cerdo.impuesto,
+                        pedidos_cerdo.total,
+                        pedidos_cerdo.iva,
+                        DATE( pedidos_cerdo.fecha_pedido ),
+                        pedidos_cerdo.estado 
+                    FROM
+                        pedidos_cerdo 
+                    ORDER BY
+                        pedidos_cerdo.id DESC""")
+            data = query.fetchall()
+            query.close()
+            new_lista = []
+            for datos in data:
+                dic = {}
+                dic["id"] = datos[0]
+                dic["numero_pedido"] = datos[1]
+                dic["cliente"] = datos[2]
+                dic["telefono"] = datos[3]
+                dic["correo"] = datos[4]
+                dic["direccion"] = datos[5]
+                dic["subtotal"] = datos[6]
+                dic["impuesto"] = datos[7]    
+                dic["total"] = datos[8]    
+                dic["iva"] = datos[9]    
+                
+                Convert = datetime.strptime(str(datos[10]), '%Y-%m-%d')
+                dic["fecha"] = Convert.strftime('%Y-%m-%d')  
+                                
+                dic["estado"] = datos[11]         
+                new_lista.append(dic)
+            return {"data": new_lista}
+        except Exception as e:
+            query.close()
+            error = "Ocurrio un problema: " + str(e)
+            return error
+        return 0
+
+    def Cabecera_pedido(id):
+        try:
+            query = mysql.connection.cursor()
+            query.execute("""SELECT
+                        pedidos_cerdo.id,
+                        pedidos_cerdo.numero_pedido,
+                        CONCAT_WS( ' ', pedidos_cerdo.nombre, pedidos_cerdo.apellido ) AS cliente,
+                        pedidos_cerdo.telefono,
+                        pedidos_cerdo.correo,
+                        pedidos_cerdo.direccion,
+                        pedidos_cerdo.subtotal,
+                        pedidos_cerdo.impuesto,
+                        pedidos_cerdo.total,
+                        pedidos_cerdo.iva,
+                        DATE( pedidos_cerdo.fecha_pedido ),
+                        pedidos_cerdo.estado,
+                        pedidos_cerdo.cedula
+                    FROM
+                        pedidos_cerdo 
+                    WHERE pedidos_cerdo.id={0}""".format(id))
+            data = query.fetchone()
+            query.close() 
+            return data
+        except Exception as e:
+            query.close()
+            error = "Ocurrio un problema: " + str(e)
+            return error
+        return 0
+
+    def Detalle_pedido_envio(id):
+        try:
+            query = mysql.connection.cursor()
+            query.execute("""SELECT
+                    CONCAT_WS( ' ', cerdo.codigo, cerdo.sexo, raza.raza ) AS cerdo,
+                    detalle_pedido_cerdo.peso,
+                    detalle_pedido_cerdo.precio,
+                    detalle_pedido_cerdo.total,
+                    detalle_pedido_cerdo.id_pedido 
+                    FROM
+                    cerdo
+                    INNER JOIN raza ON cerdo.raza = raza.id_raza
+                    INNER JOIN detalle_pedido_cerdo ON cerdo.id_cerdo = detalle_pedido_cerdo.id_cerdo
+                    WHERE detalle_pedido_cerdo.id_pedido = '{0}'""".format(id))
+            data = query.fetchall()
+            query.close() 
+            return data
+        except Exception as e:
+            query.close()
+            error = "Ocurrio un problema: " + str(e)
+            return error
+        return 0
+
+    def Anuar_pedido_cerdos(id):
+        try:
+            query = mysql.connection.cursor()
+            query.execute("UPDATE pedidos_cerdo SET estado=0 WHERE id='{0}'".format(id))
+            query.connection.commit()
+            
+            query.execute("""UPDATE detalle_pedido_cerdo
+            INNER JOIN cerdo ON detalle_pedido_cerdo.id_cerdo = cerdo.id_cerdo
+            SET cerdo.estado = 1 
+            WHERE
+            detalle_pedido_cerdo.id_pedido='{0}'""".format(id))
+            query.connection.commit()
+            
+            query.close()
+            return 1
         except Exception as e:
             query.close()
             error = "Ocurrio un problema: " + str(e)

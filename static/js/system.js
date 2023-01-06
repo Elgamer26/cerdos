@@ -1151,6 +1151,7 @@ function Mostra_carrito() {
   valor.forEach(row => {
     total = parseFloat(row['peso'] * 5).toFixed(2);
     html += `<tr class="table_row">
+    <td hidden>${row['id']}</td>
     <td class="column-1"><a class="btn btn-danger" onclick="Eliminar_cerdo_Ls(${row['id']});" style="cursor: pointer;"> <i class="fa fa-trash" style="color: white;"></i> </a></td>
     <td class="column-1">${row['raza']}</td>
     <td class="column-2"> <img Src="/static/uploads/cerdo/${row['foto']}" style="border-radius: 20px;"
@@ -1200,8 +1201,9 @@ $(document).on('click', "#btn_procesar_pedido", function (e) {
   var cedula = $("#cedula_cli").val();
   var correo = $("#correo_cli").val();
   var direccion = $("#direccion_cli").val();
+
   var count = 0;
- 
+
   $("#tabla_pediddo tbody#unir_detale_tabla tr").each(function () {
     count++;
   });
@@ -1214,59 +1216,164 @@ $(document).on('click', "#btn_procesar_pedido", function (e) {
     );
   }
 
+  if (!correo_pedido) {
+    return swal(
+      "Correo inválido",
+      "El correo ingresado es incorrecto",
+      "warning"
+    );
+  }
+
   if (nombre.trim() == "" || nombre.length == 0 ||
-  apellido.trim() == "" || apellido.length == 0 ||
-  telefono.trim() == "" || telefono.length == 0 ||
-  cedula.trim() == "" || cedula.length == 0 ||
-  correo.trim() == "" || correo.length == 0 ||
-  direccion.trim() == "" || direccion.length == 0) {
-  validar_datos_pedidos(nombre, apellido, telefono, cedula, correo, direccion);
+    apellido.trim() == "" || apellido.length == 0 ||
+    telefono.trim() == "" || telefono.length == 0 ||
+    cedula.trim() == "" || cedula.length == 0 ||
+    correo.trim() == "" || correo.length == 0 ||
+    direccion.trim() == "" || direccion.length == 0) {
+    validar_datos_pedidos(nombre, apellido, telefono, cedula, correo, direccion);
 
-  return swal(
-    "Campo vacios",
-    "Los campos no deben quedar vacios, complete los datos",
-    "warning"
-  );
-} else {
+    return swal(
+      "Campo vacios",
+      "Los campos no deben quedar vacios, complete los datos",
+      "warning"
+    );
+  } else {
+    $("#nombres_obligg").html("");
+    $("#apellidos_obligg").html("");
+    $("#telefono_obligg").html("");
+    $("#cedulla_obligg").html("");
+    $("#correo_obligg").html("");
+    $("#direccion_obligg").html("");
+  }
 
-}
+  var subtotal = $("#subtotal_unir").text();
+  var impuesto = $("#iva_unir").text();
+  var total = $("#full_total").text();
+
+  $.ajax({
+    type: "POST",
+    async: true,
+    url: "/venta/procesar_pedidos",
+    data: {
+      nombre: nombre,
+      apellido: apellido,
+      telefono: telefono,
+      cedula: cedula,
+      correo: correo,
+      direccion: direccion,
+      subtotal: subtotal,
+      impuesto: impuesto,
+      total: total
+    }
+  }).done(function (data) {
+    if (data > 0) {
+      registrar_detalle_pedido(parseInt(data));
+      return swal(
+        "Enviando información",
+        "Enviando información de pedido, espere un momento por favor...",
+        ""
+      );
+    } else {
+      return swal(
+        "Error de registro",
+        "Error de pedido: " + data,
+        "error"
+      );
+    }
+  });
 });
 
 function validar_datos_pedidos(nombre, apellido, telefono, cedula, correo, direccion) {
   if (nombre.trim() == "" || nombre.length == 0) {
-
+    $("#nombres_obligg").html(" - Ingrese nombres");
   } else {
-
+    $("#nombres_obligg").html("");
   }
 
   if (apellido.trim() == "" || apellido.length == 0) {
-
+    $("#apellidos_obligg").html(" - Ingrese apellidos");
   } else {
-
+    $("#apellidos_obligg").html("");
   }
 
   if (telefono.trim() == "" || telefono.length == 0) {
-
+    $("#telefono_obligg").html(" - Ingrese teléfono");
   } else {
-
+    $("#telefono_obligg").html("");
   }
 
   if (cedula.trim() == "" || cedula.length == 0) {
-
+    $("#cedulla_obligg").html(" - Ingrese cédula");
   } else {
-
+    $("#cedulla_obligg").html("");
   }
 
   if (correo.trim() == "" || correo.length == 0) {
-
+    $("#correo_obligg").html(" - Ingrese correo");
   } else {
-
+    $("#correo_obligg").html("");
   }
 
   if (direccion.trim() == "" || direccion.length == 0) {
-
+    $("#direccion_obligg").html(" - Ingrese dirección");
   } else {
-
+    $("#direccion_obligg").html("");
   }
 
+}
+
+function registrar_detalle_pedido(id) {
+  var count = 0;
+  var arreglo_id = new Array();
+  var arreglo_peso = new Array();
+  var arreglo_precio = new Array();
+  var arreglo_total = new Array();
+
+  $("#tabla_pediddo tbody#unir_detale_tabla tr").each(function () {
+    arreglo_id.push($(this).find("td").eq(0).text());
+    arreglo_peso.push($(this).find("td").eq(4).text());
+    arreglo_precio.push($(this).find("td").eq(5).text());
+    arreglo_total.push($(this).find("td").eq(6).text());
+    count++;
+  });
+
+  var id_cerdo = arreglo_id.toString();
+  var peso = arreglo_peso.toString();
+  var precio = arreglo_precio.toString();
+  var total = arreglo_total.toString();
+
+  if (count == 0) {
+    return false;
+  }
+
+  $.ajax({
+    url: "/venta/registrar_detalle_pedido",
+    type: "POST",
+    async: true,
+    data: {
+      id: id,
+      id_cerdo: id_cerdo,
+      peso: peso,
+      precio: precio,
+      total: total,
+    },
+  }).done(function (resp) {
+    if (resp > 0) {
+      if (resp == 1) {
+        localStorage.clear();
+        Mostra_carrito();
+        return swal(
+          "Pedido de cerdos",
+          "El pedido se realizó con exito - pedido enviado al correo!",
+          "success"
+        );
+      }
+    } else {
+      return swal(
+        "Error",
+        "No se pudo crear el detalle de venta, falla en la matrix" + resp,
+        "error"
+      );
+    }
+  });
 }

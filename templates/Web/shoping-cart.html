@@ -10,6 +10,7 @@
 							<table id="tabla_pediddo" class="table-shopping-cart">
 								<thead>
 									<tr class="table_head">
+										<th hidden></th>
 										<th class="column-1">Quitar</th>
 										<th class="column-1">Cerdo</th>
 										<th class="column-2"></th>
@@ -54,65 +55,24 @@
 
 						<div class="flex-w flex-t bor12 p-t-15 p-b-30">
 
-							<label>Nombre:</label>
-							<input class="form-control" type="text" id="nombre_cli" placeholder="Ingrese nombres">
+							<label>Nombre</label>  <span style="color: red" id="nombres_obligg"> </span>
+							<input class="form-control" type="text" id="nombre_cli" placeholder="Ingrese nombres" onkeypress="return soloLetras(event)">							
 							<br><br> 
-							<label>Apellidos:</label>
-							<input class="form-control" type="text" id="apellido_cli" placeholder="Ingrese apellidos">
+							<label>Apellidos</label>  <span style="color: red" id="apellidos_obligg"> </span>
+							<input class="form-control" type="text" id="apellido_cli" placeholder="Ingrese apellidos" onkeypress="return soloLetras(event)">
 							<br><br> 
-							<label>Correo:</label>
+							<label>Correo</label>  <span style="color: red" id="correo_obligg"> </span>
 							<input class="form-control" type="text" id="correo_cli" placeholder="Ingrese correo">
 							<br><br> 
-							<label>Teléfono:</label>
-							<input class="form-control" type="text" id="telefono_cli" placeholder="Ingrese telefono">
+							<label>Teléfono</label> <span style="color: red" id="telefono_obligg"></span>
+							<input class="form-control" type="text" maxlength="15" id="telefono_cli" placeholder="Ingrese telefono" onkeypress="return soloNumeros(event)">
 							<br><br> 
-							<label>Cédula/RUC:</label>
-							<input class="form-control" type="text" id="cedula_cli" placeholder="Ingrese cédula/ruc">
+							<label>Cédula/RUC</label> <span style="color: red" id="cedulla_obligg"></span>
+							<input class="form-control" maxlength="13" type="text" id="cedula_cli" placeholder="Ingrese cédula/ruc" onkeypress="return soloNumeros(event)">
 							<br><br> 
-							<label>Dirección:</label>
+							<label>Dirección</label> <span style="color: red" id="direccion_obligg"></span>
 							<input class="form-control" type="text" id="direccion_cli" placeholder="Ingrese dirección">
 
-							<!--<div class="size-208 w-full-ssm">
-								<span class="stext-110 cl2">
-									Shipping:
-								</span>
-							</div>
-
-							<div class="size-209 p-r-18 p-r-0-sm w-full-ssm">
-								<p class="stext-111 cl6 p-t-2">
-									There are no shipping methods available. Please double check your address, or contact us if you need any help.
-								</p>
-								
-								<div class="p-t-15">
-									<span class="stext-112 cl8">
-										Calculate Shipping
-									</span>
-
-									<div class="rs1-select2 rs2-select2 bor8 bg0 m-b-12 m-t-9">
-										<select class="js-select2" name="time">
-											<option>Select a country...</option>
-											<option>USA</option>
-											<option>UK</option>
-										</select>
-										<div class="dropDownSelect2"></div>
-									</div>
-
-									<div class="bor8 bg0 m-b-12">
-									
-									</div>
-
-									<div class="bor8 bg0 m-b-22">
-										<input class="stext-111 cl8 plh3 size-111 p-lr-15" type="text" name="postcode" placeholder="Postcode / Zip">
-									</div>
-									
-									<div class="flex-w">
-										<div class="flex-c-m stext-101 cl2 size-115 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer">
-											Update Totals
-										</div>
-									</div>
-										
-								</div>
-							</div>-->
 						</div>
 
 						<div class="flex-w flex-t p-t-27 p-b-33">

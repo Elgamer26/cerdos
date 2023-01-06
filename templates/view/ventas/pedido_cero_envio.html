@@ -1,0 +1,65 @@
+<div style="text-align:center;"><h1><u>HACIENDA AMADA ANGÉLICA</u></h1></div><br>
+<div style="float:left; width:auto;">
+<span><b>Fecha:</b>  {{ valores.cliente[10] }}   </span>
+</div>   
+<br> 
+<div style="float:left; width:auto;">
+<span><b>Nombre y apellidos:</b>  {{ valores.cliente[2] }}  </span>
+</div>
+<br>
+<div style="float:left; width:auto">
+<span><b>Cedula:</b> {{ valores.cliente[12] }}   </span>
+</div>
+<br>
+<div style="float:left; width:auto">
+<span><b>Correo:</b> {{ valores.cliente[4] }}  </span>
+</div>
+<br>
+<div style="float:left; width:auto">
+<span><b>Número pedido:</b> {{ valores.cliente[1] }}  </span>
+</div>
+<br> 
+<div style="float:left; width:auto">
+<span><b>Teléfono:</b> {{ valores.cliente[3] }} </span>
+</div>
+<br>
+
+<div style="width:100%; text-align:center;">
+        <h2><u>Detalle de pedido</u></h2>
+</div>
+
+    <table style="width:100%; border-collapse:collapse;" border="1">
+        <thead>
+            <tr bgcolor="orange">
+                <th>Cerdo</th>
+                <th>Peso Kg</th>
+                <th>Precio</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+
+        {% for valors in valores.detalle %}
+        
+            <tr>
+                <td style="text-align:center;">{{ valors[0] }}</td>
+                <td style="text-align:center;">{{ valors[1] }} Kg</td>
+                <td style="text-align:center;">$. {{ valors[2] }}</td>
+                <td style="text-align:center;">$. {{ valors[3] }}</td>
+            </tr>
+
+        {% endfor %}
+
+    </table>
+<br>
+<br>
+<div style="float:left; width:auto;">
+<span><b>Subtotal:</b>$. {{ valores.cliente[6] }} </span>
+</div>
+<br>
+<div style="float:left; width:auto;">
+<span><b>Impuesto:</b>$. {{ valores.cliente[7] }} </span>
+</div>
+<br>
+<div style="float:left; width:auto;">
+<span><b>Total:</b>$. {{ valores.cliente[8] }} </span>
+</div>

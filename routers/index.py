@@ -724,6 +724,11 @@ def venta_cerdos():
     }
     return render_template('view/ventas/venta_cerdos.html', data = data)
 
+@index.route('/vista_pedidos_cerdos')
+def vista_pedidos_cerdos(): 
+    return render_template('view/ventas/pedidos_cerdos.html')
+
+
 #########
 ######### nuevos informes
 @index.route('/informe_venta_cerdos')

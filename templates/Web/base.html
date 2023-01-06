@@ -422,12 +422,81 @@
     <script src="{{url_for('static', filename='Web/js/main.js')}}"></script>
 
     <script src="{{url_for('static', filename='js/system.js')}}"></script>
+
+    <script src="{{url_for('static', filename='js/numero.min.js')}}"></script>
  
     <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
 
     <script>
+      var correo_pedido;
       $(document).ready(function(){
         Mostra_carrito();
+      });
+
+        /////////////////
+      function soloLetras(e) {
+        key = e.keyCode || e.which;
+        tecla = String.fromCharCode(key).toLowerCase();
+        letras = " áéíóúabcdefghijklmnñopqrstuvwxyz";
+        especiales = "8-37-39-46";
+        tecla_especial = false;
+        for (var i in especiales) {
+          if (key == especiales[i]) {
+            tecla_especial = true;
+            break;
+          }
+        }
+        if (letras.indexOf(tecla) == -1 && !tecla_especial) {
+          return swal(
+            "No se permiten numeros!!",
+            "Solo se permiten letras",
+            "warning"
+          );
+        }
+      }
+
+      function soloNumeros(e) {
+        var key = window.event ? e.which : e.keyCode;
+        if (key < 48 || key > 57) {
+          return swal(
+            "No se permiten letras!!",
+            "Solo se permiten numeros",
+            "warning"
+          );
+        }
+      }
+
+      $("#cedula_cli").validarCedulaEC({
+        onValid: function() {
+            $("#cedulla_obligg").html("");
+            alertify.success('Cédula/Ruc correcto');
+        },
+        onInvalid: function() {
+            $("#cedulla_obligg").html(" - Cédula/Ruc incorrecto")
+            alertify.error('Cédula/Ruc incorrecto');
+            $("#cedula_cli").val("");
+            $("#cedula_cli").focus();
+        }
+      });
+
+      $("#correo_cli").keyup(function() {
+        if (this.value != "") {
+            document.getElementById('correo_cli').addEventListener('input', function() {
+                campo = event.target;
+                //este codigo me da formato email
+                email = /^[-\w.%+]{1,64}@(?:[A-Z0-9-]{1,63}\.){1,125}[A-Z]{2,63}$/i;
+
+                if (email.test(campo.value)) { 
+                    $("#correo_obligg").html("");
+                    correo_pedido = true;
+                } else {
+                    $("#correo_obligg").html(" - Correo incorrecto");
+                    correo_pedido = false;
+                }
+            });
+        } else { 
+            $("#correo_obligg").html("");
+        }
       });
     </script>
 

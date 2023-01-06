@@ -742,7 +742,8 @@ class Reportes():
                             cerdo.peso,
                             cerdo.etapa,
                             cerdo.costo,
-                            cerdo.id_cerdo 
+                            cerdo.id_cerdo,
+                            cerdo.tipo_ingreso
                         FROM
                             raza
                             INNER JOIN cerdo ON raza.id_raza = cerdo.raza 
@@ -1456,6 +1457,58 @@ class Reportes():
                         venta_cerdos.estado = 1 AND DATE(venta_cerdos.fecha) BETWEEN '{0}' AND '{1}'
                     ORDER BY
                         venta_cerdos.fecha ASC""".format(f_i, f_f))
+            data = query.fetchall()
+            query.close() 
+            return data
+        except Exception as e:
+            query.close()
+            error = "Ocurrio un problema: " + str(e)
+            return error
+        return 0
+
+    def Listado_pedidos_cerdos(id):
+        try:
+            query = mysql.connection.cursor()
+            query.execute("""SELECT
+                        pedidos_cerdo.id,
+                        pedidos_cerdo.numero_pedido,
+                        CONCAT_WS( ' ', pedidos_cerdo.nombre, pedidos_cerdo.apellido ) AS cliente,
+                        pedidos_cerdo.telefono,
+                        pedidos_cerdo.correo,
+                        pedidos_cerdo.direccion,
+                        pedidos_cerdo.subtotal,
+                        pedidos_cerdo.impuesto,
+                        pedidos_cerdo.total,
+                        pedidos_cerdo.iva,
+                        DATE( pedidos_cerdo.fecha_pedido ),
+                        pedidos_cerdo.estado,
+                        pedidos_cerdo.cedula
+                    FROM
+                        pedidos_cerdo 
+                    WHERE pedidos_cerdo.id = '{0}'""".format(id))
+            data = query.fetchone()
+            query.close() 
+            return data
+        except Exception as e:
+            query.close()
+            error = "Ocurrio un problema: " + str(e)
+            return error
+        return 0
+
+    def Detalle_pedidos_cerdos(id):
+        try:
+            query = mysql.connection.cursor()
+            query.execute("""SELECT
+                    CONCAT_WS( ' ', cerdo.codigo, cerdo.sexo, raza.raza ) AS cerdo,
+                    detalle_pedido_cerdo.peso,
+                    detalle_pedido_cerdo.precio,
+                    detalle_pedido_cerdo.total,
+                    detalle_pedido_cerdo.id_pedido 
+                    FROM
+                    cerdo
+                    INNER JOIN raza ON cerdo.raza = raza.id_raza
+                    INNER JOIN detalle_pedido_cerdo ON cerdo.id_cerdo = detalle_pedido_cerdo.id_cerdo
+                    WHERE detalle_pedido_cerdo.id_pedido = '{0}'""".format(id))
             data = query.fetchall()
             query.close() 
             return data
