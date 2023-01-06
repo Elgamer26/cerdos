@@ -8,6 +8,9 @@ pip install Flask-MySQL
 pip install pdfkit
 pip install fpdf
 pip install flask-mail
+pip install flask[async]
+pip install pandas
+pip install openpyxl
 
 en caso que no se pueda usar pip --> python -m pip install 
 

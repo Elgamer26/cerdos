@@ -4,6 +4,7 @@ from models.venta import Venta
 from flask_mail import Message
 from utils.email import mail
 from utils.Complemento import Complement
+import asyncio
 
 data = Complement.data_email()
 
@@ -79,8 +80,30 @@ def registrar_detalle_venta_cerdo():
         total_cerdo = total.split(",")
         
         for valor in zip(id_cerdo, peso_cerdo, precio_cerdo, total_cerdo):        
-            valor = Venta.Registrar_detalle_venta_cerdo(id, valor[0], valor[1], valor[2], valor[3])
-        return str(valor)
+            valorr = Venta.Registrar_detalle_venta_cerdo(id, valor[0], valor[1], valor[2], valor[3])
+        
+        if str(valorr) == "1":
+            try:
+                cabecera = Venta.Cabecera_factura(id)
+                detalle = Venta.Detalle_venta(id)
+                                
+                msg = Message('FACTURA DE VENTA CERDOS', 
+                    sender=data['correo'],
+                    recipients=[cabecera[2]])
+                    
+                valores =  {
+                    'cliente': cabecera,
+                    'detalle': detalle
+                }
+                msg.html = render_template('view/ventas/factura_venta.html', valores = valores)
+                mail.send(msg)
+                return str(valorr)
+            except Exception as e:
+                return str("Error: " + e)
+        else:
+            return str(valorr)
+    
+    
 
 @venta.route('/venta_cerdo_anular', methods=["POST"])
 def venta_cerdo_anular():

@@ -94,6 +94,16 @@
       href="{{url_for('static', filename='Web/css/main.css')}}"
     />
     <!--===============================================================================================-->
+  
+    <!-- CSS -->
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css"/>
+<!-- Default theme -->
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css"/>
+<!-- Semantic UI theme -->
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/semantic.min.css"/>
+<!-- Bootstrap theme -->
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/bootstrap.min.css"/>
+  
   </head>
 
   <body class="animsition">
@@ -118,8 +128,7 @@
           <nav class="limiter-menu-desktop container">
             <!-- Logo desktop -->
             <a href="/" class="logo">
-              <img
-                src="{{url_for('static', filename='Web/images/icons/logo-01.png')}}"
+              <img  src="{{url_for('static', filename='uploads/cerdito.png')}}" alt="IMG-LOGO"
                 alt="IMG-LOGO"
               />
             </a>
@@ -135,6 +144,9 @@
                 </li>
                 <li>
                   <a href="/contacto">Contacto</a>
+                </li>
+                <li>
+                  <a href="/carrito">Pedidos</a>
                 </li>
               </ul>
             </div>
@@ -156,10 +168,7 @@
       <div class="wrap-header-mobile">
         <!-- Logo moblie -->
         <div class="logo-mobile">
-          <a href="/"
-            ><img
-              src="{{url_for('static', filename='Web/images/icons/logo-01.png')}}"
-              alt="IMG-LOGO"
+          <a href="/"><img  src="{{url_for('static', filename='uploads/cerdito.png')}}" alt="IMG-LOGO"
           /></a>
         </div>
 
@@ -204,6 +213,9 @@
           <li>
             <a href="/contacto">Contacto</a>
           </li>  
+          <li>
+            <a href="/carrito">Pedidos</a>
+          </li>
         </ul>
       </div>
     </header>
@@ -247,6 +259,7 @@
 
       <div class="container">
         <div class="bg0 p-t-60 p-b-30 p-lr-15-lg how-pos3-parent">
+
           <button class="how-pos3 hov3 trans-04 js-hide-modal1">
             <img
               src="{{url_for('static', filename='Web/images/icons/icon-close.png')}}"
@@ -255,22 +268,20 @@
           </button>
 
           <div class="row">
-            <div class="col-md-6 col-lg-7 p-b-30">
+            <div class="col-md-6">
               <div class="p-l-25 p-r-30 p-lr-0-lg">
                 <div class="wrap-slick3 flex-sb flex-w"> 
 
-                  <div class="slick3 gallery-lb">
+                  <div class="slick3 gallery-lb" id="unir_imagen">
 
-                    <img id="imagen_cerdo_detalle" 
-                     src="static/uploads/cerdo/cerdo.jpg" width="50px" height="50px"
-                          alt="IMAGEN DEL CERDO" />
+                   
                                   
                   </div>
                 </div>
               </div>
             </div>
 
-            <div class="col-md-6 col-lg-5 p-b-30">
+            <div class="col-md-6">
               <div class="p-r-50 p-t-5 p-lr-0-lg">
                 <h4 class="mtext-105 cl2 js-name-detail p-b-14" id="raza_cerdo"> 
                 </h4>
@@ -284,18 +295,11 @@
                 <p class="stext-102 cl3 p-t-23" id="detalle_cerdo"> 
                 </p>
 
-                <!-- 
-                <div class="p-t-33">
+                <div class="p-t-33" id="agregar_carrito">
               
-                  <div class="flex-w flex-r-m p-b-10">
-                    <div class="size-204 flex-w flex-m respon6-next">
-                      <button class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail">
-                        Add to cart
-                      </button>
-                    </div>
-                  </div>
+
                 </div>
-                -->
+            
  
               </div>
             </div>
@@ -418,5 +422,14 @@
     <script src="{{url_for('static', filename='Web/js/main.js')}}"></script>
 
     <script src="{{url_for('static', filename='js/system.js')}}"></script>
+ 
+    <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
+
+    <script>
+      $(document).ready(function(){
+        Mostra_carrito();
+      });
+    </script>
+
   </body>
 </html>

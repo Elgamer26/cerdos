@@ -33,30 +33,90 @@
                     </div>
         
                     <div class="card-body">
-                        <div class="row">
-                                <div class="form-group col-lg-4 col-2">
-                                <label for="fecha_i">Fecha inicio</label>
-                                <input type="date" class="form-control" id="fecha_i" /> 
-                                </div>
 
-                                <div class="form-group col-lg-4 col-2">
-                                    <label for="fecha_f">Fecha fin</label>
-                                    <input type="date" class="form-control" id="fecha_f" /> 
-                                </div>
+                      <div class="row">
 
-                                <div class="form-group col-lg-1 col-1">
-                                    <label>Buscar</label>
-                                    <button onclick="cargar_fechas();" class="btn btn-info"> <i class="fa fa-search"></i> </button>
-                                </div>  
+                        <div class="form-group col-lg-12 col-12">
+
+                            <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                                <li class="nav-item">
+                                  <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true">Venta de cerdos</a>
+                                </li>
+                                <li class="nav-item">
+                                  <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">Cerdos vendidos</a>
+                                </li>  
+                            </ul>
+                            <div class="tab-content" id="pills-tabContent">
+
+                                <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+
+                                  <div class="row">
+
+                                    <div class="form-group col-lg-4 col-2">
+                                      <label for="fecha_i">Fecha inicio</label>
+                                      <input type="date" class="form-control" id="fecha_i" /> 
+                                    </div>
+    
+                                    <div class="form-group col-lg-4 col-2">
+                                        <label for="fecha_f">Fecha fin</label>
+                                        <input type="date" class="form-control" id="fecha_f" /> 
+                                    </div>
+    
+                                    <div class="form-group col-lg-1 col-1">
+                                        <label>Buscar</label>
+                                        <button onclick="cargar_fechas();" class="btn btn-info"> <i class="fa fa-search"></i> </button>
+                                    </div>  
+                                    
+                                    <div class="form-group col-lg-12 col-2" style="text-align: center;">
+                                        <label>Venta de cerdos</label>
+                                        <center>
+                                            <iframe width="100%" height="100%" class="contennidor" id="iframe_ventas_cerdos"></iframe>
+                                        </center>
+                                    </div>
+    
+                                   </div>
                                 
-                                <div class="form-group col-lg-12 col-2" style="text-align: center;">
-                                    <label>Venta de cerdos</label>
-                                    <center>
-                                        <iframe width="100%" height="100%" class="contennidor" id="iframe_ventas_cerdos"></iframe>
-                                    </center>
                                 </div>
 
+                                <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+                                
+                                  
+                                  <div class="row">
+
+                                    <div class="form-group col-lg-4 col-2">
+                                      <label for="fecha_i_c">Fecha inicio</label>
+                                      <input type="date" class="form-control" id="fecha_i_c" /> 
+                                    </div>
+    
+                                    <div class="form-group col-lg-4 col-2">
+                                        <label for="fecha_f_c">Fecha fin</label>
+                                        <input type="date" class="form-control" id="fecha_f_c" /> 
+                                    </div>
+    
+                                    <div class="form-group col-lg-1 col-1">
+                                        <label>Buscar</label>
+                                        <button onclick="cargar_fechas_cerdo();" class="btn btn-info"> <i class="fa fa-search"></i> </button>
+                                    </div>  
+                                    
+                                    <div class="form-group col-lg-12 col-2" style="text-align: center;">
+                                        <label>Cerdos vendidos</label>
+                                        <center>
+                                            <iframe width="100%" height="100%" class="contennidor" id="iframe_cerdos_vendidos"></iframe>
+                                        </center>
+                                    </div>
+    
+                                   </div>
+
+                                </div>
+                            
+                            </div> 
+                        
                         </div>
+
+                    </div>
+
+
+                    
                     </div>
                 </div>
             </div>
@@ -79,9 +139,10 @@
           }
           document.getElementById("fecha_i").value = y + "-" + m + "-" + d; 
           document.getElementById("fecha_f").value = y + "-" + m + "-" + d; 
-    });
 
- 
+          document.getElementById("fecha_i_c").value = y + "-" + m + "-" + d; 
+          document.getElementById("fecha_f_c").value = y + "-" + m + "-" + d; 
+    });
 
     function cargar_fechas(){
       var f_i = document.getElementById("fecha_i").value;
@@ -103,6 +164,25 @@
    
     }
 
- 
+    function cargar_fechas_cerdo(){
+      var f_i = document.getElementById("fecha_i_c").value;
+      var f_f = document.getElementById("fecha_f_c").value;
+
+      if (f_i > f_f) {
+          return Swal.fire(
+              "Mensaje de advertencia",
+              "La fecha inicio '" +
+              f_i +
+              "' es mayor a la fecha final '" +
+              f_f +
+              "'",
+              "warning"
+          );
+      }
+      var ifrm = document.getElementById("iframe_cerdos_vendidos");
+      ifrm.setAttribute("src", "/reporte/informa_cerdos_vendidos/"+ f_i + "/" + f_f + "");
+   
+    }
+
 </script>
   

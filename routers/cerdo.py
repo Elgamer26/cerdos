@@ -176,43 +176,34 @@ def ver_detalle_cerdo():
         dato = Cerdo.Ver_detalle_cerdo(_id)
         return jsonify(dato)
     
-    
-    
-    
-    
-
 # para caargra archivos excel al sistema
 @cerdo.route('/cargar_archivos', methods=['POST'])
 def cargar_archivos():
     if request.method == 'POST':
         try:
             file = request.files.get("archivo", False)           
-            file.save(PATH_EXCEL + file.filename)
+            file.save(PATH_EXCEL + file.filename) 
+                      
+            df = pd.read_excel(PATH_EXCEL + file.filename, sheet_name='cerdos', header=None, names=['Código','Nombre o Alias','Sexo','Raza','Foto','Peso (Kg)','Origen','Fecha','Detalle del cerdo','Tipo de ingreso','Costo','Etapa/Fase'])
+            columna = df[3:].shape
+            if str(columna[1]) == "12":
+                data = df[3:].values
+                for i in data:
+                    result = Cerdo.Crear_cerdo_carga(i[0], i[1], i[2], i[3], i[4], i[5], i[6], i[7], i[8], i[9], i[10], i[11])
+                remove(PATH_EXCEL + file.filename)                
+                return str(result)
+            else:
+                remove(PATH_EXCEL + file.filename)
+                return str(2)
             
-            lista = []
-            df = pd.read_excel(PATH_EXCEL + file.filename, sheet_name='Cerdos')
-            df.set_index('Costo', inplace=True)
-            conteo = len(df.index)
-
-            for i in range(conteo):
-                componente = df.index[i]
-                lista.append(componente)
-            print(df) 
+            # df.set_index('Costo', inplace=True)
+            # conteo = len(df.index)
             
-            
-            return 0
-
-
-            # if data == 1:
-                
-            #     # para no eliminar la foto por defecto
-            #     if foto_ac != "cerdo.jpg":
-            #         # esto es paar saber si el archivo existe y elimiarlo
-            #         if path.isfile(PATH_FILE + foto_ac) == True:
-            #             remove(PATH_FILE + foto_ac)
-                
-            #     return str(data)
-           
+            # for i in range(conteo):
+            #     componente = df.index[i][0]
+            #     print(componente) 
+                           
         except Exception as e:
-            error = "Error " + str(e)
+            remove(PATH_EXCEL + file.filename)
+            error = "Error: " + str(e)
             return error

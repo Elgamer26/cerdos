@@ -1045,13 +1045,228 @@ function ver_detalle_cerdo(id) {
     type: "POST",
     data: { id: id },
     success: function (data) {
- 
+
       $("#raza_cerdo").html(data[3]);
       $("#peso_cerdo").html("Peso: " + data[4] + " Kg");
       $("#sexo_cerdo").html("Sexo: " + data[2]);
       $("#etap_cerdo").html("Etapa: " + data[7]);
-      $("#detalle_cerdo").html(data[5]);
+      $("#detalle_cerdo").html("<b>Detalle del cerdo:</b> " + data[5]);
+      $("#unir_imagen").html(`<img id="imagen_cerdo_detalle" src="static/uploads/cerdo/${data[6]}" style="border-radius: 20px;"
+      width="550" height="400" alt="IMAGEN DEL CERDO" />`);
+      $("#agregar_carrito").html(`<div class="flex-w flex-r-m p-b-10">
+          <div class="size-204 flex-w flex-m respon6-next">
+            <button onclick="Enviar_cerdo_local(${id},'${data[3]}',${data[4]},'${data[6]}');" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04">
+              Agregar al carrito <i class="fa fa-shopping-cart" style="width: 40px; font-size: 20px;"></i>
+            </button>
+          </div>
+        </div>`);
+
     }
   });
   return false;
+}
+
+function Enviar_cerdo_local(id, raza, peso, foto) {
+  var id_cerdo;
+  var valor_cerdo;
+  valor_cerdo = RecuperarLocal();
+  valor_cerdo.forEach(animal => {
+    if (animal.id === id) {
+      id_cerdo = animal.id;
+    }
+  });
+
+  if (id_cerdo === id) {
+    swal(
+      'Cerdo dentro de carrito',
+      'El cerdo seleccionado ya esta dentro de carrito!!',
+      'warning'
+    )
+    return false;
+  }
+
+  let valor = { "id": id, "raza": raza, "peso": peso, "foto": foto }
+  agregarCarrtio(valor);
+}
+
+function RecuperarLocal() {
+  let cerdo;
+  if (localStorage.getItem('cerdo_dentro') === null) {
+    cerdo = [];
+  } else {
+    cerdo = JSON.parse(localStorage.getItem('cerdo_dentro'));
+  }
+  return cerdo;
+}
+
+function agregarCarrtio(id) {
+  let cerdo;
+  cerdo = RecuperarLocal();
+  cerdo.push(id);
+  localStorage.setItem('cerdo_dentro', JSON.stringify(cerdo));
+  swal(
+    'Cerdo agregado al carrito',
+    'El cerdo seleccionado se agregó al carrito!!',
+    'success'
+  )
+}
+
+$(document).on('click', '#vaciar_carrito', function (e) {
+  e.preventDefault();
+
+  var cerdo;
+  cerdo = RecuperarLocal();
+
+  if (cerdo.length == 0) {
+    return swal(
+      'El carrito esta vacio!',
+      'No hay cerdo en carrito.',
+      'warning'
+    )
+  }
+
+  alertify.confirm("Vaciar carrito de pedidos.", "Los cerdos se borraran del detalle de forma permanente",
+    function () {
+      localStorage.clear();
+      swal(
+        'Carrito vaciado!',
+        'El carrito se vacio de forma correcta.',
+        'success'
+      )
+      Mostra_carrito();
+    },
+    function () {
+      alertify.error('Cancel');
+    });
+
+})
+
+function Mostra_carrito() {
+  let valor;
+  valor = RecuperarLocal();
+  let html = "";
+  var total = 0;
+  var subtotal = 0;
+  $("#unir_detale_tabla").html("");
+  valor.forEach(row => {
+    total = parseFloat(row['peso'] * 5).toFixed(2);
+    html += `<tr class="table_row">
+    <td class="column-1"><a class="btn btn-danger" onclick="Eliminar_cerdo_Ls(${row['id']});" style="cursor: pointer;"> <i class="fa fa-trash" style="color: white;"></i> </a></td>
+    <td class="column-1">${row['raza']}</td>
+    <td class="column-2"> <img Src="/static/uploads/cerdo/${row['foto']}" style="border-radius: 20px;"
+    height="100" width="100" alt="${row['foto']}"/></td>
+    <td class="column-3">${row['peso']}</td>
+    <td class="column-3"> 5 </td>
+    <td class="column-5">${total}</td>
+    </tr>`;
+    subtotal = parseFloat(subtotal) + parseFloat(total);
+    $("#unir_detale_tabla").html(html);
+  });
+  $("#subtotal_unir").html(parseFloat(subtotal).toFixed(2));
+
+  var iva = 0;
+  var fulltotal = 0;
+  iva = parseFloat(subtotal) * 0.12;
+  fulltotal = parseFloat(iva) + parseFloat(subtotal);
+
+  $("#iva_unir").html(parseFloat(iva).toFixed(2));
+  $("#full_total").html(parseFloat(fulltotal).toFixed(2));
+}
+
+function Eliminar_cerdo_Ls(id) {
+  alertify.confirm("Borrar cerdo del detalle.", "El cerdo se borrará del detalle de forma permanente",
+    function () {
+      let cerdo;
+      cerdo = RecuperarLocal();
+      cerdo.forEach(function (valor, indice) {
+        if (valor.id === id) {
+          cerdo.splice(indice, 1);
+        }
+      });
+      localStorage.setItem('cerdo_dentro', JSON.stringify(cerdo));
+      Mostra_carrito();
+    },
+    function () {
+      alertify.error('Cancel');
+    });
+}
+
+$(document).on('click', "#btn_procesar_pedido", function (e) {
+  e.preventDefault();
+
+  var nombre = $("#nombre_cli").val();
+  var apellido = $("#apellido_cli").val();
+  var telefono = $("#telefono_cli").val();
+  var cedula = $("#cedula_cli").val();
+  var correo = $("#correo_cli").val();
+  var direccion = $("#direccion_cli").val();
+  var count = 0;
+ 
+  $("#tabla_pediddo tbody#unir_detale_tabla tr").each(function () {
+    count++;
+  });
+
+  if (count == 0) {
+    return swal(
+      "Detalle pedido esta vacio",
+      "No hay cerdos en el detalle de pedidos",
+      "warning"
+    );
+  }
+
+  if (nombre.trim() == "" || nombre.length == 0 ||
+  apellido.trim() == "" || apellido.length == 0 ||
+  telefono.trim() == "" || telefono.length == 0 ||
+  cedula.trim() == "" || cedula.length == 0 ||
+  correo.trim() == "" || correo.length == 0 ||
+  direccion.trim() == "" || direccion.length == 0) {
+  validar_datos_pedidos(nombre, apellido, telefono, cedula, correo, direccion);
+
+  return swal(
+    "Campo vacios",
+    "Los campos no deben quedar vacios, complete los datos",
+    "warning"
+  );
+} else {
+
+}
+});
+
+function validar_datos_pedidos(nombre, apellido, telefono, cedula, correo, direccion) {
+  if (nombre.trim() == "" || nombre.length == 0) {
+
+  } else {
+
+  }
+
+  if (apellido.trim() == "" || apellido.length == 0) {
+
+  } else {
+
+  }
+
+  if (telefono.trim() == "" || telefono.length == 0) {
+
+  } else {
+
+  }
+
+  if (cedula.trim() == "" || cedula.length == 0) {
+
+  } else {
+
+  }
+
+  if (correo.trim() == "" || correo.length == 0) {
+
+  } else {
+
+  }
+
+  if (direccion.trim() == "" || direccion.length == 0) {
+
+  } else {
+
+  }
+
 }

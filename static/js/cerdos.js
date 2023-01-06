@@ -1229,44 +1229,35 @@ function registrar_archiivos() {
   $.ajax({
     url: "/cerdo/cargar_archivos",
     type: "POST",
+    async: true,
     //aqui envio toda la formdata
     data: formdata,
     contentType: false,
     processData: false,
     success: function (resp) {
-      
-      $(".card-body").LoadingOverlay("hide");
-      return console.log(resp);
 
       if (resp > 0) {
         if (resp == 1) {
           $(".card-body").LoadingOverlay("hide");
-          cargar_contenido("contenido_principal", "/new_cerdo");
+          cargar_contenido("contenido_principal", "/list_cerdo");
           return Swal.fire(
-            "Cerdo creado con éxito",
-            "El cerdo se creo con éxito",
+            "Cerdos creados con éxito",
+            "Los cerdos se crearón con éxito",
             "success"
           );
         } else if (resp == 2) {
           $(".card-body").LoadingOverlay("hide");
           return Swal.fire(
-            "Codigo ya existe",
-            "El codigo '" + codigo_cerdo + "', ya existe en el sistema",
-            "warning"
-          );
-        } else if (resp == 3) {
-          $(".card-body").LoadingOverlay("hide");
-          return Swal.fire(
-            "Nombre del cerdo ya existe",
-            "El nombre '" + nombre + "', ya existe en el sistema",
-            "warning"
+            "Error",
+            "El archivo Excel ingresado no tiene las dimensiones necesarias",
+            "error"
           );
         }
       } else {
         $(".card-body").LoadingOverlay("hide");
         return Swal.fire(
           "Error",
-          "No se pudo crear el cerdo, falla en la matrix",
+          "Error al reaizar el registro de datos en la Matrix - " + resp,
           "error"
         );
       }

@@ -43,6 +43,10 @@ def contacto():
     dato = Reportes.Traer_empresa()
     return render_template('Web/contact.html', dato = dato)
 
+@index.route('/carrito')
+def carrito():  
+    return render_template('Web/shoping-cart.html')
+
 # esto es el login que muestra cuando inicia el sistema
 @index.route('/Login')
 def Login():

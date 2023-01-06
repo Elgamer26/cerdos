@@ -306,3 +306,17 @@ class Cerdo():
             error = "Ocurrio un problema: " + str(e)
             return error
         return 0
+
+    # modelo para registra el cerdo mediante la carga de datos
+    def Crear_cerdo_carga(codigo, nombre, sexo, raza, foto, peso, origen, fecha, detalle, tipo_ingreso, costo, etapa):
+        try:
+            query = mysql.connection.cursor()
+            query.execute('INSERT INTO cerdo (codigo,nombre,sexo,raza,peso,origen,fecha,detalle,foto,etapa,tipo_ingreso,costo) VALUES ("{0}","{1}","{2}","{3}","{4}","{5}","{6}","{7}","{8}","{9}","{10}","{11}")'.format(codigo,nombre,sexo,raza,peso,origen,fecha,detalle,foto,etapa,tipo_ingreso,costo))
+            query.connection.commit()
+            query.close()
+            return 1  # se inserto correcto
+        except Exception as e:
+            query.close()
+            error = "Ocurrio un problema: " + str(e)
+            return error
+        return 0

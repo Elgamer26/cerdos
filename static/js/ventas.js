@@ -648,6 +648,7 @@ function guardar_detalle_venta_cerdos(id) {
     $.ajax({
         url: "/venta/registrar_detalle_venta_cerdo",
         type: "POST",
+        async: true,
         data: {
             id: id,
             idc: idc,
@@ -680,7 +681,7 @@ function guardar_detalle_venta_cerdos(id) {
 
             return Swal.fire(
                 "Error",
-                "No se pudo crear el detalle de venta, falla en la matrix",
+                "No se pudo crear el detalle de venta, falla en la matrix" + resp,
                 "error"
             );
 
@@ -738,6 +739,7 @@ function envio_correo(id) {
         data: { id: id },
         async: true,
     }).done(function (response) {
+        console.log(response);
         if (response != 1) {
             alertify.error('Error al envio de correo');
         }

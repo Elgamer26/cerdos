@@ -1435,3 +1435,32 @@ class Reportes():
             error = "Ocurrio un problema: " + str(e)
             return error
         return 0
+    
+    def Informe_cerdos_vendidos(f_i, f_f):
+        try:
+            query = mysql.connection.cursor()
+            query.execute("""SELECT
+                        venta_cerdos.fecha,
+                        venta_cerdos.numero_venta,
+                        raza.raza,
+                        cerdo.sexo,
+                        detalle_venta_cerdos.peso,
+                        detalle_venta_cerdos.precio,
+                        detalle_venta_cerdos.total 
+                    FROM
+                        detalle_venta_cerdos
+                        INNER JOIN venta_cerdos ON detalle_venta_cerdos.id_venta = venta_cerdos.id
+                        INNER JOIN cerdo ON detalle_venta_cerdos.id_cerdo = cerdo.id_cerdo
+                        INNER JOIN raza ON cerdo.raza = raza.id_raza 
+                    WHERE
+                        venta_cerdos.estado = 1 AND DATE(venta_cerdos.fecha) BETWEEN '{0}' AND '{1}'
+                    ORDER BY
+                        venta_cerdos.fecha ASC""".format(f_i, f_f))
+            data = query.fetchall()
+            query.close() 
+            return data
+        except Exception as e:
+            query.close()
+            error = "Ocurrio un problema: " + str(e)
+            return error
+        return 0
