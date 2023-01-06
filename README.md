@@ -1,2 +1,2 @@
 # cerdos
-Sistema web para control de produccion porcina mediante Python - Flask - MySQL
+Sistema web creado en python mediante el uso del framework FLASK y Mysql, para el control de produccion porcina por etapas de crecimiento del cerdo
