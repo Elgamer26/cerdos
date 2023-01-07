@@ -1250,6 +1250,10 @@ $(document).on('click', "#btn_procesar_pedido", function (e) {
   var impuesto = $("#iva_unir").text();
   var total = $("#full_total").text();
 
+  $(".cargar_loader").LoadingOverlay("show", {
+    text: "Cargando...",
+  });
+
   $.ajax({
     type: "POST",
     async: true,
@@ -1268,12 +1272,8 @@ $(document).on('click', "#btn_procesar_pedido", function (e) {
   }).done(function (data) {
     if (data > 0) {
       registrar_detalle_pedido(parseInt(data));
-      return swal(
-        "Enviando información",
-        "Enviando información de pedido, espere un momento por favor...",
-        ""
-      );
     } else {
+      $(".cargar_loader").LoadingOverlay("hide");
       return swal(
         "Error de registro",
         "Error de pedido: " + data,
@@ -1358,8 +1358,17 @@ function registrar_detalle_pedido(id) {
       total: total,
     },
   }).done(function (resp) {
+    $(".cargar_loader").LoadingOverlay("hide");
     if (resp > 0) {
       if (resp == 1) {
+
+        $("#nombre_cli").val("");
+        $("#apellido_cli").val("");
+        $("#telefono_cli").val("");
+        $("#cedula_cli").val("");
+        $("#correo_cli").val("");
+        $("#direccion_cli").val("");
+
         localStorage.clear();
         Mostra_carrito();
         return swal(

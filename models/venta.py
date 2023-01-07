@@ -294,11 +294,13 @@ class Venta():
                         pedidos_cerdo.total,
                         pedidos_cerdo.iva,
                         DATE( pedidos_cerdo.fecha_pedido ),
-                        pedidos_cerdo.estado 
+                        pedidos_cerdo.estado,
+                        CONCAT_WS( ' ', pedidos_cerdo.id, pedidos_cerdo.estado) AS prueba
                     FROM
                         pedidos_cerdo 
                     ORDER BY
-                        pedidos_cerdo.id DESC""")
+                        DATE( pedidos_cerdo.fecha_pedido ),
+                        pedidos_cerdo.estado DESC""")
             data = query.fetchall()
             query.close()
             new_lista = []
@@ -313,12 +315,11 @@ class Venta():
                 dic["subtotal"] = datos[6]
                 dic["impuesto"] = datos[7]    
                 dic["total"] = datos[8]    
-                dic["iva"] = datos[9]    
-                
+                dic["iva"] = datos[9]                    
                 Convert = datetime.strptime(str(datos[10]), '%Y-%m-%d')
-                dic["fecha"] = Convert.strftime('%Y-%m-%d')  
-                                
-                dic["estado"] = datos[11]         
+                dic["fecha"] = Convert.strftime('%Y-%m-%d')                                  
+                dic["estado"] = datos[11]        
+                dic["prueba"] = datos[12]         
                 new_lista.append(dic)
             return {"data": new_lista}
         except Exception as e:
@@ -392,6 +393,19 @@ class Venta():
             detalle_pedido_cerdo.id_pedido='{0}'""".format(id))
             query.connection.commit()
             
+            query.close()
+            return 1
+        except Exception as e:
+            query.close()
+            error = "Ocurrio un problema: " + str(e)
+            return error
+        return 0
+
+    def Procesar_pedido(id):
+        try:
+            query = mysql.connection.cursor()
+            query.execute("UPDATE pedidos_cerdo SET estado=1 WHERE id='{0}'".format(id))
+            query.connection.commit()            
             query.close()
             return 1
         except Exception as e:

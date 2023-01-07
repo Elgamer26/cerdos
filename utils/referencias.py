@@ -8,6 +8,7 @@ def diccionario_colores(color):
         'rose':(214,74,236),
         'gray':(103,103,103),
         'gray2':(233,233,233),
+        'orange':(225,165,0),
         }
 
     return colores[color]

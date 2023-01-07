@@ -728,12 +728,27 @@ def venta_cerdos():
 def vista_pedidos_cerdos(): 
     return render_template('view/ventas/pedidos_cerdos.html')
 
+@index.route('/detalle_pedido/<int:id>', methods=['GET'])
+def detalle_pedido(id):  
+    data = Reportes.Listado_pedidos_cerdos(id)
+    lista_datos = Reportes.Detalle_pedidos_cerdos(id)
+    dato = {
+        "cabeza": data,
+        "lista_datos": lista_datos, 
+        "id": id
+    }
+    return render_template('view/ventas/detalle_pedido.html', dato=dato)
+
 
 #########
 ######### nuevos informes
 @index.route('/informe_venta_cerdos')
 def informe_venta_cerdos(): 
     return render_template('view/informe/informe_venta_cerdos.html')
+
+@index.route('/informe_pedido_cerdo')
+def informe_pedido_cerdo(): 
+    return render_template('view/informe/informe_pedido_cerdo.html')
 
 @index.route('/informa_compra_vacunas')
 def informa_compra_vacunas(): 

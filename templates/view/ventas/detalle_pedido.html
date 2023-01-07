@@ -1,0 +1,200 @@
+<div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1 class="m-0">
+            <i class="fa fa-list"></i> Detalle del pedido
+          </h1>
+        </div>
+  
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="/Admin">Inicio</a></li>
+            <li class="breadcrumb-item active">Detalle del pedido</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+
+            <div class="col-lg-12 col-12">
+                <div class="card card-success">
+                  <div class="card-header">
+                    <h3 class="card-title"> Detalle del pedido</h3>
+                  </div>
+      
+                  <div class="card-body">
+                                  
+                    <div class="row">
+                      <div class="form-group col-lg-9 col-6 text-center">
+                         <div class="row" style="border: solid 1px; border-radius: 10px;">
+
+                          <div class="form-group col-lg-12 col-6 text-center">
+                              <label>Clientes:</label>
+                              <input type="text" class="form-control" id="cliente" readonly value="{{ dato.cabeza[2] }} - {{ dato.cabeza[12] }}" />
+                          </div>
+
+                          <div class="form-group col-lg-4 col-6">
+                              <label>Fecha pedido</label>
+                              <input type="date" class="form-control" value="{{ dato.cabeza[10] }}" />
+                          </div>
+
+                          <div class="form-group col-lg-4 col-6">
+                              <label>Número pedido</label>
+                              <input type="text" maxlength="15" class="form-control" value="{{ dato.cabeza[1] }}" readonly />
+                          </div>
+
+                          <div class="form-group col-lg-4 col-6">
+                              <label>Impuesto iva%</label>
+                              <input type="text" maxlength="2" class="form-control" id="iva" value="12" readonly />
+                          </div>
+
+                            <div class="form-group col-lg-3 col-6">
+                                <button onclick="procesar_pedido({{ dato.id }});" class="btn btn-success">
+                                    <i class="fa fa-money-bill"></i> Procesar pedido
+                                </button>
+                            </div>
+
+                            <div class="form-group col-lg-2 col-6">
+                                <button onclick="cargar_contenido('contenido_principal','/vista_pedidos_cerdos');" class="btn btn-danger"> <i class="fa fa-svae"></i> Volver
+                                </button>
+                            </div>
+
+                        </div>
+                      </div>
+
+                      <div class="form-group col-lg-1 col-6 text-center">
+                      </div>
+
+                      <div class="form-group col-lg-2 col-6 text-center  ">
+                        <div class="row" style="border: solid 1px; border-radius: 10px;">
+
+                         <div class="form-group col-lg-12 col-6">
+                            <label>Subtotal:</label>
+                            <input readonly type="number" class="form-control" value="{{ dato.cabeza[6] }}"/> 
+                         </div>
+
+                         <div class="form-group col-lg-12 col-6">
+                            <label>Impuesto:</label>
+                            <input readonly type="number" class="form-control" value="{{ dato.cabeza[7] }}"/> 
+                         </div>
+
+                         <div class="form-group col-lg-12 col-6">
+                            <label>Total a pagar:</label>
+                            <input readonly type="number" class="form-control" value="{{ dato.cabeza[8] }}"/> 
+                         </div>
+
+                       </div>
+                     </div>
+
+                      <div class="form-group col-lg-12 col-6 text-center">
+                          <h3> <span class="badge badge-dark"><b>.:Detalle pedido:.</b></span> </h3>                                
+                          <table class="table table-display table-hover responsive nowrap text-center">
+                              <thead style="background: orange;">
+                                  <tr>                     
+                                      <th>Cerdo</th>  
+                                      <th>Peso Kg</th> 
+                                      <th>Precio Kg</th> 
+                                      <th>Total</th>  
+                                  </tr>
+                              </thead>
+                              <tbody>     
+                                {% for data in dato.lista_datos %}
+
+                                    <tr>
+                                        <td>{{ data[0] }}</td>
+                                        <td>{{ data[1] }} Kg</td>
+                                        <td>$ {{ data[2] }}</td>
+                                        <td>$ {{ data[3] }}</td> 
+                                    </tr>
+
+                                {% endfor %}
+
+                              </tbody>
+                          </table>
+                      </div>
+
+                    </div> 
+                  
+                  </div> 
+
+                  <!--<div class="card-footer">
+                    <button onclick="" class="btn btn-success">
+                        <i class="fa fa-save"></i> Guadar
+                    </button>
+                    -
+                    <button onclick="cargar_contenido('contenido_principal','/vista_pedidos_cerdos');"
+                        class="btn btn-danger">
+                        <i class="fa fa-svae"></i> Volver
+                    </button>
+                  </div>-->
+                </div>
+            </div>
+            
+        </div>
+
+    </section>
+</div>
+
+<script>
+
+    function procesar_pedido(id){
+
+        Swal.fire({
+            title: "Procesar el pedido",
+            text: "Procesar el pedido de cerdos??",
+            icon: "warning",
+            showCancelButton: true,
+            showConfirmButton: true,
+            allowOutsideClick: false,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Si, procesar!!",
+        }).then((result) => {
+            if (result.value) {
+
+                $(".card-success").LoadingOverlay("show", {
+                    text: "Procesando...",
+                });
+    
+                $.ajax({
+                    url: "/venta/procesar_pedido",
+                    type: "POST",
+                    data: { id: id }, 
+                    async: true,
+                }).done(function (response) {
+                    $(".card-success").LoadingOverlay("hide")
+                    if (response > 0) {
+                        if (response == 1) {
+                            cargar_contenido('contenido_principal','/vista_pedidos_cerdos');
+                            return Swal.fire(
+                                "Pedido precesado",
+                                "El pedido sé proceso con éxito",
+                                "success"
+                            );
+                        }
+                    } else {
+                        return Swal.fire(
+                            "Error",
+                            "No se pudo procesar el pedido, error en la matrix" + response,
+                            "error"
+                        );
+                    }
+         
+                });
+    
+            }
+        });
+
+
+    }
+
+</script>
+  
+  
+
+
+  

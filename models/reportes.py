@@ -1517,3 +1517,56 @@ class Reportes():
             error = "Ocurrio un problema: " + str(e)
             return error
         return 0
+
+    def Informe_ventas_cerdos(f_i, f_f, estado):
+        try:
+            query = mysql.connection.cursor()
+            query.execute("""SELECT
+                        pedidos_cerdo.id,
+                        pedidos_cerdo.numero_pedido, 
+                        pedidos_cerdo.subtotal,
+                        pedidos_cerdo.impuesto,
+                        pedidos_cerdo.total,
+                        pedidos_cerdo.iva,
+                        DATE( pedidos_cerdo.fecha_pedido ),
+                        pedidos_cerdo.estado
+                    FROM
+                        pedidos_cerdo 
+                    WHERE pedidos_cerdo.estado = '{0}' 
+                    AND DATE( pedidos_cerdo.fecha_pedido ) BETWEEN '{1}' AND '{2}'""".format(estado, f_i, f_f))
+            data = query.fetchall()
+            query.close() 
+            return data
+        except Exception as e:
+            query.close()
+            error = "Ocurrio un problema: " + str(e)
+            return error
+        return 0
+
+    def Informe_cerdos_pedidos(f_i, f_f, estado):
+        try:
+            query = mysql.connection.cursor()
+            query.execute("""SELECT
+                        CONCAT_WS( ' ', raza.raza, cerdo.sexo ) AS cerdo,
+                        detalle_pedido_cerdo.peso,
+                        detalle_pedido_cerdo.precio,
+                        detalle_pedido_cerdo.total,  
+                        DATE( pedidos_cerdo.fecha_pedido ),
+                        pedidos_cerdo.numero_pedido 
+                    FROM
+                        cerdo
+                        INNER JOIN raza ON cerdo.raza = raza.id_raza
+                        INNER JOIN detalle_pedido_cerdo ON cerdo.id_cerdo = detalle_pedido_cerdo.id_cerdo
+                        INNER JOIN pedidos_cerdo ON detalle_pedido_cerdo.id_pedido = pedidos_cerdo.id 
+                    WHERE
+                        pedidos_cerdo.estado = '{0}' 
+                        AND DATE( pedidos_cerdo.fecha_pedido ) BETWEEN '{1}' 
+                        AND '{2}'""".format(estado, f_i, f_f))
+            data = query.fetchall()
+            query.close() 
+            return data
+        except Exception as e:
+            query.close()
+            error = "Ocurrio un problema: " + str(e)
+            return error
+        return 0

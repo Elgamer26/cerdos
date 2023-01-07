@@ -772,9 +772,13 @@ function Listado_pedidos_cerdos() {
         columns: [
             { defaultContent: "" },
             {
-                data: "estado",
+                data: "prueba",
                 render: function (data, type, row) {
-                    if (data == 1) {
+                    var prueba = data.split(" ");
+                    if (prueba[1] == 2) {
+                        return `<button class="btn_anular_pedido btn btn-outline-danger"><i class="fa fa-times"></i></button> - <a class="btn_pedido_file btn btn-outline-primary"><i class="fa fa-file"></i></a> - <a class="btn_envio_correo btn btn-outline-warning"><i class="fa fa-envelope"></i></a> - <a onclick="cargar_contenido('contenido_principal','/detalle_pedido/${prueba[0]}');" class="btn btn-outline-success"><i class="fa fa-eye"></i></a>  
+                        </td>`;
+                    } else if (prueba[1] == 1) {
                         return `<button class="btn_anular_pedido btn btn-outline-danger"><i class="fa fa-times"></i></button> - <a class="btn_pedido_file btn btn-outline-primary"><i class="fa fa-file"></i></a> - <a class="btn_envio_correo btn btn-outline-warning"><i class="fa fa-envelope"></i></a> </td>`;
                     } else {
                         return `<a class="btn_pedido_file btn btn-outline-primary"><i class="fa fa-file"></i></a>`;
@@ -790,7 +794,9 @@ function Listado_pedidos_cerdos() {
             {
                 data: "estado",
                 render: function (data, type, row) {
-                    if (data == 1) {
+                    if (data == 2) {
+                        return "<span class='badge badge-warning'>PENDIENTE</span>";
+                    } else if (data == 1) {
                         return "<span class='badge badge-success'>ACTIVO</span>";
                     } else {
                         return "<span class='badge badge-danger'>ANULADO</span>";
@@ -946,4 +952,3 @@ $("#tabla_pedidos_cerdos").on("click", ".btn_anular_pedido", function () {
         }
     });
 });
-

@@ -792,6 +792,13 @@
                 </li> 
 
                 <li class="nav-item">
+                  <a onclick="cargar_contenido('contenido_principal','/informe_pedido_cerdo');" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Pedido de cerdos</p>
+                  </a>
+                </li> 
+
+                <li class="nav-item">
                   <a onclick="cargar_contenido('contenido_principal','/informa_control_peso');" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Informe de control de peso</p>
@@ -1299,6 +1306,7 @@
   <!-- script del js -->
   <script src="{{url_for('static', filename='js/system.js')}}"></script>
   <script src="{{url_for('static', filename='js/numero.min.js')}}"></script>
+  <script src="{{url_for('static', filename='js/ventas.js')}}"></script>
 </body>
 
 </html>

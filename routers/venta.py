@@ -221,3 +221,30 @@ def anuar_pedido_cerdos():
         id = request.form["id"] 
         valor = Venta.Anuar_pedido_cerdos(id)
         return str(valor)
+
+@venta.route('/procesar_pedido', methods=["POST"])
+def procesar_pedido():
+    if request.method == "POST":
+        id = request.form["id"] 
+        valor = Venta.Procesar_pedido(id)
+        
+        if str(valor) == "1":
+            try:
+                cabecera = Venta.Cabecera_pedido(id)
+                detalle = Venta.Detalle_pedido_envio(id)
+                                
+                msg = Message('PEDIDO PROCESADO', 
+                    sender=data['correo'],
+                    recipients=[cabecera[4]])
+                    
+                valores =  {
+                    'cliente': cabecera,
+                    'detalle': detalle
+                }
+                msg.html = render_template('view/ventas/pedido_cero_envio.html', valores = valores)
+                mail.send(msg)
+                return str(valor)
+            except Exception as e:
+                return str("Error: " + e)
+        else:
+            return str(valor)
