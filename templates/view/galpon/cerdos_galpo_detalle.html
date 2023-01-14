@@ -383,27 +383,32 @@
 
                                 <div class="row" style="border: solid 0px;">
 
-                                <div class="form-group col-lg-2 col-6">
+                                <div class="form-group col-lg-3 col-6">
                                     <label for="fecha_pe">Fecha</label>
                                     <input type="date" readonly class="form-control" id="fecha_pe" />
                                     <span style="color: red" id="fecha_pe_obligg"></span>
                                 </div>  
 
-                                <div class="form-group col-lg-3 col-6">
+                                <div class="form-group col-lg-2 col-6">
                                   <label for="semana_alimentacion_p">Semana peso:</label>
                                   <input type="text" readonly class="form-control" id="semana_alimentacion_p" /> 
                                 </div>
 
-                                <div class="form-group col-lg-3 col-6">
-                                  <label for="peso_actual">Peso actual (Kg)</label>
+                                <div class="form-group col-lg-2 col-6">
+                                  <label for="peso_actual">P. actual (Kg)</label>
                                   <input readonly type="text" class="form-control" id="peso_actual" /> 
                                 </div>
+
+                                <div class="form-group col-lg-2 col-6">
+                                  <label for="etapa_actual_cerdo">Etapa actual</label>
+                                  <input readonly type="text" class="form-control" id="etapa_actual_cerdo" /> 
+                                </div>
                             
-                                <div class="form-group col-lg-4 col-6">
+                                <div class="form-group col-lg-3 col-6">
                                     <label for="metodo">Metodo pesaje:</label>
                                     <select class="form-control" style="width: 100%" id="metodo">
-                                        <option value="exacto">Peso exacto (Bascula)</option>   
-                                        <option value="vivo">Peso vivo aproximado</option>     
+                                        <option value="exacto">P. exacto (Bascula)</option>   
+                                        <option value="vivo">P. vivo aproximado</option>     
                                     </select>
                                 </div>                       
 
@@ -1288,7 +1293,7 @@
                                 </button>
                                 <div class="dropdown-menu" role="menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(68px, 38px, 0px); top: 0px; left: 0px; will-change: transform;">
                                   <a style="cursor: pointer;" class="dropdown-item" onclick="modal_alimentar( ${row[1]} );">Alimentar</a>
-                                  <a style="cursor: pointer;" class="dropdown-item" onclick="modal_pesaje( ${row[1]}, ${row[6]} );">Pesar</a>
+                                  <a style="cursor: pointer;" class="dropdown-item" onclick="modal_pesaje( ${row[1]}, ${row[6]}, '${row[7]}');">Pesar</a>
                                   <a style="cursor: pointer;" class="dropdown-item" onclick="modal_vacunar_cerdo( ${row[1]} );">Vacunar</a>
                                   <a style="cursor: pointer;" class="dropdown-item" onclick="modal_desparasitante_cerdo( ${row[1]} );">Desparasitar</a> 
                                   <a href="/reporte/costo_produccion_cerdo/${row[1]}" style="background: green; color: white; cursor: pointer;" class="dropdown-item" target="_blank">Costo por semana</a> 
@@ -1336,7 +1341,7 @@
                               </button>
                               <div class="dropdown-menu" role="menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(68px, 38px, 0px); top: 0px; left: 0px; will-change: transform;">
                                 <a style="cursor: pointer;" class="dropdown-item" onclick="modal_alimentar( ${row[1]} );">Alimentar</a>
-                                <a style="cursor: pointer;" class="dropdown-item" onclick="modal_pesaje( ${row[1]}, ${row[6]} );">Pesar</a>
+                                <a style="cursor: pointer;" class="dropdown-item" onclick="modal_pesaje( ${row[1]}, ${row[6]}, '${row[7]}' );">Pesar</a>
                                 <a style="cursor: pointer;" class="dropdown-item" onclick="modal_vacunar_cerdo( ${row[1]} );">Vacunar</a>
                                 <a style="cursor: pointer;" class="dropdown-item" onclick="modal_desparasitante_cerdo( ${row[1]} );">Desparasitar</a> 
                                 <a href="/reporte/costo_produccion_cerdo/${row[1]}" style="background: green; color: white; cursor: pointer;" class="dropdown-item" target="_blank">Costo por semana</a> 
@@ -1667,9 +1672,10 @@
   
 
     /////////// pesaje
-    function modal_pesaje(id, peso){
+    function modal_pesaje(id, peso, etapa){
         $("#id_cerdo_p").val(id);
         $("#peso_actual").val(peso);
+        $("#etapa_actual_cerdo").val(etapa);
 
         $("#nuevo_pesaje_obligg").html("");
         $("#observacion_obligg").html(""); 
@@ -1763,11 +1769,11 @@
     $("#nuevo_pesaje").on("keyup", function(){
 
       var data = $("#nuevo_pesaje").val();
-
-      if(parseInt(data) > 0 && parseInt(data) <= 5.5){
+    
+      if(parseInt(data) > 0 && parseInt(data) <= 5){
          return $("#etapa_fase").val("Lactancia");
       } 
-      if(parseInt(data) >= 6.5 && parseInt(data) <= 15){
+      if(parseInt(data) >= 6 && parseInt(data) <= 15){
          return $("#etapa_fase").val("Preiniciador");
       } 
       if(parseInt(data) >= 16 && parseInt(data) <= 30){

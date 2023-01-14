@@ -12,7 +12,7 @@ import pandas as pd
 cerdo = Blueprint('cerdo', __name__)
 # para mover la imagen
 PATH_FILE = getcwd() + "/static/uploads/cerdo/"
-PATH_EXCEL = getcwd() + "/static/uploads/excel/"
+PATH_EXCEL = getcwd() + "/static/uploads/cerdo_exel/"
 
 # controlador para crear una nueva raza
 @cerdo.route('/crear_raza', methods=['POST'])

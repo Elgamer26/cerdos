@@ -502,7 +502,7 @@ def listado_tratamientos():
     fecha = datetime.now()
     now = fecha.strftime("%Y-%m-%d")  
     tratamiendos = Enfermedad.Listado_tratamientos()
-    cerdo = Galpon.Select_cerdos() 
+    cerdo = Galpon.Combo_cerdo_tratados_list() 
     data = {
         'fecha': now,
         'lista': tratamiendos,

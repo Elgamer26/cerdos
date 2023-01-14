@@ -299,8 +299,7 @@ class Venta():
                     FROM
                         pedidos_cerdo 
                     ORDER BY
-                        DATE( pedidos_cerdo.fecha_pedido ),
-                        pedidos_cerdo.estado DESC""")
+                        DATE( pedidos_cerdo.fecha_pedido ) DESC""")
             data = query.fetchall()
             query.close()
             new_lista = []

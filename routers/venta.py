@@ -80,27 +80,28 @@ def registrar_detalle_venta_cerdo():
         
         for valor in zip(id_cerdo, peso_cerdo, precio_cerdo, total_cerdo):        
             valorr = Venta.Registrar_detalle_venta_cerdo(id, valor[0], valor[1], valor[2], valor[3])
-        
-        if str(valorr) == "1":
-            try:
-                cabecera = Venta.Cabecera_factura(id)
-                detalle = Venta.Detalle_venta(id)
+        return str(valorr)
+    
+        # if str(valorr) == "1":
+        #     try:
+        #         cabecera = Venta.Cabecera_factura(id)
+        #         detalle = Venta.Detalle_venta(id)
                                 
-                msg = Message('FACTURA DE VENTA CERDOS', 
-                    sender=data['correo'],
-                    recipients=[cabecera[2]])
+        #         msg = Message('FACTURA DE VENTA CERDOS', 
+        #             sender=data['correo'],
+        #             recipients=[cabecera[2]])
                     
-                valores =  {
-                    'cliente': cabecera,
-                    'detalle': detalle
-                }
-                msg.html = render_template('view/ventas/factura_venta.html', valores = valores)
-                mail.send(msg)
-                return str(valorr)
-            except Exception as e:
-                return str("Error: " + e)
-        else:
-            return str(valorr)
+        #         valores =  {
+        #             'cliente': cabecera,
+        #             'detalle': detalle
+        #         }
+        #         msg.html = render_template('view/ventas/factura_venta.html', valores = valores)
+        #         mail.send(msg)
+        #         return str(valorr)
+        #     except Exception as e:
+        #         return str("Error: " + e)
+        # else:
+        #     return str(valorr)
     
 @venta.route('/venta_cerdo_anular', methods=["POST"])
 def venta_cerdo_anular():
@@ -117,19 +118,21 @@ def envio_correo_venta():
             cabecera = Venta.Cabecera_factura(id)
             detalle = Venta.Detalle_venta(id)
                         
-            msg = Message('FACTURA DE VENTA CERDOS', 
-                sender=data['correo'],
-                recipients=[cabecera[2]])
+            # msg = Message('FACTURA DE VENTA CERDOS', 
+            #     sender=data['correo'],
+            #     recipients=[cabecera[2]])
             
             valores =  {
                 'cliente': cabecera,
                 'detalle': detalle
             }
-            msg.html = render_template('view/ventas/factura_venta.html', valores = valores)
-            mail.send(msg)
-            return str(1)
+            #msg.html = render_template('view/ventas/factura_venta.html', valores = valores)
+            #mail.send(msg)
+            html = render_template('view/ventas/factura_venta.html', valores = valores)
+            
+            return jsonify(html, cabecera[2])
         except Exception as e:
-            return str(e)
+            return str(1)
 
 ## procesar pedidos de cerdos
 @venta.route('/procesar_pedidos', methods=["POST"])
@@ -165,27 +168,27 @@ def registrar_detalle_pedido():
         
         for valor in zip(id_cerdo, peso_cerdo, precio_cerdo, total_cerdo):        
             valorr = Venta.Registrar_detalle_pedido(id, valor[0], valor[1], valor[2], valor[3])
-    
-        if str(valorr) == "1":
-            try:
-                cabecera = Venta.Cabecera_pedido(id)
-                detalle = Venta.Detalle_pedido_envio(id)
+        return str(valorr)
+        # if str(valorr) == "1":
+        #     try:
+        #         cabecera = Venta.Cabecera_pedido(id)
+        #         detalle = Venta.Detalle_pedido_envio(id)
                                 
-                msg = Message('PEDIDO DE CERDOS', 
-                    sender=data['correo'],
-                    recipients=[cabecera[4]])
+        #         msg = Message('PEDIDO DE CERDOS', 
+        #             sender=data['correo'],
+        #             recipients=[cabecera[4]])
                     
-                valores =  {
-                    'cliente': cabecera,
-                    'detalle': detalle
-                }
-                msg.html = render_template('view/ventas/pedido_cero_envio.html', valores = valores)
-                mail.send(msg)
-                return str(valorr)
-            except Exception as e:
-                return str("Error: " + e)
-        else:
-            return str(valorr)
+        #         valores =  {
+        #             'cliente': cabecera,
+        #             'detalle': detalle
+        #         }
+        #         msg.html = render_template('view/ventas/pedido_cero_envio.html', valores = valores)
+        #         mail.send(msg)
+        #         return str(valorr)
+        #     except Exception as e:
+        #         return str("Error: " + e)
+        # else:
+        #     return str(valorr)
 
 @venta.route('/listar_pedidos_cerdos', methods=['GET'])
 def listar_pedidos_cerdos():
@@ -201,19 +204,21 @@ def envio_correo_pedido():
             cabecera = Venta.Cabecera_pedido(id)
             detalle = Venta.Detalle_pedido_envio(id)
                         
-            msg = Message('PEDIDO DE CERDOS', 
-                sender=data['correo'],
-                recipients=[cabecera[4]])
+            # msg = Message('PEDIDO DE CERDOS', 
+            #     sender=data['correo'],
+            #     recipients=[cabecera[4]])
             
             valores =  {
                 'cliente': cabecera,
                 'detalle': detalle
             }
-            msg.html = render_template('view/ventas/pedido_cero_envio.html', valores = valores)
-            mail.send(msg)
-            return str(1)
+            # msg.html = render_template('view/ventas/pedido_cero_envio.html', valores = valores)
+            # mail.send(msg)
+            
+            html = render_template('view/ventas/pedido_cero_envio.html', valores = valores)
+            return jsonify(html, cabecera[4])
         except Exception as e:
-            return str(e)
+            return str(1)
 
 @venta.route('/anuar_pedido_cerdos', methods=["POST"])
 def anuar_pedido_cerdos():
@@ -227,24 +232,25 @@ def procesar_pedido():
     if request.method == "POST":
         id = request.form["id"] 
         valor = Venta.Procesar_pedido(id)
-        
-        if str(valor) == "1":
-            try:
-                cabecera = Venta.Cabecera_pedido(id)
-                detalle = Venta.Detalle_pedido_envio(id)
+        return str(valor)
+    
+        # if str(valor) == "1":
+        #     try:
+        #         cabecera = Venta.Cabecera_pedido(id)
+        #         detalle = Venta.Detalle_pedido_envio(id)
                                 
-                msg = Message('PEDIDO PROCESADO', 
-                    sender=data['correo'],
-                    recipients=[cabecera[4]])
+        #         msg = Message('PEDIDO PROCESADO', 
+        #             sender=data['correo'],
+        #             recipients=[cabecera[4]])
                     
-                valores =  {
-                    'cliente': cabecera,
-                    'detalle': detalle
-                }
-                msg.html = render_template('view/ventas/pedido_cero_envio.html', valores = valores)
-                mail.send(msg)
-                return str(valor)
-            except Exception as e:
-                return str("Error: " + e)
-        else:
-            return str(valor)
+        #         valores =  {
+        #             'cliente': cabecera,
+        #             'detalle': detalle
+        #         }
+        #         msg.html = render_template('view/ventas/pedido_cero_envio.html', valores = valores)
+        #         mail.send(msg)
+        #         return str(valor)
+        #     except Exception as e:
+        #         return str("Error: " + e)
+        # else:
+        #     return str(valor)

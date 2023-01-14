@@ -5329,7 +5329,7 @@ def informa_pedido_cerdos(f_i, f_f, estado):
             # Page number
             self.cell(w=0, h=10, txt='Pagina ' + str(self.page_no()) + '/{nb}', border=0, align='C', fill=0)
     
-    data = Reportes.Informe_ventas_cerdos(f_i, f_f, estado) 
+    data = Reportes.Informe_pedidos_cerdos(f_i, f_f, estado) 
 
     pdf = PDF(orientation='L', unit='mm', format='A4')
     pdf.alias_nb_pages()

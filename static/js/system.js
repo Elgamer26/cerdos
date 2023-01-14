@@ -1361,7 +1361,7 @@ function registrar_detalle_pedido(id) {
     $(".cargar_loader").LoadingOverlay("hide");
     if (resp > 0) {
       if (resp == 1) {
-
+        enviar_correo_pedido(id);
         $("#nombre_cli").val("");
         $("#apellido_cli").val("");
         $("#telefono_cli").val("");

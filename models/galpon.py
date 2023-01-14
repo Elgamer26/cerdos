@@ -605,6 +605,33 @@ class Galpon():
             error = "Ocurrio un problema: " + str(e)
             return error
         return 0
+    
+    def Combo_cerdo_tratados_list():
+        try:
+            query = mysql.connection.cursor()
+            query.execute("""SELECT
+                        cerdo.id_cerdo,
+                        CONCAT_WS( ' ', 'Código: ', cerdo.codigo, '- Sexo: ', cerdo.sexo, '- Raza: ', raza.raza ) AS cerdo,
+                        cerdo.estado 
+                    FROM
+                        tratamiento_cerdos
+                        INNER JOIN enfermedad_cerdo ON tratamiento_cerdos.enfer_cerdo_id = enfermedad_cerdo.id
+                        INNER JOIN cerdo ON enfermedad_cerdo.cerdo_id = cerdo.id_cerdo
+                        INNER JOIN raza ON cerdo.raza = raza.id_raza 
+                    WHERE
+                        cerdo.estado = 1 
+                    GROUP BY
+                        cerdo.id_cerdo 
+                    ORDER BY
+                        tratamiento_cerdos.id DESC""")
+            data = query.fetchall()
+            query.close() 
+            return data
+        except Exception as e:
+            query.close()
+            error = "Ocurrio un problema: " + str(e)
+            return error
+        return 0
 
 
     #####

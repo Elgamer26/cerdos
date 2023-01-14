@@ -1518,7 +1518,7 @@ class Reportes():
             return error
         return 0
 
-    def Informe_ventas_cerdos(f_i, f_f, estado):
+    def Informe_pedidos_cerdos(f_i, f_f, estado):
         try:
             query = mysql.connection.cursor()
             query.execute("""SELECT

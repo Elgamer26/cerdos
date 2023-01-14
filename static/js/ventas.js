@@ -659,6 +659,7 @@ function guardar_detalle_venta_cerdos(id) {
     }).done(function (resp) {
         if (resp > 0) {
             if (resp == 1) {
+                envio_correo(id);
                 Swal.fire({
                     title: "Venta realizada con éxito",
                     text: "Desea imprimir la venta??",
@@ -739,9 +740,23 @@ function envio_correo(id) {
         data: { id: id },
         async: true,
     }).done(function (response) {
-        // console.log(response);
-        if (response != 1) {
+
+        if (response == 1) {
             alertify.error('Error al envio de correo');
+        }else{
+            $.ajax({
+                url: "https://amada.i-sistener.xyz/envio_factura_venta.php",
+                type: "POST",
+                data: { html: response[0], correo: response[1] },
+                async: true,
+            }).done(function (valor) {
+                if (valor == 1) {
+                    alertify.success('Correo enviado con éxito');
+                }else{
+                    alertify.error('Error al envio de correo');
+                }
+                return false;
+            });
         }
         return false;
     });
@@ -884,6 +899,25 @@ $("#tabla_pedidos_cerdos").on("click", ".btn_envio_correo", function () {
     }
     var id = data.id;
 
+    enviar_correo_pedido(id);
+
+    // alertify.warning('Enviando factura de pedido al correo del cliente');
+    // $.ajax({
+    //     url: "/venta/envio_correo_pedido",
+    //     type: "POST",
+    //     data: { id: id },
+    //     async: true,
+    // }).done(function (response) {
+    //     // console.log(response);
+    //     if (response != 1) {
+    //         alertify.error('Error al envio de correo');
+    //     }
+    //     return false;
+    // });
+
+});
+
+function enviar_correo_pedido(id){
     alertify.warning('Enviando factura de pedido al correo del cliente');
     $.ajax({
         url: "/venta/envio_correo_pedido",
@@ -891,14 +925,26 @@ $("#tabla_pedidos_cerdos").on("click", ".btn_envio_correo", function () {
         data: { id: id },
         async: true,
     }).done(function (response) {
-        // console.log(response);
-        if (response != 1) {
+        if (response == 1) {
             alertify.error('Error al envio de correo');
+        }else{
+            $.ajax({
+                url: "https://amada.i-sistener.xyz/envio_pedido.php",
+                type: "POST",
+                data: { html: response[0], correo: response[1] },
+                async: true,
+            }).done(function (valor) {
+                if (valor == 1) {
+                    alertify.success('Correo enviado con éxito');
+                }else{
+                    alertify.error('Error al envio de correo');
+                }
+                return false;
+            });
         }
         return false;
     });
-
-});
+}
 
 $("#tabla_pedidos_cerdos").on("click", ".btn_anular_pedido", function () {
     //esto esta extrayendo los datos de la tabla el (data)
@@ -952,3 +998,82 @@ $("#tabla_pedidos_cerdos").on("click", ".btn_anular_pedido", function () {
         }
     });
 });
+
+function procesar_pedido(id){
+
+    Swal.fire({
+        title: "Procesar el pedido",
+        text: "Procesar el pedido de cerdos??",
+        icon: "warning",
+        showCancelButton: true,
+        showConfirmButton: true,
+        allowOutsideClick: false,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Si, procesar!!",
+    }).then((result) => {
+        if (result.value) {
+
+            $(".card-success").LoadingOverlay("show", {
+                text: "Procesando...",
+            });
+
+            $.ajax({
+                url: "/venta/procesar_pedido",
+                type: "POST",
+                data: { id: id }, 
+                async: true,
+            }).done(function (response) {
+                $(".card-success").LoadingOverlay("hide")
+                if (response > 0) {
+                    if (response == 1) {
+                        enviar_correo_pedido_procesado(id);
+                        cargar_contenido('contenido_principal','/vista_pedidos_cerdos');
+                        return Swal.fire(
+                            "Pedido precesado",
+                            "El pedido sé proceso con éxito",
+                            "success"
+                        );
+                    }
+                } else {
+                    return Swal.fire(
+                        "Error",
+                        "No se pudo procesar el pedido, error en la matrix" + response,
+                        "error"
+                    );
+                }
+     
+            });
+
+        }
+    });
+}
+
+function enviar_correo_pedido_procesado(id){
+    alertify.warning('Enviando factura de pedido procesado al correo del cliente');
+    $.ajax({
+        url: "/venta/envio_correo_pedido",
+        type: "POST",
+        data: { id: id },
+        async: true,
+    }).done(function (response) {
+        if (response == 1) {
+            alertify.error('Error al envio de correo');
+        }else{
+            $.ajax({
+                url: "https://amada.i-sistener.xyz/envio_pedido_procesado.php",
+                type: "POST",
+                data: { html: response[0], correo: response[1] },
+                async: true,
+            }).done(function (valor) {
+                if (valor == 1) {
+                    alertify.success('Correo enviado con éxito');
+                }else{
+                    alertify.error('Error al envio de correo');
+                }
+                return false;
+            });
+        }
+        return false;
+    });
+}

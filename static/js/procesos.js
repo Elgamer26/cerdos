@@ -511,12 +511,13 @@ function registra_pesaje() {
 }
 
 function guardar_pesaje_cedo_cerdo() {
+    var etapa_fase;
     var id = $("#id_cerdo_p").val();
     var semana = $("#semana_alimentacion_p").val();
     var peso_actual = $("#peso_actual").val();
     var metodo = $("#metodo").val();
     var observacion = $("#observacion").val();
-    var etapa_fase = $("#etapa_fase").val();
+    etapa_fase = $("#etapa_fase").val();
     var nuevo_pesaje = $("#nuevo_pesaje").val();
 
     var perimetro_t = $("#perimetro_t").val();
@@ -545,6 +546,11 @@ function guardar_pesaje_cedo_cerdo() {
         $("#observacion_obligg").html("");
     }
 
+    if (parseInt(nuevo_pesaje) < parseInt(peso_actual)) {
+        var etapa_actual = $("#etapa_actual_cerdo").val();
+        etapa_fase = etapa_actual;
+    }
+
     var formdata = new FormData();
     formdata.append("id", id);
     formdata.append("semana", semana);
@@ -553,7 +559,6 @@ function guardar_pesaje_cedo_cerdo() {
     formdata.append("observacion", observacion);
     formdata.append("etapa_fase", etapa_fase);
     formdata.append("nuevo_pesaje", nuevo_pesaje);
-
     formdata.append("perimetro_t", perimetro_t);
     formdata.append("largo_c", largo_c);
 
@@ -1619,3 +1624,4 @@ $("#cantidad_desparasitante_t").on("keyup", function () {
         }
     }
 });
+
