@@ -244,7 +244,7 @@ $("#tabla_tipo_a_").on("click", ".editar", function () {
   document.getElementById("id_tipo_a").value = data.id;
   document.getElementById("tipo_alimento").value = data.tipo_alimento;
 
-  $("#unir_texto").text("Editar tipo de alimento");
+  $("#unir_texto").text("Editar tipo de comida");
   $("#btn_registrar").hide();
   $("#btn_editar").show();
   $("#btn_nuevo").show();
@@ -258,7 +258,7 @@ function editar_tipo_a() {
   $(".alerta_smsm_tipo_a_success").hide(1000);
 
   if (valor.length == 0 || valor.trim() == "") {
-    $("#mensaje_tipo_a").text("Ingrese el tipo de alimento");
+    $("#mensaje_tipo_a").text("Ingrese el tipo de comida");
     $(".alerta_smsm_tipo_a").show(3000);
     return false;
   } else {

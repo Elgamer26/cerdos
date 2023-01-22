@@ -64,7 +64,8 @@ class Galpon():
                             galpon_cerdo_new.semana,
                             COUNT( detallegalpon_cerdo.id ) AS cantidad,
                             galpon.observacion,
-                            galpon_cerdo_new.id_galpon 
+                            galpon_cerdo_new.id_galpon,
+                            COUNT( detallegalpon_cerdo.id_cerdo ) 
                         FROM
                             galpon_cerdo_new
                             INNER JOIN detallegalpon_cerdo ON galpon_cerdo_new.id = detallegalpon_cerdo.id_galpon
@@ -100,7 +101,8 @@ class Galpon():
                             galpon_cerdo_new.semana,
                             COUNT( detallegalpon_cerdo.id ) AS cantidad,
                             galpon.observacion,
-                            galpon_cerdo_new.id_galpon 
+                            galpon_cerdo_new.id_galpon,
+                            COUNT( detallegalpon_cerdo.id_cerdo ) 
                         FROM
                             galpon_cerdo_new
                             INNER JOIN detallegalpon_cerdo ON galpon_cerdo_new.id = detallegalpon_cerdo.id_galpon
