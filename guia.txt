@@ -27,3 +27,7 @@ source env/bin/activate
 
 
 DROP DATABASE Amadangelica1$cerdos;
+
+
+mysqldump -u Amadangelica1 -h Amadangelica1.mysql.pythonanywhere-services.com --set-gtid-purged=OFF --no-tablespaces --column-statistics=0 'Amadangelica1$cerdos'  > db-backup.sql
+--esto me ayuda cuanod quiero exportar la base de datos en pythonanywhere
