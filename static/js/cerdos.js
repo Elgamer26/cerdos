@@ -1236,6 +1236,7 @@ function registrar_archiivos() {
     processData: false,
     success: function (resp) {
 
+
       if (resp > 0) {
         if (resp == 1) {
           $(".card-body").LoadingOverlay("hide");
